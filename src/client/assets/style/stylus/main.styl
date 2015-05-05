@@ -1,0 +1,24 @@
+@require 'nib'
+@import 'nib/gradients'
+
+@import url(http://fonts.googleapis.com/css?family=Oxygen:400,700,300&subset=latin,latin-ext)
+
+global-reset()
+
+
+html
+  height 100%
+
+body
+  min-height 100%
+  background: linear-gradient(to bottom, rgba(230,230,230,1) 0%,rgba(230,230,230,0) 100px,rgba(230,230,230,0) 100%) no-repeat;
+  font-family Oxygen, sans-serif
+
+h1
+  font-size 2rem
+  color pink
+
+div.content
+  display flex
+  flex-direction column
+  align-items center

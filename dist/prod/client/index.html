@@ -1,0 +1,29 @@
+<!doctype html>
+<html ng-app="app" ng-strict-di>
+  <head>
+    <meta charset="utf-8">
+    <title>Tchat</title>
+
+    <!-- assets:css -->
+    <link rel="stylesheet" href="/assets/styles/application.min.css">
+    <!-- endinject-->
+
+    <base href="/">
+  </head>
+  <body>
+    <div ui-view class="content"></div>
+
+    <!-- assets:js -->
+    <script src="/assets/primus.js"></script>
+    <!-- endinject-->
+
+    <!-- vendor:js -->
+    <script src="/assets/scripts/vendor.min.js"></script>
+    <!-- endinject-->
+
+    <!-- application:js -->
+    <script src="/assets/scripts/application.min.js"></script>
+    <script src="/assets/scripts/templatecache.min.js"></script>
+    <!-- endinject-->
+  </body>
+</html>
