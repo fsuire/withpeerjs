@@ -137,7 +137,7 @@
         .pipe(gulp.dest(config.distPath + 'client/assets/styles/'))
         .pipe(browserSync.reload({ stream: true })),
       gulp
-        .src('src/client/**/*.js')
+        .src(['src/client/**/*.js', '!src/client/**/*.spec.js'])
         .pipe(plug.newer(config.distPath + 'client/assets/scripts/application.min.js'))
         .pipe(plug.angularFilesort())
         .pipe(plug.concat('application.js'))
