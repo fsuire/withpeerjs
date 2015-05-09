@@ -29,6 +29,11 @@
   }
 
 
+  function logWatch(event) {
+    log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+  }
+
+
 
   // --------------------------------------------------------------------------------
   // --------------------------------------------------------------------------------
@@ -198,11 +203,11 @@
   gulp.task('backend-test', 'Run tests on the server code', function(callback) {
     log('---> backend-test');
     process.env.ENV = 'dev';
-    gulp.src(['src/server/**/*.js', '!src/server/**/*.spec.js'])
+    gulp.src(['src/server/**/*.js', '!src/server/**/*.spec.js', '!src/server/specs/bootstrap.js'])
     .pipe(plug.istanbul()) // Covering files
     .pipe(plug.istanbul.hookRequire()) // Force `require` to return covered files
     .on('finish', function () {
-      gulp.src('src/server/specs/*.js')
+      gulp.src('src/server/**/*.js')
         .pipe(plug.jasmine())
         .pipe(plug.istanbul.writeReports({
           dir: 'reports/server/',
@@ -213,6 +218,16 @@
         })) // Creating the reports after tests runned
         .on('end', callback);
     });
+
+
+    if(env.tdd) {
+      gulp
+        .watch('src/server/**/*.js', function() {
+          runSequence('backend-test');
+        })
+        .on('change', logWatch);
+    }
+
   });
 
   // --------------------------------------------------------------------------------
@@ -339,9 +354,6 @@
 //      })
 //      .on('change', logWatch);
 
-    function logWatch(event) {
-      log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-    }
   });
 
   // --------------------------------------------------------------------------------

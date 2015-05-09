@@ -1,10 +1,17 @@
 (function() {
   'use strict';
 
+  module.exports = application;
 
-  var IoC = require('electrolyte');
+  application['@singleton'] = true;
+  application['@require'] = [
+    'electrolyte',
+    'lodash',
+    'express',
+    'services/config'
+  ];
 
-  var application = function(_, express, config) {
+  function application(IoC, _, express, config) {
 
     var app = express();
 
@@ -14,15 +21,6 @@
 
     return app;
 
-  };
-
-  application['@singleton'] = true;
-  application['@require'] = [
-    'lodash',
-    'express',
-    'services/config'
-  ];
-
-  module.exports = application;
+  }
 
 })();
