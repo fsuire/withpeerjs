@@ -1,8 +1,8 @@
 (function() {
   'use strict';
 
-  var _ = require('lodash');
   var sinon = require('sinon');
+  var _ = require('lodash');
 
   var application = require(__dirname + '/../../app/application.js');
 

@@ -18,7 +18,6 @@
             res.send(data);
           })
           .fail(function(error) {
-            console.error(error);
             res.status(500);
             res.send('Oooups ! Error 500 ! "Internal Server Error" !');
           });
