@@ -6,17 +6,31 @@
   socketIOService['@singleton'] = true;
   socketIOService['@require'] = [
     'socket.io',
-    'services/http.service',
-    'services/config'
+    'services/http.service'
   ];
 
-  function socketIOService(socketIO, server, config) {
-
+  function socketIOService(socketIO, server) {
     var io = socketIO(server);
 
-    io.on('connection', function(socket) {
+    io.on('connection', connection);
+
+    return io;
+
+    function connection(socket) {
       console.log('a user connected');
-    });
+
+      socket.on('disconnect', disconnection);
+      socket.on('chat:message', messageReceived);
+    }
+
+    function disconnection() {
+      console.log('a user disconnected');
+    }
+
+    function messageReceived(message) {
+      console.log('message received :', message);
+      io.emit('chat:message', message);
+    }
 
   }
 

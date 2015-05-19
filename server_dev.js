@@ -9,3 +9,4 @@ IoC.loader(IoC.node('dist/dev/server'));
 
 // var primus = IoC.create('services/primus.service');
 var primus = IoC.create('services/socketIO.service');
+//var primus = IoC.create('services/http.service');
