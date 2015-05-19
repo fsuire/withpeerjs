@@ -11,16 +11,19 @@
     return function(application) {
       application.use(function(req, res) {
 
-        getHtml(config.htmlErrorPath)
-          .then(function(data) {
-            res.status(404);
-            res.setHeader('Content-Type', 'text/html');
-            res.send(data);
-          })
-          .fail(function(error) {
-            res.status(500);
-            res.send('Oooups ! Error 500 ! "Internal Server Error" !');
-          });
+        if(req.url.indexOf('/socket.io/') !== 0) {
+
+          getHtml(config.htmlErrorPath)
+            .then(function(data) {
+              res.status(404);
+              res.setHeader('Content-Type', 'text/html');
+              res.send(data);
+            })
+            .fail(function(error) {
+              res.status(500);
+              res.send('Oooups ! Error 500 ! "Internal Server Error" !');
+            });
+        }
 
       });
     };

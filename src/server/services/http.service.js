@@ -8,7 +8,7 @@
 
   function httpServer(http, rewriter, app, config) {
 
-    var server = http.createServer(app);
+    var server = http.Server(app);
 
     server.listen(config.port, config.ipaddress, listen);
 
