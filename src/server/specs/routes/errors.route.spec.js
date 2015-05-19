@@ -56,7 +56,7 @@
         return deferred.promise;
       });
 
-      var route = errorsRoute(getHtml.getHtml , config)(application);
+      var route = errorsRoute(getHtml.getHtml, config)(application);
       application.useRoute({}, res);
 
     });
@@ -81,7 +81,7 @@
         return deferred.promise;
       });
 
-      var route = errorsRoute(getHtml.getHtml , config)(application);
+      var route = errorsRoute(getHtml.getHtml, config)(application);
       application.useRoute({}, res);
 
     });

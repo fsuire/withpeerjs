@@ -39,7 +39,7 @@
       sinon.spy(IoC, 'create');
       sinon.spy(express, 'express');
 
-      var app = application(IoC, _, express.express , config);
+      var app = application(IoC, _, express.express, config);
 
       expect(express.express.callCount).toBe(1);
       expect(IoC.create.callCount).toBe(3);
