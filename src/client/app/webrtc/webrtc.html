@@ -1,8 +1,2 @@
 <h1>webRTC</h1>
-<div class="tchat-messages">
-  <p ng-repeat="message in vm.messageList track by $index">{{ message }}</p>
-</div>
-<form name="message" ng-submit="vm.sendMessageAction();">
-  <input type="text" ng-model="vm.message" placeholder="Type your message"/>
-  <input type="submit" value="Send" />
-</form>
+<web-rtc></web-rtc>
