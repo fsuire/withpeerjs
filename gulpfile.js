@@ -459,7 +459,8 @@
   }, {
     options: {
       '': 'Launch the server with dev config',
-      prod: 'Launch the server with prod config'
+      prod: 'Launch the server with prod config',
+      'nosync': 'Launch the server without browsersync'
     }
   });
 
@@ -490,6 +491,9 @@
   });
 
   function serve() {
+    if(env.nosync) {
+      return;
+    }
 
     log('---> serve function');
 
