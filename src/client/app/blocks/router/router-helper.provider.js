@@ -15,7 +15,7 @@
    * @description
    * The `routerHelper` provider.
    *
-   * @param {object} $stateProvider - The ui-router `$state` provider
+   * @param {object} $stateProvider     - The ui-router `$state` provider
    * @param {object} $urlRouterProvider - The ui-router `$urlRouter` provider
    */
   function routerHelperProvider($stateProvider, $urlRouterProvider) {
@@ -52,9 +52,9 @@
      * Returns an instance of the `routerHelper` service.
      *
      * @param {object} $rootScope - The angular `$rootScope` service
-     * @param {object} $state - The angular `$state` service
-     * @param {object} $location - The angular `$location` service
-     * @param {object} logger - {@link blocks.logger.logger The `logger` service}
+     * @param {object} $state     - The angular `$state` service
+     * @param {object} $location  - The angular `$location` service
+     * @param {object} logger     - {@link blocks.logger.logger The `logger` service}
      *
      * @returns {object} - {@link blocks.router.routerHelper The `routerHelper` service}
      */
@@ -124,9 +124,9 @@
        * @description
        * Add states to the router.
        *
-       * @param {array} states - An array of states configuration
-       * @param {string} otherwisePath -
-       * The route definition that will be used on route change when no other route definition is matched.
+       * @param {array} states         - An array of states configuration
+       * @param {string} otherwisePath - The route definition that will be used
+       * on route change when no other route definition is matched.
        */
       function addStates(states, otherwisePath) {
         states.forEach(function(state) {

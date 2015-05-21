@@ -61,6 +61,8 @@
      * @function
      * @name getMessageListAction
      * @memberOf app.tchat.Tchat
+     *
+     * @param {object} data - A message to push in the message list
      */
     function getMessageListAction(data) {
       logger.debug('TchatController::getMessageList()', data);

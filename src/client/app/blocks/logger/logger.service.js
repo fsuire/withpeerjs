@@ -49,7 +49,7 @@
      * Write a log message.
      *
      * @param {string} message - The message
-     * @param {*} [data] - The data associated to the message
+     * @param {*} [data]       - The data associated to the message
      */
     function log(message, data) {
       $log.log(message, data);
@@ -64,7 +64,7 @@
      * Write an information message.
      *
      * @param {string} message - The message
-     * @param {*} [data] - The data associated to the message
+     * @param {*} [data]       - The data associated to the message
      */
     function info(message, data) {
       $log.info('Info: ' + message, data);
@@ -79,7 +79,7 @@
      * Write a warning message.
      *
      * @param {string} message - The message
-     * @param {*} [data] - The data associated to the message
+     * @param {*} [data]       - The data associated to the message
      */
     function warn(message, data) {
       $log.warn('Warning: ' + message, data);
@@ -94,7 +94,7 @@
      * Write an error message.
      *
      * @param {string} message - The message
-     * @param {*} [data] - The data associated to the message
+     * @param {*} [data]       - The data associated to the message
      */
     function error(message, data) {
       $log.error('Error: ' + message, data);
@@ -109,7 +109,7 @@
      * Write a debug message.
      *
      * @param {string} message - The message
-     * @param {*} [data] - The data associated to the message
+     * @param {*} [data]       - The data associated to the message
      */
     function debug(message, data) {
       $log.debug('Debug: ' + message, data);
