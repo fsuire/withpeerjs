@@ -9,13 +9,11 @@ form.tchat {
 @media screen and (max-width: 800px) {
   form.tchat {
     width: 90%;
-    min-width: 500px;
   }
 }
 @media screen and (max-width: 500px) {
   form.tchat {
     width: 100%;
-    min-width: initial;
   }
 }
 form.tchat input.nickname {
