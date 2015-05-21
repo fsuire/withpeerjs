@@ -181,7 +181,7 @@
     }
 
     return gulp
-      .src('src/client/assets/style/stylus/main.styl')
+      .src('src/client/app/**/*.styl')
       .pipe(plug.stylus({
         use: nib(),
         compress: compress
@@ -317,7 +317,7 @@
   gulp.task('watch', 'Watch changes and apply tasks', ['build'], function() {
     log('---> watch');
     gulp
-      .watch('src/client/assets/**/*.styl', function() {
+      .watch('src/client/app/**/*.styl', function() {
         runSequence('stylus');
       })
       .on('change', logWatch);
