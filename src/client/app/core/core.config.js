@@ -3,8 +3,7 @@
 
   angular
     .module('app.core')
-    .config(configureRouter)
-    .config(configurePrimus);
+    .config(configureRouter);
 
   configureRouter.$inject = ['$locationProvider', 'routerHelperProvider'];
 
@@ -25,30 +24,5 @@
     routerHelperProvider.configure({
       pageTitle: 'F8C-Q7N - Tchat'
     });
-  }
-
-  configurePrimus.$inject = ['primusProvider'];
-
-  /**
-   * @function
-   * @memberOf app.core
-   * @name configurePrimus
-   *
-   * @description
-   * Configure Primus.
-   *
-   * @param {object} primusProvider - The `primus` provider
-   */
-  function configurePrimus(primusProvider) {
-    primusProvider
-      .setEndpoint('http://127.0.0.1:3000')
-      .setOptions({
-        reconnect: {
-          minDelay: 100,
-          maxDelay: 60000,
-          retries: 100
-        }
-      })
-      .setDefaultMultiplex(true);
   }
 })();

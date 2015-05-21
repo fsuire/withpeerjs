@@ -32,7 +32,7 @@
    * Decorate the `$exceptionHandler` service to handle uncaught Angular exceptions.
    *
    * @param {object} $delegate - The angular `$delegate` service
-   * @param {object} logger - {@link blocks.logger.logger The `logger` service}
+   * @param {object} logger    - {@link blocks.logger.logger The `logger` service}
    *
    * @returns {function}
    */

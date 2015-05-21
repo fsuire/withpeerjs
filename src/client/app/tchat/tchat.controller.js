@@ -5,7 +5,7 @@
     .module('app.tchat')
     .controller('Tchat', TchatController);
 
-  TchatController.$inject = ['primus', 'logger'];
+  TchatController.$inject = ['$scope', 'io', 'logger'];
 
   /**
    * @ngdoc Controller
@@ -15,24 +15,30 @@
    * @description
    * The Tchat controller
    *
-   * @param {object} Primus - The `primus` service
+   * @param {object} io     - {@link blocks.io.io The `io` service}
    * @param {logger} logger - {@link blocks.logger.logger The `logger` service}
+   *
+   * @property {string} nickname   - The user nickname
+   * @property {sring} message     - The user message
+   * @property {array} messageList - An array of message
+   *
    */
-  function TchatController(primus, logger) {
+  function TchatController($scope, io, logger) {
     var vm = this;
 
-    vm.message = null;
+    vm.nickname    = null;
+    vm.message     = null;
     vm.messageList = [];
 
-    vm.sendMessageAction = sendMessageAction;
+    vm.sendMessageAction    = sendMessageAction;
     vm.getMessageListAction = getMessageListAction;
 
     _init();
 
-    ////////////////////
+    ////////////////
 
     function _init() {
-      primus.$on('tchat-send-message', getMessageListAction);
+      io.on('chat:message', getMessageListAction);
     }
 
     /**
@@ -41,9 +47,12 @@
      * @memberOf app.tchat.Tchat
      */
     function sendMessageAction() {
-      var data = { message: vm.message };
+      var data = {
+        nickname: vm.nickname,
+        message: vm.message
+      };
 
-      primus.send('tchat-send-message', data);
+      io.emit('chat:message', data);
 
       logger.debug('TchatController::sendMessage()', data);
     }
@@ -56,7 +65,9 @@
     function getMessageListAction(data) {
       logger.debug('TchatController::getMessageList()', data);
 
-      vm.messageList.push(data.message);
+      $scope.$apply(function() {
+        vm.messageList.push(data);
+      });
 
       logger.debug('TchatController.messageList', vm.messageList);
     }

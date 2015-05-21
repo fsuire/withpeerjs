@@ -14,8 +14,6 @@
       'app.core',
 
       /* Feature areas */
-
-      'app.webrtc',
       'app.tchat'
     ]);
 })();

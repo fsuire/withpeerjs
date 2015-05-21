@@ -16,6 +16,8 @@
    * Returns an instance of the `logger` service.
    *
    * @param {object} $log - The angular `$log` service
+   *
+   * @returns @param {object} {@link blocks.logger.logger The `logger` service}
    */
   function loggerFactory($log) {
     /**

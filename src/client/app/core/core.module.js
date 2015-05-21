@@ -12,14 +12,13 @@
   angular
     .module('app.core', [
       /* Angular modules */
-      'ngResource',
 
       /* Cross-app modules */
       'blocks.exception',
+      'blocks.io',
       'blocks.logger',
-      'blocks.router',
+      'blocks.router'
 
       /* 3rd-party modules */
-      'primus'
     ]);
 })();

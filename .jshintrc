@@ -2,7 +2,6 @@
   "extends": ".jshintrc-base",
   "globals": {
     "angular": false,
-    "io": false,
     "describe": false,
     "it": false,
     "beforeEach": false,
