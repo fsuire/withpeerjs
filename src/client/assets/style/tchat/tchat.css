@@ -1,0 +1,41 @@
+form.tchat {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 70%;
+}
+@media screen and (max-width: 800px) {
+  form.tchat {
+    width: 90%;
+    min-width: 500px;
+  }
+}
+@media screen and (max-width: 500px) {
+  form.tchat {
+    width: 100%;
+    min-width: initial;
+  }
+}
+form.tchat input.nickname {
+  width: 100%;
+}
+form.tchat .board {
+  width: 100%;
+  min-height: 200px;
+  max-height: 50vh;
+  border: 1px solid #008000;
+  overflow: hidden;
+}
+form.tchat .board .message-data {
+  display: flex;
+  flex-direction: row;
+}
+form.tchat .board .message-data .nickname {
+  min-width: 100px;
+  max-width: 20%;
+}
+form.tchat input.message {
+  flex: 1;
+}

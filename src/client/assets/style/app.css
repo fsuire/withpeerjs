@@ -107,39 +107,3 @@ td {
 a img {
   border: none;
 }
-html {
-  height: 100%;
-}
-body {
-  min-height: 100%;
-  background: -webkit-linear-gradient(top, #e6e6e6 0%, rgba(230,230,230,0) 100px, rgba(230,230,230,0) 100%) no-repeat;
-  background: -moz-linear-gradient(top, #e6e6e6 0%, rgba(230,230,230,0) 100px, rgba(230,230,230,0) 100%) no-repeat;
-  background: -o-linear-gradient(top, #e6e6e6 0%, rgba(230,230,230,0) 100px, rgba(230,230,230,0) 100%) no-repeat;
-  background: -ms-linear-gradient(top, #e6e6e6 0%, rgba(230,230,230,0) 100px, rgba(230,230,230,0) 100%) no-repeat;
-  background: linear-gradient(to bottom, #e6e6e6 0%, rgba(230,230,230,0) 100px, rgba(230,230,230,0) 100%) no-repeat;
-  font-family: Oxygen, sans-serif;
-}
-h1 {
-  font-size: 2rem;
-  color: #ffc0cb;
-}
-div.content {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: box;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -o-box-orient: vertical;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -o-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-}

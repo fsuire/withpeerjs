@@ -1,0 +1,50 @@
+@import '../app.theme.color';
+@import '../app.theme.responsive';
+
+form.tchat {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  width: 70%;
+
+  @media screen and (max-width: $responsive-medium-break) {
+    width: 90%;
+    min-width: $responsive-small-break;
+  }
+
+  @media screen and (max-width: $responsive-small-break) {
+    width: 100%;
+    min-width: initial;
+  }
+
+  input.nickname {
+    width: 100%;
+  }
+
+  .board {
+    width: 100%;
+    min-height: 200px;
+    max-height: 50vh;
+    border: 1px solid $title-primary-color;
+    overflow: hidden;
+
+    .message-data {
+      display: flex;
+      flex-direction: row;
+
+      .nickname {
+        min-width: 100px;
+        max-width: 20%;
+      }
+
+    }
+  }
+
+  input.message {
+    flex: 1;
+  }
+
+}
