@@ -14,6 +14,11 @@ body {
 h1 {
   font-size: 3rem;
   color: $title-primary-color;
+  margin-bottom: 0.5em;
+
+  @media screen and (max-width: $responsive-small-break) {
+    margin: 0;
+  }
 }
 
 div.content {
@@ -24,6 +29,5 @@ div.content {
 
   @media screen and (max-width: $responsive-small-break) {
     padding: 0;
-    padding-top: 1em;
   }
 }

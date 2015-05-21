@@ -9,6 +9,12 @@ body {
 h1 {
   font-size: 3rem;
   color: #008000;
+  margin-bottom: 0.5em;
+}
+@media screen and (max-width: 500px) {
+  h1 {
+    margin: 0;
+  }
 }
 div.content {
   display: flex;
@@ -19,6 +25,5 @@ div.content {
 @media screen and (max-width: 500px) {
   div.content {
     padding: 0;
-    padding-top: 1em;
   }
 }
