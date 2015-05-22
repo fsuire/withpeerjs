@@ -2,9 +2,9 @@
 @import '../app.theme.responsive';
 
 form.tchat {
+  flex: 1;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
 
@@ -18,24 +18,27 @@ form.tchat {
     width: 100%;
   }
 
-  input.nickname {
+  header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.25em;
     width: 100%;
-    margin-bottom: 0.5em;
 
     @media screen and (max-width: $responsive-small-break) {
       margin-bottom: 0;
     }
+    
+    .nickname {
+      flex: 1;
+    }
   }
 
   .board {
+    flex: 1;
     width: 100%;
-    min-height: 200px;
-    max-height: 50vh;
-    border: 1px solid $title-primary-color;
-    border-radius: 0.5em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.25em;
     padding: 0.25em;
-    overflow: auto;
+    position: relative;
 
     @media screen and (max-width: $responsive-small-break) {
       border-right: 0;
@@ -43,21 +46,73 @@ form.tchat {
       border-radius: 0;
       margin-bottom: 0;
     }
+    
+    .clip {
+      overflow: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
 
     .message-data {
       display: flex;
       flex-direction: row;
+      margin-bottom: 0.25em;
+      min-height: 1em;
 
       .nickname {
         min-width: 100px;
         max-width: 20%;
+        text-align: right;
+        padding: 0.25em;
+        border-radius: 0.5em;
+        margin-right: 0.25em;
+      }
+      
+      .message {
+        padding: 0.25em;
+        border-radius: 0.5em;
+        flex: 1;
       }
 
     }
+    
+    .message-data:nth-child(odd) {
+      $$bg-color = lighten($secondary-color, 70%);
+      
+      .nickname {
+        background-color: $$bg-color;
+      }
+      
+      .message {
+        background-color: $$bg-color;
+      }
+    }
+    
+    .message-data:nth-child(even) {
+      $$bg-color = lighten($primary-color, 70%);
+      
+      .nickname {
+        background-color: $$bg-color;
+      }
+      
+      .message {
+        background-color: $$bg-color;
+      }
+    }
   }
-
-  input.message {
-    flex: 1;
+  
+  footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    
+    input.message {
+      margin-right: 0.25em;
+      flex: 1;
+    }
   }
 
 }

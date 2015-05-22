@@ -1,7 +1,7 @@
 form.tchat {
+  flex: 1;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
   width: 70%;
@@ -16,24 +16,26 @@ form.tchat {
     width: 100%;
   }
 }
-form.tchat input.nickname {
+form.tchat header {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.25em;
   width: 100%;
-  margin-bottom: 0.5em;
 }
 @media screen and (max-width: 500px) {
-  form.tchat input.nickname {
+  form.tchat header {
     margin-bottom: 0;
   }
 }
+form.tchat header .nickname {
+  flex: 1;
+}
 form.tchat .board {
+  flex: 1;
   width: 100%;
-  min-height: 200px;
-  max-height: 50vh;
-  border: 1px solid #008000;
-  border-radius: 0.5em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
   padding: 0.25em;
-  overflow: auto;
+  position: relative;
 }
 @media screen and (max-width: 500px) {
   form.tchat .board {
@@ -43,14 +45,51 @@ form.tchat .board {
     margin-bottom: 0;
   }
 }
+form.tchat .board .clip {
+  overflow: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 form.tchat .board .message-data {
   display: flex;
   flex-direction: row;
+  margin-bottom: 0.25em;
+  min-height: 1em;
 }
 form.tchat .board .message-data .nickname {
   min-width: 100px;
   max-width: 20%;
+  text-align: right;
+  padding: 0.25em;
+  border-radius: 0.5em;
+  margin-right: 0.25em;
 }
-form.tchat input.message {
+form.tchat .board .message-data .message {
+  padding: 0.25em;
+  border-radius: 0.5em;
+  flex: 1;
+}
+form.tchat .board .message-data:nth-child(odd) .nickname {
+  background-color: #f5d7f8;
+}
+form.tchat .board .message-data:nth-child(odd) .message {
+  background-color: #f5d7f8;
+}
+form.tchat .board .message-data:nth-child(even) .nickname {
+  background-color: #d5edc6;
+}
+form.tchat .board .message-data:nth-child(even) .message {
+  background-color: #d5edc6;
+}
+form.tchat footer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+form.tchat footer input.message {
+  margin-right: 0.25em;
   flex: 1;
 }
