@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  // Clean the distPath
+  // Clean the outputDir
 
   var del = require('del');
 
