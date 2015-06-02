@@ -11,6 +11,7 @@ global.config      = require('./config');
 global.ROOT        = path.normalize(__dirname + '/..');
 global.VERSION     = args.version || require('../package.json').version;
 global.SERVER_PORT = args.port || 8080;
+global.IS_SYNC      = args.sync;
 global.IS_DEV      = args.dev;
 global.IS_PROD     = args.prod;
 
