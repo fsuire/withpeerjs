@@ -4,10 +4,11 @@
 var bowerFiles = require('bower-files')();
 var files = []
   .concat(bowerFiles.ext('js').files)
-  .concat([
-    'src/client/**/*.module.js',
-    'src/client/**/*.js'
-  ]);
+  .concat(config.client.jsFiles)
+  .concat(config.client.jsDevFiles);
+
+var preprocessors = {};
+preprocessors[config.clientDir + '**/*.js'] = 'coverage';
 
 module.exports = function(config) {
   config.set({
@@ -32,9 +33,7 @@ module.exports = function(config) {
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      'src/client/**/*.js': 'coverage'
-    },
+    preprocessors: preprocessors,
 
 
     // test results reporter to use
@@ -70,7 +69,7 @@ module.exports = function(config) {
     singleRun: true,
 
     coverageReporter: {
-      dir: 'reports/client/',
+      dir: config.reportsDir,
       reporters: [
         { type: 'html', subdir: 'report-html' },
         { type: 'lcov', subdir: 'report-lcov' }

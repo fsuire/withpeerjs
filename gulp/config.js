@@ -16,11 +16,20 @@ module.exports = {
       'src/client/index.html'
     ],
     jsFiles: [
+      'src/client/**/*.module.js',
       'src/client/**/*.js',
+      //'!src/client/**/*.mock.js',
       '!src/client/**/*.spec.js'
+    ],
+    jsDevFiles: [
+      //'src/client/**/*.mock.js',
+      'src/client/**/*.spec.js'
     ],
     styleDir: 'client/assets/styles/',
     scriptDir: 'client/assets/scripts/'
   },
-  outputDir: 'dist/'
+  clientDir: 'client/',
+  outputDir: 'dist/',
+  reportsDir: 'reports/',
+  serverDir: 'server/'
 };
