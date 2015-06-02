@@ -3,7 +3,7 @@
 
   // Copy server code from src to the distPath
 
-  exports.task = function(done) {
+  exports.task = function() {
     return gulp
       .src(config.server.jsFiles)
       .pipe(plug.newer(config.outputDir))
