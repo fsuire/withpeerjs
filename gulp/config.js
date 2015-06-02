@@ -18,9 +18,9 @@ module.exports = {
     jsFiles: [
       'src/client/**/*.js',
       '!src/client/**/*.spec.js'
-    ]
+    ],
+    styleDir: 'client/assets/styles/',
+    scriptDir: 'client/assets/scripts/'
   },
-  outputDir: 'dist/',
-  styleDir: 'client/assets/styles/',
-  scriptDir: 'client/assets/scripts/'
+  outputDir: 'dist/'
 };
