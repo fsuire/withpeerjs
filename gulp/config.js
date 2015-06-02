@@ -20,5 +20,7 @@ module.exports = {
       '!src/client/**/*.spec.js'
     ]
   },
-  outputDir: 'dist/'
+  outputDir: 'dist/',
+  styleDir: 'client/assets/styles/',
+  scriptDir: 'client/assets/scripts/'
 };
