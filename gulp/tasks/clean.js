@@ -1,7 +1,9 @@
-exports.task = function(done) {
-  del([config.outputDir], function(error, paths) {
-    log('Deleted files/folders:\n', paths.join('\n'));
+var config = require('../config');
+var del    = require('del');
 
-    done(error);
+exports.task = function(done) {
+  del(config.ouputDir, function (err, paths) {
+    console.log('Deleted files/folders:\n', paths.join('\n'));
+    done(err);
   });
 };
