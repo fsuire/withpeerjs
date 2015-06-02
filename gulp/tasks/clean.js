@@ -1,5 +1,6 @@
-var config = require('../config');
-var del    = require('del');
+'use strict';
+
+var del = require('del');
 
 exports.task = function(done) {
   del(config.outputDir, function (err, paths) {

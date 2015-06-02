@@ -1,3 +1,7 @@
+'use strict';
+
+require('./gulp/globals');
+
 var gulp = require('gulp');
 var fs   = require('fs');
 
