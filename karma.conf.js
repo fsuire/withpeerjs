@@ -8,7 +8,7 @@ var files = []
   .concat(config.client.jsDevFiles);
 
 var preprocessors = {};
-preprocessors[config.clientDir + '**/*.js'] = 'coverage';
+preprocessors[config.sourceDir + config.clientDir + '**/*.js'] = 'coverage';
 
 module.exports = function(config) {
   config.set({

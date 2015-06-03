@@ -33,5 +33,6 @@ module.exports = {
   clientDir: 'client/',
   outputDir: 'dist/',
   reportsDir: 'reports/',
-  serverDir: 'server/'
+  serverDir: 'server/',
+  sourceDir: 'src/'
 };

@@ -4,10 +4,10 @@
   // Copy server code from src to the outputDir
 
   var path = require('path');
-  
+
   exports.task = function() {
     var serverFiles = config.server.jsFiles;
-    var outputDir = path.join(config.outputDir, config.serverDir);
+    var outputDir = config.outputDir + config.serverDir;
 
     return gulp
       .src(serverFiles)
