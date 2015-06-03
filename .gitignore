@@ -4,4 +4,3 @@ coverage/
 dist/
 reports/
 src/**/*.css
-/client/assets/styles/app.theme.color.css
