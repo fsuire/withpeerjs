@@ -11,9 +11,7 @@
     return plug.merge(
       gulp
         .src(config.client.cssFiles)
-        .pipe(plug.concat('application.css'))
-        .pipe(gulp.dest(config.outputDir + config.client.styleDir))
-        .pipe(plug.rename({suffix: '.min'}))
+        .pipe(plug.concat('application.min.css'))
         .pipe(plug.bytediff.start())
         .pipe(plug.minifyCss())
         .pipe(plug.bytediff.stop(utils.bytediffFormatter))
@@ -26,9 +24,7 @@
       gulp
         .src(config.client.jsFiles)
         .pipe(plug.angularFilesort())
-        .pipe(plug.concat('application.js'))
-        .pipe(gulp.dest(config.outputDir + config.client.scriptDir))
-        .pipe(plug.rename({suffix: '.min'}))
+        .pipe(plug.concat('application.min.js'))
         .pipe(plug.bytediff.start())
         .pipe(plug.uglify())
         .pipe(plug.bytediff.stop(utils.bytediffFormatter))
@@ -45,8 +41,6 @@
           module: 'app.core',
           standalone: false
         }))
-        .pipe(gulp.dest(config.outputDir + config.client.scriptDir))
-        .pipe(plug.rename({suffix: '.min'}))
         .pipe(plug.bytediff.start())
         .pipe(plug.uglify())
         .pipe(plug.bytediff.stop(utils.bytediffFormatter))
