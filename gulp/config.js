@@ -12,8 +12,7 @@ module.exports = {
       'src/client/**/*.css'
     ],
     htmlFiles: [
-      'src/client/error.html',
-      'src/client/index.html'
+      'src/client/**/*.html'
     ],
     jsFiles: [
       'src/client/**/*.module.js',
@@ -26,7 +25,10 @@ module.exports = {
       'src/client/**/*.spec.js'
     ],
     styleDir: 'client/assets/styles/',
-    scriptDir: 'client/assets/scripts/'
+    scriptDir: 'client/assets/scripts/',
+    templateFiles: [
+      'src/client/app/**/*.html'
+    ]
   },
   clientDir: 'client/',
   outputDir: 'dist/',
