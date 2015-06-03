@@ -4,9 +4,9 @@
   /**
    * Formatter for bytediff to display the size changes after processing
    *
-   * @param  {Object} data - byte data
+   * @param {object} data - byte data
    *
-   * @return {String} Difference in bytes, formatted
+   * @return {string} Difference in bytes, formatted
    */
   module.exports.bytediffFormatter = function(data) {
     var difference = (data.savings > 0) ? ' smaller.' : ' larger.';
@@ -15,4 +15,12 @@
       + ' and is ' + ((1 - data.percent) * 100).toFixed(2) + '%' + difference;
   };
 
+  /**
+   * Log any change on files
+   *
+   * @param {object} event - The event's change
+   */
+  module.exports.logWatch = function(event) {
+    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+  };
 })();

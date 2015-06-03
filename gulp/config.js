@@ -4,7 +4,8 @@ module.exports = {
   server: {
     jsFiles: [
       'src/server/**/*.js',
-      '!src/server/**/*.spec.js'
+      '!src/server/**/*.spec.js',
+      '!src/server/specs/bootstrap.js'
     ]
   },
   client: {
