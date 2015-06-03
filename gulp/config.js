@@ -11,6 +11,9 @@ module.exports = {
     cssFiles: [
       'src/client/**/*.css'
     ],
+    stylusFiles: [
+      'src/client/app/**/*.styl'
+    ],
     htmlFiles: [
       'src/client/**/*.html'
     ],
