@@ -6,6 +6,10 @@ module.exports = {
       'src/server/**/*.js',
       '!src/server/**/*.spec.js',
       '!src/server/specs/bootstrap.js'
+    ],
+    jsDevFiles: [
+      'src/server/specs/bootstrap.js',
+      'src/server/**/*.spec.js'
     ]
   },
   client: {
