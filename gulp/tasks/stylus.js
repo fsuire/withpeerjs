@@ -17,7 +17,7 @@
         use: nib(),
         compress: compress
       }))
-      .pipe(gulp.dest(config.outputDir +config.client.styleDir));
+      .pipe(gulp.dest('src/' + config.client.styleDir));
   };
 
 })();

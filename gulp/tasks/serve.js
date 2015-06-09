@@ -6,7 +6,7 @@
   var args  = require('minimist')(process.argv.slice(2));
   var browserSync = require('browser-sync');
 
-  exports.dependencies = ['build'];
+  exports.dependencies = ['watch'];
 
   exports.task = function(done) {
     var browserSyncLoadingDelay = 1000;

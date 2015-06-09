@@ -3,46 +3,46 @@
 
   // Watch changes and apply tasks
 
+  var utils = require('../utils');
   var runSequence = require('run-sequence');
 
-  exports.dependencies = ['serve'];
+  console.log(':)', utils);
 
-  exports.task = function(callback) {
+  exports.dependencies = ['build'];
 
+  exports.task = function() {
+    console.log('watch ');
    gulp
       .watch(config.client.stylusFiles, function() {
+      console.log('merde');
         runSequence('stylus');
       })
-      .on('change', logWatch);
+      .on('change', utils.logWatch);
 
     gulp
       .watch(config.client.cssFiles, function() {
         runSequence('build');
       })
-      .on('change', logWatch);
+      .on('change', utils.logWatch);
 
     gulp
       .watch(config.client.jsFiles, function() {
         runSequence('karma', 'build');
       })
-      .on('change', logWatch);
+      .on('change', utils.logWatch);
 
     gulp
       .watch(config.client.htmlFiles, function() {
         runSequence('build');
       })
-      .on('change', logWatch);
+      .on('change', utils.logWatch);
 
     gulp
       .watch(config.server.jsFiles, function() {
         runSequence('build');
       })
-      .on('change', logWatch);
+      .on('change', utils.logWatch);
 
   };
-
-  function logWatch(event) {
-    log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-  }
 
 })();
