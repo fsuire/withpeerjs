@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  // Build the application
+  // Watch changes and apply tasks
 
   var runSequence = require('run-sequence');
 
