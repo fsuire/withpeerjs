@@ -16,6 +16,7 @@
       /* Cross-app modules */
       'blocks.exception',
       'blocks.io',
+      'blocks.navigator',
       'blocks.logger',
       'blocks.router'
 
