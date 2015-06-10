@@ -16,10 +16,6 @@
    * @returns {object} - {@link blocks.navigator.navigator the `navigator` service}
    */
   function navigatorFactory() {
-    navigator.getUserMedia = navigator.getUserMedia
-      || navigator.webkitGetUserMedia
-      || navigator.mozGetUserMedia;
-
     /**
      * @ngdoc Service
      * @memberOf blocks.navigator
