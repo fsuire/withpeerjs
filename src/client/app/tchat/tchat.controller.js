@@ -114,7 +114,7 @@
     function _sendOffer(description) {
       return function() {
         console.log('sending offer');
-        io.emit('rtc:offer', description);
+        //io.emit('rtc:offer', description);
       };
     }
 
