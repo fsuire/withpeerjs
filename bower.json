@@ -18,5 +18,8 @@
     "ui-router": "~0.2.13",
     "angular-sanitize": "~1.4.0",
     "webrtc-adapter": "~0.1.1"
+  },
+  "resolutions": {
+    "angular": "1.4.0"
   }
 }

@@ -30,19 +30,35 @@
   function TchatController($scope, $window, $sce, io, navigator, logger) {
     var vm = this;
 
+    var _peerA            = null;
+    var _peerB            = null;
+    var _peerAsendChannel = null;
+
     vm.nickname    = null;
     vm.message     = null;
     vm.messageList = [];
     vm.video       = null;
 
     vm.sendMessageAction    = sendMessageAction;
-    vm.getMessageListAction = getMessageListAction;
+    vm.sendOfferAction      = sendOfferAction;
+    //vm.getMessageListAction = getMessageListAction;
 
     _init();
 
     ////////////////
 
     function _init() {
+      // io.on('chat:message', getMessageListAction);
+      io.on('rtc:offer', _rtcOfferReceived);
+      io.on('rtc:answer', _rtcAnswerReceived);
+      io.on('rtc:candidate', _rtcCandidateReceived);
+
+      _initVideoAsLocalMediaStream();
+
+      _initLocalRtcPeerConnection();
+    }
+
+    function _initVideoAsLocalMediaStream() {
       navigator.getUserMedia({
         'video': true
       }, function(localMediaStream) {
@@ -52,9 +68,142 @@
       }, function(error) {
         logger.debug('navigator.getUserMedia error: ', error);
       });
-
-      io.on('chat:message', getMessageListAction);
     }
+
+    function _initLocalRtcPeerConnection() {
+      _peerA            = new $window.RTCPeerConnection({ iceServers: [] });
+      _peerB            = new $window.RTCPeerConnection({ iceServers: [] });
+      _peerAsendChannel = _peerA.createDataChannel('sendDataChannel');
+
+      // _peerA.createOffer(_createOffer, _handleFailure('creating offer'));
+      _peerB.createDataChannel('sendDataChannel');
+
+      _peerA.onicecandidate = _sendCandidate;
+      _peerB.ondatachannel  = _onDataChannel;
+    }
+
+    function _handleFailure(step) {
+      return function(err) {
+        console.error('error ' + step + ': ', err);
+      };
+    }
+
+    function _createOffer(description) {
+      console.log('peer A successfully created offer');
+      _peerA.setLocalDescription(
+        description,
+        _sendOffer(description),
+        _handleFailure('setting local description of peer A')
+      );
+    }
+
+    function _createAnswer() {
+      _peerB.createAnswer(
+        function(description) {
+          console.log('peer B successfully created answer');
+          _peerB.setLocalDescription(
+            description,
+            _sendAnswer(description),
+            _handleFailure('setting local description of peer B')
+          );
+        },
+        _handleFailure('creating answer')
+      );
+    }
+
+    function _sendAnswer(description) {
+      return function() {
+        console.log('sending answer');
+        io.emit('rtc:answer', description);
+        /*_peerA.setRemoteDescription(
+          description,
+          function() {
+            console.log('signaling completed between peers');
+          },
+          _handleFailure('setting remote description of peer A')
+        );*/
+      };
+    }
+
+    function _sendOffer(description) {
+      return function() {
+        console.log('sending offer');
+        io.emit('rtc:offer', description);
+        /*_peerB.setRemoteDescription(
+          description,
+          _createAnswer,
+          _handleFailure('setting remote description of peer B')
+        );*/
+      };
+    }
+
+    function _sendCandidate(evt) {
+      console.log('sending candidate');
+      if (evt.candidate) {
+        //_peerB.addIceCandidate(evt.candidate);
+        io.emit('rtc:candidate', evt.candidate);
+      } else {
+        console.log('peer A has finished gathering candidates');
+      }
+    }
+
+    function _onDataChannel(evt) {
+      console.log('on data channel !');
+      var receiveChannel = evt.channel;
+      receiveChannel.onmessage = _messageReceived;
+
+      function _messageReceived(evt) {
+        console.log('message !', evt.data);
+        var message = JSON.parse(evt.data);
+        _appendMessage(message);
+      }
+    }
+
+    function _rtcOfferReceived(offer) {
+      console.log('offer received');
+      offer = new $window.RTCSessionDescription(offer);
+      _peerB.setRemoteDescription(
+        offer,
+        _createAnswer,
+        _handleFailure('setting remote description of peer B')
+      );
+    }
+
+    function _rtcAnswerReceived(answer) {
+      logger.debug('answer received');
+      answer = new $window.RTCSessionDescription(answer);
+      _peerA.setRemoteDescription(
+        answer,
+        function() {
+          console.log('signaling completed between peers');
+        },
+        _handleFailure('setting remote description of peer A')
+      );
+    }
+
+    function _rtcCandidateReceived(candidate) {
+      candidate = new $window.RTCIceCandidate(candidate);
+      _peerB.addIceCandidate(candidate);
+    }
+
+    /**
+     * @function
+     * @name _appendMessage
+     * @memberOf app.tchat.Tchat
+     *
+     * @param {object} data - A message to push in the message list
+     */
+    function _appendMessage(data) {
+      logger.debug('TchatController::appendMessage()', data);
+
+      $scope.$apply(function() {
+        vm.messageList.push(data);
+      });
+
+      logger.debug('TchatController.messageList', vm.messageList);
+    }
+
+    ////////////////
 
     /**
      * @function
@@ -67,26 +216,15 @@
         message: vm.message
       };
 
-      io.emit('chat:message', data);
+      // io.emit('chat:message', data);
+      _peerAsendChannel.send(JSON.stringify(data));
+      // _appendMessage(data);
 
       logger.debug('TchatController::sendMessage()', data);
     }
 
-    /**
-     * @function
-     * @name getMessageListAction
-     * @memberOf app.tchat.Tchat
-     *
-     * @param {object} data - A message to push in the message list
-     */
-    function getMessageListAction(data) {
-      logger.debug('TchatController::getMessageList()', data);
-
-      $scope.$apply(function() {
-        vm.messageList.push(data);
-      });
-
-      logger.debug('TchatController.messageList', vm.messageList);
+    function sendOfferAction() {
+      _peerA.createOffer(_createOffer, _handleFailure('creating offer'));
     }
   }
 })();

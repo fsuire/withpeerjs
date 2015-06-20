@@ -4,7 +4,7 @@
   module.exports = socketIOService;
 
   socketIOService['@singleton'] = true;
-  socketIOService['@require'] = [
+  socketIOService['@require']   = [
     'socket.io',
     'services/http.service'
   ];
@@ -21,6 +21,10 @@
 
       socket.on('disconnect', disconnection);
       socket.on('chat:message', messageReceived);
+
+      socket.on('rtc:offer', rtcOfferReceived(socket));
+      socket.on('rtc:answer', rtcAnswerReceived(socket));
+      socket.on('rtc:candidate', rtcCandidateReceived(socket));
     }
 
     function disconnection() {
@@ -32,6 +36,26 @@
       io.emit('chat:message', message);
     }
 
+    function rtcOfferReceived(socket) {
+      console.log('offer received');
+      return function(offer) {
+        socket.broadcast.emit('rtc:offer', offer);
+      }
+    }
+
+    function rtcAnswerReceived(socket) {
+      console.log('answer received');
+      return function(answer) {
+        socket.broadcast.emit('rtc:answer', answer);
+      }
+    }
+
+    function rtcCandidateReceived(socket) {
+      console.log('candidate received');
+      return function(candidate) {
+        socket.broadcast.emit('rtc:candidate', candidate);
+      }
+    }
   }
 
 })();
