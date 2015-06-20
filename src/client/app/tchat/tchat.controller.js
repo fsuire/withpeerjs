@@ -41,14 +41,12 @@
 
     vm.sendMessageAction    = sendMessageAction;
     vm.sendOfferAction      = sendOfferAction;
-    //vm.getMessageListAction = getMessageListAction;
 
     _init();
 
     ////////////////
 
     function _init() {
-      // io.on('chat:message', getMessageListAction);
       io.on('rtc:offer', _rtcOfferReceived);
       io.on('rtc:answer', _rtcAnswerReceived);
       io.on('rtc:candidate', _rtcCandidateReceived);
@@ -72,14 +70,9 @@
 
     function _initLocalRtcPeerConnection() {
       _peerA            = new $window.RTCPeerConnection({ iceServers: [] });
-      _peerB            = new $window.RTCPeerConnection({ iceServers: [] });
       _peerAsendChannel = _peerA.createDataChannel('sendDataChannel');
 
-      // _peerA.createOffer(_createOffer, _handleFailure('creating offer'));
-      _peerB.createDataChannel('sendDataChannel');
-
       _peerA.onicecandidate = _sendCandidate;
-      _peerB.ondatachannel  = _onDataChannel;
     }
 
     function _handleFailure(step) {
@@ -115,32 +108,19 @@
       return function() {
         console.log('sending answer');
         io.emit('rtc:answer', description);
-        /*_peerA.setRemoteDescription(
-          description,
-          function() {
-            console.log('signaling completed between peers');
-          },
-          _handleFailure('setting remote description of peer A')
-        );*/
       };
     }
 
     function _sendOffer(description) {
       return function() {
         console.log('sending offer');
-        io.emit('rtc:offer', description);
-        /*_peerB.setRemoteDescription(
-          description,
-          _createAnswer,
-          _handleFailure('setting remote description of peer B')
-        );*/
+        //io.emit('rtc:offer', description);
       };
     }
 
     function _sendCandidate(evt) {
       console.log('sending candidate');
       if (evt.candidate) {
-        //_peerB.addIceCandidate(evt.candidate);
         io.emit('rtc:candidate', evt.candidate);
       } else {
         console.log('peer A has finished gathering candidates');
@@ -161,7 +141,13 @@
 
     function _rtcOfferReceived(offer) {
       console.log('offer received');
-      offer = new $window.RTCSessionDescription(offer);
+
+      offer  = new $window.RTCSessionDescription(offer);
+      _peerB = new $window.RTCPeerConnection({ iceServers: [] });
+
+      _peerB.createDataChannel('sendDataChannel');
+      _peerB.ondatachannel = _onDataChannel;
+
       _peerB.setRemoteDescription(
         offer,
         _createAnswer,
@@ -216,7 +202,6 @@
         message: vm.message
       };
 
-      // io.emit('chat:message', data);
       _peerAsendChannel.send(JSON.stringify(data));
       // _appendMessage(data);
 
