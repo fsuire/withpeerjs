@@ -37,22 +37,22 @@
     }
 
     function rtcOfferReceived(socket) {
+      console.log('offer received');
       return function(offer) {
-        console.log('offer received');
         socket.broadcast.emit('rtc:offer', offer);
       }
     }
 
     function rtcAnswerReceived(socket) {
+      console.log('answer received');
       return function(answer) {
-        console.log('answer received');
         socket.broadcast.emit('rtc:answer', answer);
       }
     }
 
     function rtcCandidateReceived(socket) {
+      console.log('candidate received');
       return function(candidate) {
-        console.log('candidate received');
         socket.broadcast.emit('rtc:candidate', candidate);
       }
     }
