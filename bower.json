@@ -20,6 +20,6 @@
     "webrtc-adapter": "~0.1.1"
   },
   "resolutions": {
-    "angular": "1.4.0"
+    "angular": "1.4.1"
   }
 }
