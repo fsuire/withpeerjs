@@ -17,6 +17,7 @@
       'blocks.exception',
       'blocks.io',
       'blocks.navigator',
+      'blocks.rtc',
       'blocks.logger',
       'blocks.router'
 

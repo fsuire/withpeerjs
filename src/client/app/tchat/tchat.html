@@ -3,6 +3,7 @@
 <form class="tchat" name="message" ng-submit="vm.sendMessageAction();">
   <header>
     <input type="text" ng-model="vm.nickname" placeholder="Enter your nickname" class="nickname"/>
+    <input type="button" value="Offer" ng-click="vm.sendOfferAction()"/>
   </header>
 
   <div class="video-board">
@@ -21,6 +22,5 @@
   <footer>
     <input type="text" ng-model="vm.message" placeholder="type a message" class="message"/>
     <input type="submit" value="Send" />
-    <input type="button" value="Offer" ng-click="vm.sendOfferAction()"/>
   </footer>
 </form>

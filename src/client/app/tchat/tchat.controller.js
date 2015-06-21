@@ -5,7 +5,7 @@
     .module('app.tchat')
     .controller('Tchat', TchatController);
 
-  TchatController.$inject = ['$scope', '$window', '$sce', 'io', 'navigator', 'logger'];
+  TchatController.$inject = ['$scope', '$window', '$sce', 'io', 'navigator', 'logger', 'rtcUp'];
 
   /**
    * @ngdoc Controller
@@ -27,21 +27,20 @@
    * @property {array} messageList - An array of message
    *
    */
-  function TchatController($scope, $window, $sce, io, navigator, logger) {
+  function TchatController($scope, $window, $sce, io, navigator, logger, rtcUp) {
     var vm = this;
 
-    var _peerA            = null;
-    var _peerB            = null;
-    var _peerAsendChannel = null;
+    var _upConnection               = null;
+    var _downConnection             = null;
+    var _upConnectionChannel        = null;
 
     vm.nickname    = null;
     vm.message     = null;
     vm.messageList = [];
     vm.video       = null;
 
-    vm.sendMessageAction    = sendMessageAction;
-    vm.sendOfferAction      = sendOfferAction;
-    //vm.getMessageListAction = getMessageListAction;
+    vm.sendMessageAction = sendMessageAction;
+    vm.sendOfferAction   = sendOfferAction;
 
     _init();
 
@@ -50,12 +49,12 @@
     function _init() {
       // io.on('chat:message', getMessageListAction);
       io.on('rtc:offer', _rtcOfferReceived);
-      io.on('rtc:answer', _rtcAnswerReceived);
       io.on('rtc:candidate', _rtcCandidateReceived);
 
       _initVideoAsLocalMediaStream();
 
       _initLocalRtcPeerConnection();
+      rtcUp.initialize();
     }
 
     function _initVideoAsLocalMediaStream() {
@@ -71,15 +70,12 @@
     }
 
     function _initLocalRtcPeerConnection() {
-      _peerA            = new $window.RTCPeerConnection({ iceServers: [] });
-      _peerB            = new $window.RTCPeerConnection({ iceServers: [] });
-      _peerAsendChannel = _peerA.createDataChannel('sendDataChannel');
 
-      // _peerA.createOffer(_createOffer, _handleFailure('creating offer'));
-      _peerB.createDataChannel('sendDataChannel');
+      _downConnection      = new $window.RTCPeerConnection({ iceServers: [] });
 
-      _peerA.onicecandidate = _sendCandidate;
-      _peerB.ondatachannel  = _onDataChannel;
+      _downConnection.createDataChannel('sendDataChannel');
+
+      _downConnection.ondatachannel  = _onDataChannel;
     }
 
     function _handleFailure(step) {
@@ -88,23 +84,14 @@
       };
     }
 
-    function _createOffer(description) {
-      console.log('peer A successfully created offer');
-      _peerA.setLocalDescription(
-        description,
-        _sendOffer(description),
-        _handleFailure('setting local description of peer A')
-      );
-    }
-
     function _createAnswer() {
-      _peerB.createAnswer(
+      _downConnection.createAnswer(
         function(description) {
           console.log('peer B successfully created answer');
-          _peerB.setLocalDescription(
+          _downConnection.setLocalDescription(
             description,
             _sendAnswer(description),
-            _handleFailure('setting local description of peer B')
+            _handleFailure('setting local description of _downConnection')
           );
         },
         _handleFailure('creating answer')
@@ -115,36 +102,7 @@
       return function() {
         console.log('sending answer');
         io.emit('rtc:answer', description);
-        /*_peerA.setRemoteDescription(
-          description,
-          function() {
-            console.log('signaling completed between peers');
-          },
-          _handleFailure('setting remote description of peer A')
-        );*/
       };
-    }
-
-    function _sendOffer(description) {
-      return function() {
-        console.log('sending offer');
-        io.emit('rtc:offer', description);
-        /*_peerB.setRemoteDescription(
-          description,
-          _createAnswer,
-          _handleFailure('setting remote description of peer B')
-        );*/
-      };
-    }
-
-    function _sendCandidate(evt) {
-      console.log('sending candidate');
-      if (evt.candidate) {
-        //_peerB.addIceCandidate(evt.candidate);
-        io.emit('rtc:candidate', evt.candidate);
-      } else {
-        console.log('peer A has finished gathering candidates');
-      }
     }
 
     function _onDataChannel(evt) {
@@ -162,28 +120,16 @@
     function _rtcOfferReceived(offer) {
       console.log('offer received');
       offer = new $window.RTCSessionDescription(offer);
-      _peerB.setRemoteDescription(
+      _downConnection.setRemoteDescription(
         offer,
         _createAnswer,
-        _handleFailure('setting remote description of peer B')
-      );
-    }
-
-    function _rtcAnswerReceived(answer) {
-      logger.debug('answer received');
-      answer = new $window.RTCSessionDescription(answer);
-      _peerA.setRemoteDescription(
-        answer,
-        function() {
-          console.log('signaling completed between peers');
-        },
-        _handleFailure('setting remote description of peer A')
+        _handleFailure('_rtcOfferReceived()')
       );
     }
 
     function _rtcCandidateReceived(candidate) {
       candidate = new $window.RTCIceCandidate(candidate);
-      _peerB.addIceCandidate(candidate);
+      _downConnection.addIceCandidate(candidate);
     }
 
     /**
@@ -216,15 +162,14 @@
         message: vm.message
       };
 
-      // io.emit('chat:message', data);
-      _peerAsendChannel.send(JSON.stringify(data));
+      rtcUp.send(JSON.stringify(data));
       // _appendMessage(data);
 
-      logger.debug('TchatController::sendMessage()', data);
+
     }
 
     function sendOfferAction() {
-      _peerA.createOffer(_createOffer, _handleFailure('creating offer'));
+      rtcUp.createOffer();
     }
   }
 })();
