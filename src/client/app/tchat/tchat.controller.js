@@ -5,7 +5,7 @@
     .module('app.tchat')
     .controller('Tchat', TchatController);
 
-  TchatController.$inject = ['$scope', '$window', '$sce', 'io', 'navigator', 'logger', 'rtcUp'];
+  TchatController.$inject = ['$scope', '$window', '$sce', 'io', 'navigator', 'logger', 'rtcUp', 'rtcDown'];
 
   /**
    * @ngdoc Controller
@@ -27,12 +27,10 @@
    * @property {array} messageList - An array of message
    *
    */
-  function TchatController($scope, $window, $sce, io, navigator, logger, rtcUp) {
+  function TchatController($scope, $window, $sce, io, navigator, logger, rtcUp, rtcDown) {
     var vm = this;
 
-    var _upConnection               = null;
     var _downConnection             = null;
-    var _upConnectionChannel        = null;
 
     vm.nickname    = null;
     vm.message     = null;
@@ -48,12 +46,11 @@
 
     function _init() {
       // io.on('chat:message', getMessageListAction);
-      io.on('rtc:offer', _rtcOfferReceived);
-      io.on('rtc:candidate', _rtcCandidateReceived);
-
       _initVideoAsLocalMediaStream();
 
-      _initLocalRtcPeerConnection();
+
+      rtcDown.onmessage = _appendMessage;
+      rtcDown.initialize();
       rtcUp.initialize();
     }
 
@@ -69,69 +66,6 @@
       });
     }
 
-    function _initLocalRtcPeerConnection() {
-
-      _downConnection      = new $window.RTCPeerConnection({ iceServers: [] });
-
-      _downConnection.createDataChannel('sendDataChannel');
-
-      _downConnection.ondatachannel  = _onDataChannel;
-    }
-
-    function _handleFailure(step) {
-      return function(err) {
-        console.error('error ' + step + ': ', err);
-      };
-    }
-
-    function _createAnswer() {
-      _downConnection.createAnswer(
-        function(description) {
-          console.log('peer B successfully created answer');
-          _downConnection.setLocalDescription(
-            description,
-            _sendAnswer(description),
-            _handleFailure('setting local description of _downConnection')
-          );
-        },
-        _handleFailure('creating answer')
-      );
-    }
-
-    function _sendAnswer(description) {
-      return function() {
-        console.log('sending answer');
-        io.emit('rtc:answer', description);
-      };
-    }
-
-    function _onDataChannel(evt) {
-      console.log('on data channel !');
-      var receiveChannel = evt.channel;
-      receiveChannel.onmessage = _messageReceived;
-
-      function _messageReceived(evt) {
-        console.log('message !', evt.data);
-        var message = JSON.parse(evt.data);
-        _appendMessage(message);
-      }
-    }
-
-    function _rtcOfferReceived(offer) {
-      console.log('offer received');
-      offer = new $window.RTCSessionDescription(offer);
-      _downConnection.setRemoteDescription(
-        offer,
-        _createAnswer,
-        _handleFailure('_rtcOfferReceived()')
-      );
-    }
-
-    function _rtcCandidateReceived(candidate) {
-      candidate = new $window.RTCIceCandidate(candidate);
-      _downConnection.addIceCandidate(candidate);
-    }
-
     /**
      * @function
      * @name _appendMessage
@@ -140,7 +74,7 @@
      * @param {object} data - A message to push in the message list
      */
     function _appendMessage(data) {
-      logger.debug('TchatController::appendMessage()', data);
+      logger.debug('TchatController::_appendMessage()', data);
 
       $scope.$apply(function() {
         vm.messageList.push(data);
