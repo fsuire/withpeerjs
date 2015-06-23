@@ -27,6 +27,30 @@
       _channel    = _connection.createDataChannel('sendDataChannel');
 
       _connection.ondatachannel  = _onDataChannel;
+      _connection.onicecandidate  = function() {
+        console.log('rtcDown : onicecandidate has been called, it should not happen ?!');
+      };
+      _connection.oniceconnectionstatechange  = function(evt) {
+        console.log('rtcDown, oniceconnectionstatechange :', evt);
+      };
+      _connection.onidentityresult  = function(evt) {
+        console.log('rtcDown, onidentityresult :', evt.assertion);
+      };
+      _connection.onidpassertionerror  = function(evt) {
+        console.log('rtcDown, onidpassertionerror :', evt);
+      };
+      _connection.onidpvalidationerror  = function(evt) {
+        console.log('rtcDown, onidpvalidationerror :', evt);
+      };
+      _connection.onnegotiationneeded  = function(evt) {
+        console.log('rtcDown, onnegotiationneeded :', evt);
+      };
+      _connection.onpeeridentity  = function(evt) {
+        console.log('rtcDown, onpeeridentity :', evt);
+      };
+      _connection.onsignalingstatechange  = function(evt) {
+        console.log('rtcDown, onsignalingstatechange :', evt);
+      };
     }
 
     ////////////////

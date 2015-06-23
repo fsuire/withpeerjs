@@ -21,11 +21,36 @@
     ////////////////
 
     function initialize() {
+      io.on('rtc:answer', _rtcAnswerReceived);
+
       _connection                 = new $window.RTCPeerConnection({ iceServers: [] });
       _channel                    = _connection.createDataChannel('sendDataChannel');
-      _connection.onicecandidate  = _sendCandidate;
 
-      io.on('rtc:answer', _rtcAnswerReceived);
+      _connection.ondatachannel  = function() {
+        console.log('rtcUp : ondatachannel has been called, it should not happen ?!');
+      };
+      _connection.onicecandidate  = _sendCandidate;
+      _connection.oniceconnectionstatechange  = function(evt) {
+        console.log('rtcUp, oniceconnectionstatechange :', evt);
+      };
+      _connection.onidentityresult  = function(evt) {
+        console.log('rtcUp, onidentityresult :', evt.assertion);
+      };
+      _connection.onidpassertionerror  = function(evt) {
+        console.log('rtcUp, onidpassertionerror :', evt);
+      };
+      _connection.onidpvalidationerror  = function(evt) {
+        console.log('rtcUp, onidpvalidationerror :', evt);
+      };
+      _connection.onnegotiationneeded  = function(evt) {
+        console.log('rtcUp, onnegotiationneeded :', evt);
+      };
+      _connection.onpeeridentity  = function(evt) {
+        console.log('rtcUp, onpeeridentity :', evt);
+      };
+      _connection.onsignalingstatechange  = function(evt) {
+        console.log('rtcUp, onsignalingstatechange :', evt);
+      };
     }
 
     function createOffer(description) {
