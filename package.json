@@ -19,18 +19,18 @@
     "url": "https://github.com/openshift/origin-server"
   },
   "engines": {
-    "node": ">= 0.6.0",
+    "node": ">= 0.10.0",
     "npm": ">= 1.0.0"
   },
   "dependencies": {
-    "electrolyte": "0.0.6",
-    "express": "~3.4.4",
-    "express-rewrite": "0.0.4",
-    "lodash": "^3.9.3",
-    "q": "^1.2.0",
-    "socket.io": "^1.3.5",
-    "websockets": "^0.2.0",
-    "ws": "^0.7.1"
+    "easyrtc": "1.0.x",
+    "electrolyte": "0.0.x",
+    "express": "3.4.x",
+    "express-rewrite": "0.0.x",
+    "lodash": "3.9.x",
+    "peer": "0.2.x",
+    "q": "1.2.x",
+    "socket.io": "1.3.x"
   },
   "devDependencies": {
     "bower-files": "^3.7.0",
@@ -71,6 +71,7 @@
     "nib": "^1.1.0",
     "run-sequence": "^1.1.0",
     "sinon": "^1.14.1",
+    "sse": "0.0.6",
     "stylus": "^0.51.1"
   },
   "bundleDependencies": [],

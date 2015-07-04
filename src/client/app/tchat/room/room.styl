@@ -1,0 +1,32 @@
+@import '../../app.theme.color';
+@import '../../app.theme.responsive';
+
+[route="tchat.room"] {
+  display: flex;
+  flex-direction: row;
+
+  .informations {
+    display: flex;
+    flex-direction: column;
+    
+    .peer-list > li {
+      margin-bottom: 0.5em;
+
+      > div {
+
+        border: 1px solid $primary-background-color;
+        padding: 0.5em;
+
+        &:hover {
+          cursor: pointer;
+          border: 1px solid darken($primary-background-color, 40%);
+        }
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+    }
+  }
+}

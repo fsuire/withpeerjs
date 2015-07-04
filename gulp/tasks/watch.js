@@ -6,8 +6,6 @@
   var utils = require('../utils');
   var runSequence = require('run-sequence');
 
-  console.log(':)', utils);
-
   exports.dependencies = ['build'];
 
   exports.task = function() {

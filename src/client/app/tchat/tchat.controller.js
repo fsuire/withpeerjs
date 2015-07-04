@@ -5,7 +5,7 @@
     .module('app.tchat')
     .controller('Tchat', TchatController);
 
-  TchatController.$inject = ['$scope', '$window', '$sce', 'io', 'navigator', 'logger', 'rtcUp', 'rtcDown'];
+  TchatController.$inject = ['$scope', '$window', '$sce', '$state', 'navigator', 'logger'];
 
   /**
    * @ngdoc Controller
@@ -18,7 +18,6 @@
    * @param {object} $scope    - The angular `$scope` service
    * @param {object} $window   - The angular `$window` service
    * @param {object} $sce      - The angular `$sce` service
-   * @param {object} io        - {@link blocks.io.io The `io` service}
    * @param {object} navigator - {@link blocks.navigator.navigator The `navigator` service}
    * @param {logger} logger    - {@link blocks.logger.logger The `logger` service}
    *
@@ -27,8 +26,10 @@
    * @property {array} messageList - An array of message
    *
    */
-  function TchatController($scope, $window, $sce, io, navigator, logger, rtcUp, rtcDown) {
+  function TchatController($scope, $window, $sce, $state, navigator, logger) {
     var vm = this;
+
+    console.log($state.get());
 
     var _downConnection             = null;
 
@@ -45,13 +46,7 @@
     ////////////////
 
     function _init() {
-      // io.on('chat:message', getMessageListAction);
-      _initVideoAsLocalMediaStream();
 
-
-      rtcDown.onmessage = _appendMessage;
-      rtcDown.initialize();
-      rtcUp.initialize();
     }
 
     function _initVideoAsLocalMediaStream() {
@@ -91,19 +86,12 @@
      * @memberOf app.tchat.Tchat
      */
     function sendMessageAction() {
-      var data = {
-        nickname: vm.nickname,
-        message: vm.message
-      };
-
-      rtcUp.send(JSON.stringify(data));
-      // _appendMessage(data);
 
 
     }
 
     function sendOfferAction() {
-      rtcUp.createOffer();
+
     }
   }
 })();

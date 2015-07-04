@@ -26,6 +26,7 @@ module.exports = {
     jsFiles: [
       'src/client/**/*.module.js',
       'src/client/**/*.js',
+      '!src/client/**/*.old.js',
       //'!src/client/**/*.mock.js',
       '!src/client/**/*.spec.js'
     ],

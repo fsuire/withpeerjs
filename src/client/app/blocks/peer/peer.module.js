@@ -3,11 +3,11 @@
 
   /**
    * @ngdoc Module
-   * @name blocks.io
+   * @name blocks.peer
    *
    * @description
-   * The reusable io module.
+   * The reusable peer module.
    */
   angular
-    .module('blocks.io', []);
+    .module('blocks.peer', []);
 })();

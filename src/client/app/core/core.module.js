@@ -15,11 +15,11 @@
 
       /* Cross-app modules */
       'blocks.exception',
-      'blocks.io',
       'blocks.navigator',
-      'blocks.rtc',
+      'blocks.peer',
       'blocks.logger',
-      'blocks.router'
+      'blocks.router',
+      'blocks.sse'
 
       /* 3rd-party modules */
     ]);

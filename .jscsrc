@@ -32,7 +32,7 @@
   "requireLineFeedAtFileEnd": true,
   "requireSpaceAfterBinaryOperators": ["?", ":", "+", "-", "/", "*", "%", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "&&", "||"],
   "requireSpaceBeforeBinaryOperators": ["?", ":", "+", "-", "/", "*", "%", "==", "===", "!=", "!==", ">", ">=", "<", "<=", "&&", "||"],
-  "requireSpaceAfterKeywords": ["else", "for", "while", "do", "switch", "return", "try"],
+  "requireSpaceAfterKeywords": ["else", "return", "try"],
   "requireSpaceBeforeBlockStatements": true,
   "requireSpacesInAnonymousFunctionExpression": {
     "beforeOpeningCurlyBrace": true

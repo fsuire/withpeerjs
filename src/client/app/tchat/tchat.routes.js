@@ -27,11 +27,31 @@
         state: 'tchat',
         config: {
           url: '/tchat',
-          templateUrl: 'app/tchat/tchat.html',
-          controller: 'Tchat',
+          abstract: true,
+          template: '<ui-view/>'
+        }
+      },
+      {
+        state: 'tchat.nickname',
+        config: {
+          url: '',
+          templateUrl: 'app/tchat/nickname/nickname.html',
+          controller: 'TchatNickname',
           controllerAs: 'vm',
           data: {
-            pageTitle: 'Tchat'
+            pageTitle: 'Tchat - nickname, please'
+          }
+        }
+      },
+      {
+        state: 'tchat.room',
+        config: {
+          url: '/room',
+          templateUrl: 'app/tchat/room/room.html',
+          controller: 'TchatRoom',
+          controllerAs: 'vm',
+          data: {
+            pageTitle: 'Tchat room'
           }
         }
       }

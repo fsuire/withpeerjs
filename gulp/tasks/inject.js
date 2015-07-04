@@ -15,7 +15,7 @@
     var cssFiles = 'assets/**/*.css';
     var assetsFiles = 'assets/**/*.js';
     var vendorFiles = bowerFiles.ext('js').files;
-    var applicationFiles = 'app/**/*.js';
+    var applicationFiles = ['app/**/*.js', '!app/**/*.old.js'];
 
     if (!IS_DEV) {
        cssFiles = 'assets/**/*.min.css';

@@ -4,23 +4,19 @@
   module.exports = application;
 
   application['@singleton'] = true;
-  application['@require'] = [
-    'electrolyte',
-    'lodash',
-    'express',
-    'services/config'
-  ];
+  application['@require'] = ['express','services/httpApp.service', 'services/server.service', 'services/peerServer.service', 'routers/tchat.router'];
 
-  function application(IoC, _, express, config) {
+  function application(express, httpApp, server, peerServer, tchatRouter) {
 
-    var app = express();
+    // static directories
+    httpApp.use('/', express.static('dist/dev/client'));
+    httpApp.use('/bower_components', express.static('bower_components'));
 
-    _.forEach(config.routes, function(value) {
-      IoC.create('routes/' + value)(app);
-    });
+    // application routers
+    tchatRouter(httpApp);
 
-    return app;
-
+    // peer server
+    httpApp.use(peerServer);
   }
 
 })();

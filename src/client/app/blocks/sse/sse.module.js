@@ -3,11 +3,11 @@
 
   /**
    * @ngdoc Module
-   * @name blocks.io
+   * @name blocks.sse
    *
    * @description
-   * The reusable io module.
+   * The reusable sse module.
    */
   angular
-    .module('blocks.rtc', []);
+    .module('blocks.sse', []);
 })();

@@ -1,0 +1,33 @@
+<div route="tchat.room">
+
+  <section class="informations">
+    <div class="box">
+      <header>{{ vm.user.nickname }}</header>
+      <section>
+        RTC id : {{ vm.user.rtcId }}
+      </section>
+      <footer>
+      </footer>
+    </div>
+
+    <div class="box">
+      <header>User list</header>
+      <section>
+        <ul class="peer-list">
+          <li ng-repeat="(rtcId, peer) in vm.registeredPeerList">
+            <div ng-click="vm.connectToAction(peer.rtcId)">
+              {{ peer.nickname }}
+            </div>
+          </li>
+        </ul>
+      </section>
+      <footer>
+      </footer>
+    </div>
+  </section>
+
+  <section class="rooms">
+
+  </section>
+
+</div>

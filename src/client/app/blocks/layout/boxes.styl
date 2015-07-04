@@ -1,0 +1,50 @@
+@import '../../app.theme.color';
+@import '../../app.theme.responsive';
+@import 'background';
+
+.box {
+  display: flex;
+  flex-direction: column;
+  
+  border-radius: 1em;
+  box-shadow: regular-shadow($primary-background-color);
+  margin-bottom: 1em;
+
+  > header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    border: 1px solid darken($primary-color, 25%);
+    
+    padding: 1em;
+    background: shiny-spot(white), $primary-color;
+  }
+  
+  > section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    border-right: 1px solid darken($primary-background-color, 25%);
+    border-left: 1px solid darken($primary-background-color, 25%);
+    
+    padding: 1em;
+  }
+  
+  > footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    border: 1px solid darken($secondary-color, 25%);
+    
+    padding: 0.5em;
+    background: shadowy-spot(black), $secondary-color;
+  }
+}
