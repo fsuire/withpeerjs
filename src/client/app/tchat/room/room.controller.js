@@ -39,14 +39,7 @@
       });
 
       peer.on('open', onConnectionOpened);
-      peer.on('connection', function(dataConnection) {
-        console.log('a new dataConnection has been established', dataConnection);
-
-        dataConnection.on('data', function(data) {
-          console.log(data);
-        });
-
-      });
+      peer.on('connection', onDataConnection);
 
     }
 
@@ -72,6 +65,14 @@
       console.log('--->', data, tchatUser.rtcId);
       $scope.$apply(function() {
         vm.registeredPeerList = data;
+      });
+    }
+
+    function onDataConnection(dataConnection) {
+      console.log('a new dataConnection has been established', dataConnection);
+
+      dataConnection.on('data', function(data) {
+        console.log(data);
       });
     }
 
