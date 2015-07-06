@@ -31,15 +31,17 @@
     }
 
     function _initRtcPeerConnection() {
-      /* global Peer:false */
-      peer = new Peer({
-        host: '/',
-        port: 3000
+
+      $http.get('/serverInformations').success(function(data) {
+        /* global Peer:false */
+        peer = new Peer({
+          host: '/',
+          port: data.port
+        });
+
+        peer.on('open', onConnectionOpened);
+        peer.on('connection', onDataConnection);
       });
-
-      peer.on('open', onConnectionOpened);
-      peer.on('connection', onDataConnection);
-
     }
 
     ////////////////

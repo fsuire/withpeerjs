@@ -4,9 +4,9 @@
   module.exports = application;
 
   application['@singleton'] = true;
-  application['@require'] = ['express','services/httpApp.service', 'services/server.service', 'services/peerServer.service', 'routers/tchat.router'];
+  application['@require'] = ['express','services/httpApp.service', 'services/server.service', 'services/peerServer.service', 'routers/tchat.router', 'routers/serverInformations.router'];
 
-  function application(express, httpApp, server, peerServer, tchatRouter) {
+  function application(express, httpApp, server, peerServer, tchatRouter, serverInfo) {
 
     // static directories
     httpApp.use('/', express.static('dist/dev/client'));
@@ -14,6 +14,7 @@
 
     // application routers
     tchatRouter(httpApp);
+    serverInfo(httpApp);
 
     // peer server
     httpApp.use(peerServer);
