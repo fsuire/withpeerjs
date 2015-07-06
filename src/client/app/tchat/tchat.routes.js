@@ -48,7 +48,7 @@
         config: {
           url: '/room',
           templateUrl: 'app/tchat/room/room.html',
-          controller: 'TchatRoom',
+          controller: 'TchatRoomController',
           controllerAs: 'vm',
           data: {
             pageTitle: 'Tchat room'

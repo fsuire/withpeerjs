@@ -3,17 +3,17 @@
 
   angular
     .module('app.tchat')
-    .controller('TchatRoom', TchatRoomController);
+    .controller('TchatRoomController', TchatRoomController);
 
-  TchatRoomController.$inject = ['$scope', '$state', '$http', 'tchatUser', 'sse'];
+  TchatRoomController.$inject = ['$scope', '$state', '$http', 'tchatUser', 'registeredPeers', 'sse'];
 
-  function TchatRoomController($scope, $state, $http, tchatUser, sse) {
+  function TchatRoomController($scope, $state, $http, tchatUser, registeredPeers, sse) {
     var vm = this;
 
     var peer = null;
     vm.user = tchatUser;
     vm.registeredPeerList = [];
-
+    vm.dataConnections = {};
 
     vm.connectToAction = connectToAction;
 
@@ -53,16 +53,14 @@
       $http
         .put('/tchat/register/' + tchatUser.nickname + '/' + tchatUser.rtcId + '/' + sse.id)
         .success(function(data, status, headers, config) {
-          console.log('registered successfully on tchat');
         });
 
     }
 
     function onRegisteredPeerList(data) {
-      console.log('onRegisteredPeerList', data);
       delete data[tchatUser.rtcId];
-      console.log('--->', data, tchatUser.rtcId);
       $scope.$apply(function() {
+        registeredPeers.setList(data);
         vm.registeredPeerList = data;
       });
     }
@@ -70,15 +68,21 @@
     function onDataConnection(dataConnection) {
       console.log('a new dataConnection has been established', dataConnection);
 
-      dataConnection.on('data', function(data) {
-        console.log(data);
+      $scope.$apply(function() {
+        vm.dataConnections[dataConnection.id] = dataConnection;
       });
+
     }
 
     ////////////////
 
     function connectToAction(rtcId) {
       var dataConnection = peer.connect(rtcId);
+
+      dataConnection.on('open', function() {
+        onDataConnection(dataConnection);
+      });
     }
   }
+
 })();

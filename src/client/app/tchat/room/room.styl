@@ -8,7 +8,7 @@
   .informations {
     display: flex;
     flex-direction: column;
-    
+
     .peer-list > li {
       margin-bottom: 0.5em;
 
@@ -27,6 +27,45 @@
         margin-bottom: 0;
       }
 
+    }
+  }
+
+  .rooms {
+    padding-left: 1em;
+
+    tchat-room {
+      > .box {
+
+        > section {
+          resize: both;
+          min-width: 400px;
+          max-height: 400px;
+          overflow: auto;
+
+          > .message {
+            display: flex;
+            flex-direction: row;
+            padding: 0.5em;
+            border-bottom: 1px solid darken($primary-background-color, 25%);
+
+            &:last-child {
+              border-bottom: 0;
+            }
+
+            .nickname {
+              max-width: 20%;
+              min-width: 20%;
+              flex-shrink: 0;
+              font-weight: bold;
+              margin-right: 1em;
+            }
+
+            .message {
+              flex: 1;
+            }
+          }
+        }
+      }
     }
   }
 }
