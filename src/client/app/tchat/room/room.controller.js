@@ -11,7 +11,6 @@
     var vm = this;
 
     var peer = null;
-    var registeredConnections = [];
     vm.user = tchatUser;
     vm.registeredPeerList = [];
 
@@ -79,7 +78,7 @@
     ////////////////
 
     function connectToAction(rtcId) {
-      var connection = peer.connect(rtcId);
+      var dataConnection = peer.connect(rtcId);
     }
   }
 })();
