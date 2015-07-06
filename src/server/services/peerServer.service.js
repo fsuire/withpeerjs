@@ -16,16 +16,20 @@
 
     var peerApp = PeerServer(server, peerServerOptions);
 
-    peerApp.on('connection', peerConnection);
+    /*peerApp.on('connection', peerConnection);
+    peerApp.on('disconnect', peerDisconnection);*/
 
     return peerApp;
 
     ////////////////
 
-    function peerConnection(id) {
+    /*function peerConnection(id) {
       console.log('peer connection', id);
-//      console.log(peerApp._clients.peerjs[id]);
     }
+
+    function peerDisconnection(id) {
+      console.log('peer disconnection', id);
+    }*/
 
   }
 

@@ -4,11 +4,14 @@
   module.exports = tchatRouter;
 
   tchatRouter['@singleton'] = true;
-  tchatRouter['@require'] = ['lodash', 'services/getHtmlFile.service', 'services/sse.service', 'services/config'];
+  tchatRouter['@require'] = ['lodash', 'services/getHtmlFile.service', 'services/sse.service', 'services/peerServer.service', 'services/config'];
 
-  function tchatRouter(_, getHtml, sse, config) {
+  function tchatRouter(_, getHtml, sse, peerServer, config) {
 
     var clients = {};
+
+    // peerServer.on('connection', registerClient);
+    peerServer.on('disconnect', unregisterClient);
 
     return function(httpApp) {
 
@@ -16,6 +19,8 @@
       httpApp.get(/^\/tchat/, indexRedirect);
 
     }
+
+    ////////////////
 
     function indexRedirect(req, res, next) {
       if(typeof req.headers.accept === 'string' && req.headers.accept.indexOf('text/html') >= 0) {
@@ -44,10 +49,17 @@
         delete sanitizedClientList[i]['sseId'];
       }
 
-
       var sseEvent = sse.createEvent('list:change', sanitizedClientList);
-
       sse.sendToEveryone(sseEvent);
+    }
+
+    function unregisterClient(rtcId) {
+      if(!_.isUndefined(clients[rtcId])) {
+        delete clients[rtcId];
+
+        var sseEvent = sse.createEvent('list:change', clients);
+        sse.sendToEveryone(sseEvent);
+      }
     }
   }
 

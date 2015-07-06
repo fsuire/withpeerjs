@@ -34,6 +34,8 @@
       $sendButton.on('click', send);
       connection.on('data', onData);
 
+      scope.nickname = registeredPeers.getNicknameFromRtcId(connection.peer);
+
     }
 
     function onData(data) {
@@ -44,13 +46,22 @@
     function send() {
       var message = $input.val();
       if(message !== '') {
-        appendMessage(tchatUser.nickname, message);
+        appendMessage(tchatUser.nickname, message, true);
         connection.send(message);
       }
     }
 
-    function appendMessage(nickname, message) {
-      $displayZone.append('<div class="message"><div class="nickname">' + nickname + '</div><div class="message">' + message + '</div></div>');
+    function appendMessage(nickname, message, isLocallySent) {
+      var messageClass = 'message';
+      if(isLocallySent) {
+        messageClass += ' locally-sent';
+      }
+      $displayZone.append(
+        '<div class="' + messageClass
+        + '"><div class="nickname"><span>'
+        + nickname + '</span></div><div class="message">'
+        + message + '</div></div>'
+      );
     }
 
   }
