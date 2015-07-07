@@ -21,7 +21,7 @@
        cssFiles = 'assets/**/*.min.css';
        assetsFiles = 'assets/*.js';
        vendorFiles = ['assets/scripts/vendor.min.js'];
-       applicationFiles = ['assets/scripts/application.min.js', 'assets/scripts/templatecache.min.js'];
+       applicationFiles = ['assets/scripts/application.min.js', 'assets/scripts/templatecache.js'];
     }
 
     return gulp.src(config.client.indexHtmlFile)

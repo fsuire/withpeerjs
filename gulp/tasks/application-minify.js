@@ -39,7 +39,8 @@
         .pipe(plug.minifyHtml())
         .pipe(plug.angularTemplatecache('templatecache.js', {
           module: 'app.core',
-          standalone: false
+          standalone: false,
+          root: 'app'
         }))
         .pipe(plug.bytediff.start())
         .pipe(plug.uglify())

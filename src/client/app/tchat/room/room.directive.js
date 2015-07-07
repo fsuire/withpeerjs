@@ -18,7 +18,7 @@
 
     return {
       restrict: 'E',
-      templateUrl: '/app/tchat/room/room.directive.html',
+      templateUrl: 'app/tchat/room/room.directive.html',
       scope: {
         connection: '='
       },
