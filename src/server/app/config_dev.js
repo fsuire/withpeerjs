@@ -7,6 +7,9 @@
 
     ipaddress: '127.0.0.1',
     port: 3000,
+    peerjs: {
+      port: 3000
+    },
 
     htmlIndexPath: 'dist/dev/client/index.html',
     htmlErrorPath: 'dist/dev/client/error.html',

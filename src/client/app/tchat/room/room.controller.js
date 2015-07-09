@@ -36,7 +36,7 @@
         /* global Peer:false */
         peer = new Peer({
           host: '/',
-          port: data.port
+          port: data.peerjs.port
         });
 
         peer.on('open', onConnectionOpened);
