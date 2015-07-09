@@ -9,7 +9,7 @@
     ipaddress: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
     port: process.env.OPENSHIFT_NODEJS_PORT || 3100,
     peerjs: {
-      port: 80
+      port: process.env.OPENSHIFT_NODEJS_PORT || 3100
     },
 
     htmlIndexPath: 'dist/prod/client/index.html',
