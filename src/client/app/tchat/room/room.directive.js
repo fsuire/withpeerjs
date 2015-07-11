@@ -56,6 +56,7 @@
         if(message !== '') {
           appendMessage(tchatUser.nickname, message, true);
           _connection.send(message);
+          _inputElt.value = '';
         }
       }
 
