@@ -55,3 +55,13 @@
   };
 
 })();
+
+      /*gulp
+        .src(config.client.fontFiles)
+        .pipe(plug.newer(config.outputDir + config.clientDir))
+        .pipe(gulp.dest(config.outputDir + config.clientDir))
+        .pipe(plug.if(
+            IS_SYNC,
+            browserSync.reload({ stream: true })
+          )
+        )*/

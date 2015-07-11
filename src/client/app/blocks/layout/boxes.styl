@@ -1,27 +1,66 @@
 @import '../../app.theme.color';
 @import '../../app.theme.responsive';
 @import 'background';
+@import 'icons';
+@import 'button.mixin';
 
-.box {
+
+
+box {
+  $color1 = $primary-color;
+  $color2 = $secondary-color;
+  
   display: flex;
   flex-direction: column;
   
-  border-radius: 1em;
+  transform: scaleY(1);
+  
   box-shadow: regular-shadow($primary-background-color);
   margin-bottom: 1em;
+  
+  button {
+    standard-button();
 
+    &:hover {
+      background-color: alpha($pseudo-white, 100%);
+    }    
+    
+    &:not(:first-child) {
+      margin-left: 0.25em;
+    }
+      
+    &.icon-close {
+      add-icon($icon-close, true);
+    }
+    &.icon-ok {
+      add-icon($icon-ok, true);
+    }
+    &.icon-mail-dark {
+      add-icon($icon-mail-dark, true);
+    }
+    &.icon-right-open {
+      add-icon($icon-right-open, true);
+    }
+    &.icon-comment-alt {
+      add-icon($icon-comment-alt, true);
+    }
+  }
+  
   > header {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     
-    border-top-left-radius: 1em;
-    border-top-right-radius: 1em;
-    border: 1px solid darken($primary-color, 25%);
+    border: 1px solid darken($color1, 25%);
     
-    padding: 1em;
-    background: shiny-spot(white), $primary-color;
+    padding: 0.5em;
+    background: shiny-spot($pseudo-white), $color1;
+    
+    button:hover {
+      color: $color1
+    }
+    
   }
   
   > section {
@@ -38,13 +77,16 @@
   > footer {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     
-    border-bottom-left-radius: 1em;
-    border-bottom-right-radius: 1em;
-    border: 1px solid darken($secondary-color, 25%);
+    border: 1px solid darken($color2, 25%);
     
     padding: 0.5em;
-    background: shadowy-spot(black), $secondary-color;
+    background: shadowy-spot(black), $color2;
+    
+    button:hover {
+      color: $color2
+    }
   }
+  
 }

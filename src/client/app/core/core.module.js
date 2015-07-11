@@ -17,6 +17,7 @@
       'blocks.exception',
       'blocks.navigator',
       'blocks.peer',
+      'blocks.layout',
       'blocks.logger',
       'blocks.router',
       'blocks.sse'

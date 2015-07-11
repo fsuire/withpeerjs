@@ -1,29 +1,34 @@
 <div route="tchat.room">
 
   <section class="informations">
-    <div class="box">
+    <box>
       <header>{{ vm.user.nickname }}</header>
       <section>
         RTC id : {{ vm.user.rtcId }}
       </section>
       <footer>
       </footer>
-    </div>
+    </box>
 
-    <div class="box">
+    <box>
       <header>User list</header>
-      <section>
-        <ul class="peer-list">
+      <section class="peer-list">
+        <ul>
           <li ng-repeat="(rtcId, peer) in vm.registeredPeerList">
-            <div ng-click="vm.connectToAction(peer.rtcId)">
-              {{ peer.nickname }}
+            <div>
+              <span>{{ peer.nickname }}</span>
+              <button
+                title="Start a private conversation"
+                class="icon-comment-alt"
+                ng-click="vm.connectToAction(peer.rtcId)"
+              />
             </div>
           </li>
         </ul>
       </section>
       <footer>
       </footer>
-    </div>
+    </box>
   </section>
 
   <section class="rooms">

@@ -3,8 +3,6 @@
 
   // Copy server code from src to the outputDir
 
-  var path = require('path');
-
   exports.task = function() {
     var serverFiles = config.server.jsFiles;
     var outputDir = config.outputDir + config.serverDir;

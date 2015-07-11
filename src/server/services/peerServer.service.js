@@ -24,11 +24,9 @@
     ////////////////
 
     /*function peerConnection(id) {
-      console.log('peer connection', id);
     }
 
     function peerDisconnection(id) {
-      console.log('peer disconnection', id);
     }*/
 
   }

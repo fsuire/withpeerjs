@@ -13,12 +13,19 @@
     vm.nickname = tchatUser.nickname;
 
     vm.validateNicknameAction = validateNicknameAction;
+    vm.nicknameKeyupAction = nicknameKeyupAction;
 
     ////////////////
 
     function validateNicknameAction() {
       tchatUser.nickname = vm.nickname;
       $state.go('tchat.room');
+    }
+
+    function nicknameKeyupAction(event) {
+      if(event.keyCode === 13) {
+        validateNicknameAction();
+      }
     }
 
   }

@@ -68,8 +68,6 @@
     }
 
     function onDataConnection(dataConnection) {
-      console.log('a new dataConnection has been established', dataConnection);
-
       $scope.$apply(function() {
         vm.dataConnections[dataConnection.id] = dataConnection;
       });

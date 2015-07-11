@@ -12,7 +12,6 @@
     console.log('watch ');
    gulp
       .watch(config.client.stylusFiles, function() {
-      console.log('merde');
         runSequence('stylus');
       })
       .on('change', utils.logWatch);

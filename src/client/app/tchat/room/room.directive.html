@@ -1,9 +1,19 @@
-<div class="box">
-  <header>{{ nickname }}</header>
+<box standard-behaviour>
+  <header>
+    {{ nickname }}
+    <div>
+      <button class="icon-right-open"/>
+      <button class="icon-close"/>
+    </div>
+  </header>
   <section>
   </section>
   <footer>
-    <input type="text" placeholder="Type your message here"/>
-    <button>send</button>
+    <input
+      type="text"
+      class="message"
+      placeholder="Type your message here"
+    />
+    <button class="icon-mail-dark"></button>
   </footer>
-</div>
+</box>

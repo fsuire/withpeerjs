@@ -19,7 +19,7 @@
       runSequence(
         ['lint-js'],
         ['stylus'],
-        ['copy-server', 'vendor', 'application-minify'],
+        ['copy-server', 'vendor', 'application-minify', 'copy-fonts'],
         ['inject'],
         callback
       );

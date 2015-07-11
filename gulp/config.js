@@ -16,6 +16,12 @@ module.exports = {
     cssFiles: [
       'src/client/**/*.css'
     ],
+    fontFiles: [
+      'src/client/**/*.eot',
+      'src/client/**/*.woff',
+      'src/client/**/*.ttf',
+      'src/client/**/*.svg'
+    ],
     stylusFiles: [
       'src/client/app/**/*.styl'
     ],

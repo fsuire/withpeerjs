@@ -9,13 +9,6 @@
 
   function tchatRoomDirective(tchatUser, registeredPeers) {
 
-    var $sendButton = null;
-    var $input = null;
-    var $displayZone = null;
-    var connection = null;
-
-    var lastSpeakerNickname = null;
-
     return {
       restrict: 'E',
       templateUrl: 'app/tchat/room/room.directive.html',
@@ -26,42 +19,67 @@
     };
 
     function link(scope, element, attrs) {
-      connection = scope.connection;
-      $sendButton = element.find('button');
-      $input = element.find('input');
+      var _element = element[0];
+      var _closeButton = _element.querySelector('button.icon-close');
+      var _sendButton = _element.querySelector('button.icon-mail-dark');
+      var _connection = scope.connection;
+      var _inputElt = _element.querySelector('input.message');
+      var $displayZone = null;
+      var lastSpeakerNickname = null;
+
       $displayZone = element.find('section');
 
-      $sendButton.on('click', send);
-      connection.on('data', onData);
+      _sendButton.addEventListener('click', send);
+      _inputElt.addEventListener('keyup', function(event) {
+        if(event.keyCode === 13) {
+          send();
+        }
+      });
+      _closeButton.addEventListener('click', function() {
+        _connection.close();
+        closeRoom();
+      });
+      _connection.on('data', onData);
+      _connection.on('close', closeRoom);
 
-      scope.nickname = registeredPeers.getNicknameFromRtcId(connection.peer);
+      scope.nickname = registeredPeers.getNicknameFromRtcId(_connection.peer);
 
-    }
+      ////////////////
 
-    function onData(data) {
-      var nickname = registeredPeers.getNicknameFromRtcId(connection.peer);
-      appendMessage(nickname, data);
-    }
-
-    function send() {
-      var message = $input.val();
-      if(message !== '') {
-        appendMessage(tchatUser.nickname, message, true);
-        connection.send(message);
+      function onData(data) {
+        var nickname = registeredPeers.getNicknameFromRtcId(_connection.peer);
+        appendMessage(nickname, data);
       }
-    }
 
-    function appendMessage(nickname, message, isLocallySent) {
-      var messageClass = 'message';
-      if(isLocallySent) {
-        messageClass += ' locally-sent';
+      function send() {
+        var message = _inputElt.value;
+        if(message !== '') {
+          appendMessage(tchatUser.nickname, message, true);
+          _connection.send(message);
+        }
       }
-      $displayZone.append(
-        '<div class="' + messageClass
-        + '"><div class="nickname"><span>'
-        + nickname + '</span></div><div class="message">'
-        + message + '</div></div>'
-      );
+
+      function appendMessage(nickname, message, isLocallySent) {
+        var messageClass = 'message';
+        if(isLocallySent) {
+          messageClass += ' locally-sent';
+        }
+        $displayZone.append(
+          '<div class="' + messageClass
+          + '"><div class="nickname"><span>'
+          + nickname + '</span></div><div class="message">'
+          + message + '</div></div>'
+        );
+      }
+
+      function closeRoom() {
+
+        _element.addEventListener('animationend', function() {
+          _element.style.display = 'none';
+        });
+        _element.classList.add('vanishing');
+      }
+
     }
 
   }

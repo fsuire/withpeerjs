@@ -1,0 +1,31 @@
+prepare-for-icon()
+  font-family: "icon-font";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+standard-button()
+  border: none;
+  background-color: alpha($pseudo-white, 60%);
+  border-radius: 0.25em;
+  font-size: 0.75em;
+  padding: 0.25em;
+  margin-left: 2em;
+  width: 2em;
+  height: 2em;
+
+  transition-property: background-color, border-color, color;
+  transition-duration: 100ms;
+  transition-timing-function: ease-out;
+  
+add-icon($icon, $hover = false)
+  prepare-for-icon();
+  
+  if $hover
+    &:hover {
+      cursor: pointer;
+    }
+  
+  &:before {
+    content: $icon;
+  }
