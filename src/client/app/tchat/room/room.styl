@@ -1,5 +1,6 @@
 @import '../../app.theme.color';
 @import '../../app.theme.responsive';
+@import '../../blocks/layout/icons';
 @import '../../blocks/layout/button.mixin';
 @import '../../blocks/layout/background';
 
@@ -117,23 +118,62 @@
         
         margin: 0;
         
-        > header .room-name {
+        > header > prefix-icon {
           flex: 1;
-          padding: 0.25em;
-          border: 1px solid alpha(#000, 0%);
-          border-radius: 0.25em;
-          background-color: alpha($pseudo-white, 0%);
-          color: $primary-font-color;
-          font-size: 1em;
-
-          transition-property: background-color, border-color, color;
-          transition-duration: 100ms;
-          transition-timing-function: ease-out;
-
-          &:focus,
-          &:hover {
+          height: 1em;
+          
+          focused-input() {
             background-color: alpha($pseudo-white, 50%);
-            border: 1px solid alpha(#000, 50%);
+            border: 1px solid darken($primary-color, 30%);
+            border-left: none;
+          }
+          
+          &:before {
+            height: 100%;
+            padding: 0.25em;
+            border-radius: 0.25em;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border: 1px solid alpha($primary-color, 0%);
+            
+            transition-property: background-color, border-color, color;
+            transition-duration: 100ms;
+            transition-timing-function: ease-out;
+          }
+          
+          &:focus,
+          &:hover,
+          &.has-focus {
+            &:before {
+              background-color: $pseudo-white;
+              color: $primary-color;
+              border: 1px solid darken($primary-color, 30%);
+            }
+            input {
+              focused-input();
+            }
+          }
+        
+          input {
+            padding: 0.25em;
+            height: 100%;
+            border: 1px solid alpha($primary-color, 0%);
+            border-left: none;
+            border-radius: 0.25em;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            background-color: alpha($pseudo-white, 0%);
+            color: $primary-font-color;
+            font-size: 1em;
+
+            transition-property: background-color, border-color, color;
+            transition-duration: 100ms;
+            transition-timing-function: ease-out;
+            
+            &:focus {
+              focused-input();
+            }
+            
           }
         }
 

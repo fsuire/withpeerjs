@@ -7,7 +7,34 @@ $icon-mail = '\e802';
 $icon-mail-dark = '\e803';
 
 $icon-user = '\e804';
+$icon-users = '\e808';
+$icon-user-plus = '\e807';
+$icon-user-times = '\e809';
 
 $icon-right-open = '\e805';
 
 $icon-comment-alt = '\e806';
+
+$icon-pencil = '\e80a';
+
+$icon-chat = '\e80b';
+
+/////////////////
+
+prepare-for-icon()
+  font-family: "icon-font";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+
+add-icon($icon, $hover = false)
+  prepare-for-icon();
+  
+  if $hover
+    &:hover {
+      cursor: pointer;
+    }
+  
+  &:before {
+    content: $icon;
+  }

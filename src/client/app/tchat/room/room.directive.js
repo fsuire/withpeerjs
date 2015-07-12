@@ -21,12 +21,12 @@
     function link(scope, element, attrs) {
       var _connection = scope.connection;
       var _element = element[0];
-      var _roomNameElement = _element.querySelector('input.room-name');
+      var _roomNameElement = _element.querySelector('.room-name');
       var _closeButtonElement = _element.querySelector('button.icon-close');
       var _sendButtonElement = _element.querySelector('button.icon-mail-dark');
       var _inputMessageElement = _element.querySelector('input.message');
       var _messageListElement = _element.querySelector('.message-list');
-      var _oldRoomName = 'Room without name';
+      var _oldRoomName = _connection.metadata.roomName;
       var _lastSpeakerId = null;
       var _lastMessageZoneElement = null;
 

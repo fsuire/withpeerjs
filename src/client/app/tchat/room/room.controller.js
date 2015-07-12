@@ -44,6 +44,18 @@
       });
     }
 
+    function _createNewDataConnection(rtcId, roomName) {
+      var dataConnection = peer.connect(rtcId, {
+        metadata: {
+          roomName: roomName
+        }
+      });
+
+      dataConnection.on('open', function() {
+        onDataConnection(dataConnection);
+      });
+    }
+
     ////////////////
 
     function onConnectionOpened(id) {
@@ -61,8 +73,8 @@
 
     function onRegisteredPeerList(data) {
       delete data[tchatUser.rtcId];
+      registeredPeers.setList(data);
       $scope.$apply(function() {
-        registeredPeers.setList(data);
         vm.registeredPeerList = data;
       });
     }
@@ -76,12 +88,8 @@
 
     ////////////////
 
-    function connectToAction(rtcId) {
-      var dataConnection = peer.connect(rtcId);
-
-      dataConnection.on('open', function() {
-        onDataConnection(dataConnection);
-      });
+    function connectToAction(peer) {
+      _createNewDataConnection(peer.rtcId, tchatUser.nickname + ' - ' + peer.nickname);
     }
   }
 
