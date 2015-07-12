@@ -2,32 +2,31 @@
 
   <section class="informations">
     <box>
-      <header>{{ vm.user.nickname }}</header>
+      <header>You are connected as&nbsp;<strong>{{ vm.user.nickname }}</strong></header>
       <section>
         RTC id : {{ vm.user.rtcId }}
       </section>
-      <footer>
-      </footer>
     </box>
 
     <box>
-      <header>User list</header>
+      <header>Peer list</header>
       <section class="peer-list">
         <ul>
-          <li ng-repeat="(rtcId, peer) in vm.registeredPeerList">
-            <div>
-              <span>{{ peer.nickname }}</span>
-              <button
-                title="Start a private conversation"
-                class="icon-comment-alt"
-                ng-click="vm.connectToAction(peer.rtcId)"
-              />
-            </div>
+          <li ng-hide="getObjectLength(vm.registeredPeerList)">
+            No one seems to be online !
+          </li>
+          <li ng-repeat="(rtcId, peer) in vm.registeredPeerList" class="peer">
+
+            <span>{{ peer.nickname }}</span>
+            <button
+              title="Start a private conversation"
+              class="icon-comment-alt"
+              ng-click="vm.connectToAction(peer.rtcId)"
+            />
+
           </li>
         </ul>
       </section>
-      <footer>
-      </footer>
     </box>
   </section>
 

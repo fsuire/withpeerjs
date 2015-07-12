@@ -5,9 +5,9 @@
     .module('app.tchat')
     .directive('tchatRoom', tchatRoomDirective);
 
-  tchatRoomDirective.$inject = ['tchatUser', 'registeredPeers'];
+  tchatRoomDirective.$inject = ['$document', 'tchatUser', 'registeredPeers'];
 
-  function tchatRoomDirective(tchatUser, registeredPeers) {
+  function tchatRoomDirective($document, tchatUser, registeredPeers) {
 
     return {
       restrict: 'E',
@@ -24,10 +24,9 @@
       var _sendButton = _element.querySelector('button.icon-mail-dark');
       var _connection = scope.connection;
       var _inputElt = _element.querySelector('input.message');
-      var $displayZone = null;
-      var lastSpeakerNickname = null;
-
-      $displayZone = element.find('section');
+      var _displayZone = _element.querySelector('.message-list');
+      var _lastSpeakerId = null;
+      var _lastMessageZoneElement = null;
 
       _sendButton.addEventListener('click', send);
       _inputElt.addEventListener('keyup', function(event) {
@@ -48,37 +47,49 @@
 
       function onData(data) {
         var nickname = registeredPeers.getNicknameFromRtcId(_connection.peer);
-        appendMessage(nickname, data);
+        appendMessage(_connection.peer, nickname, data);
       }
 
       function send() {
         var message = _inputElt.value;
         if(message !== '') {
-          appendMessage(tchatUser.nickname, message, true);
+
+          appendMessage(tchatUser.rtcId, tchatUser.nickname, message, true);
           _connection.send(message);
           _inputElt.value = '';
         }
       }
 
-      function appendMessage(nickname, message, isLocallySent) {
-        var messageClass = 'message';
-        if(isLocallySent) {
-          messageClass += ' locally-sent';
+      function appendMessage(rtcId, nickname, message, isLocallySent) {
+
+        if(_lastSpeakerId !== rtcId) {
+
+          var messageElement = $document[0].createElement('div');
+          messageElement.classList.add('message');
+          messageElement.innerHTML = '<div class="nickname"><span>'
+            + nickname + '</span></div><div class="message"><p>'
+            + message + '<p></div>';
+          if(isLocallySent) {
+            messageElement.classList.add('locally-sent');
+          }
+          _displayZone.appendChild(messageElement);
+
+          _lastMessageZoneElement = messageElement.querySelector('.message');
+
+        } else {
+
+          var newMessageElement = $document[0].createElement('p');
+          var messageText = $document[0].createTextNode(message);
+          newMessageElement.appendChild(messageText);
+          _lastMessageZoneElement.appendChild(newMessageElement);
+
         }
-        $displayZone.append(
-          '<div class="' + messageClass
-          + '"><div class="nickname"><span>'
-          + nickname + '</span></div><div class="message">'
-          + message + '</div></div>'
-        );
+
+        _lastSpeakerId = rtcId;
       }
 
       function closeRoom() {
-
-        _element.addEventListener('animationend', function() {
-          _element.style.display = 'none';
-        });
-        _element.classList.add('vanishing');
+        _element.style.display = 'none';
       }
 
     }
