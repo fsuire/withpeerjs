@@ -19,44 +19,78 @@
     };
 
     function link(scope, element, attrs) {
-      var _element = element[0];
-      var _closeButton = _element.querySelector('button.icon-close');
-      var _sendButton = _element.querySelector('button.icon-mail-dark');
       var _connection = scope.connection;
-      var _inputElt = _element.querySelector('input.message');
-      var _displayZone = _element.querySelector('.message-list');
+      var _element = element[0];
+      var _roomNameElement = _element.querySelector('input.room-name');
+      var _closeButtonElement = _element.querySelector('button.icon-close');
+      var _sendButtonElement = _element.querySelector('button.icon-mail-dark');
+      var _inputMessageElement = _element.querySelector('input.message');
+      var _messageListElement = _element.querySelector('.message-list');
+      var _oldRoomName = 'Room without name';
       var _lastSpeakerId = null;
       var _lastMessageZoneElement = null;
 
-      _sendButton.addEventListener('click', send);
-      _inputElt.addEventListener('keyup', function(event) {
+
+      _roomNameElement.addEventListener('keyup', function(event) {
         if(event.keyCode === 13) {
-          send();
+          _roomNameElement.blur();
+          _inputMessageElement.focus();
         }
       });
-      _closeButton.addEventListener('click', function() {
+      _roomNameElement.addEventListener('focus', function() {
+        _oldRoomName = _roomNameElement.value;
+        _roomNameElement.value = '';
+      });
+      _roomNameElement.addEventListener('blur', sendNewRoomName);
+
+      _inputMessageElement.addEventListener('keyup', function(event) {
+        if(event.keyCode === 13) {
+          sendMessage();
+        }
+      });
+
+      _closeButtonElement.addEventListener('click', function() {
         _connection.close();
         closeRoom();
       });
+
+      _sendButtonElement.addEventListener('click', sendMessage);
+
       _connection.on('data', onData);
       _connection.on('close', closeRoom);
 
-      scope.nickname = registeredPeers.getNicknameFromRtcId(_connection.peer);
+      scope.roomName = _oldRoomName;
 
       ////////////////
 
       function onData(data) {
-        var nickname = registeredPeers.getNicknameFromRtcId(_connection.peer);
-        appendMessage(_connection.peer, nickname, data);
+        data = JSON.parse(data);
+
+        switch(data.type) {
+          case 'message':
+            var nickname = registeredPeers.getNicknameFromRtcId(_connection.peer);
+            appendMessage(_connection.peer, nickname, data.value);
+            break;
+          case 'room-name':
+            scope.$apply(function() {
+              _oldRoomName = scope.roomName;
+              scope.roomName = data.value;
+            });
+            break;
+        }
+
       }
 
-      function send() {
-        var message = _inputElt.value;
+      function sendMessage() {
+        var message = _inputMessageElement.value;
         if(message !== '') {
 
           appendMessage(tchatUser.rtcId, tchatUser.nickname, message, true);
-          _connection.send(message);
-          _inputElt.value = '';
+          _connection.send(JSON.stringify({
+            type: 'message',
+            value: message
+          }));
+          _inputMessageElement.value = '';
         }
       }
 
@@ -72,7 +106,7 @@
           if(isLocallySent) {
             messageElement.classList.add('locally-sent');
           }
-          _displayZone.appendChild(messageElement);
+          _messageListElement.appendChild(messageElement);
 
           _lastMessageZoneElement = messageElement.querySelector('.message');
 
@@ -90,6 +124,18 @@
 
       function closeRoom() {
         _element.style.display = 'none';
+      }
+
+      function sendNewRoomName() {
+        if(_roomNameElement.value === '') {
+          _roomNameElement.value = _oldRoomName;
+        } else if(_oldRoomName !== _roomNameElement.value) {
+          _oldRoomName = _roomNameElement.value;
+          _connection.send(JSON.stringify({
+            type: 'room-name',
+            value: _oldRoomName
+          }));
+        }
       }
 
     }

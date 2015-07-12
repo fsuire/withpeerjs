@@ -116,6 +116,26 @@
         flex-direction: column;
         
         margin: 0;
+        
+        > header .room-name {
+          flex: 1;
+          padding: 0.25em;
+          border: 1px solid alpha(#000, 0%);
+          border-radius: 0.25em;
+          background-color: alpha($pseudo-white, 0%);
+          color: $primary-font-color;
+          font-size: 1em;
+
+          transition-property: background-color, border-color, color;
+          transition-duration: 100ms;
+          transition-timing-function: ease-out;
+
+          &:focus,
+          &:hover {
+            background-color: alpha($pseudo-white, 50%);
+            border: 1px solid alpha(#000, 50%);
+          }
+        }
 
         > section {
           flex: 1;
