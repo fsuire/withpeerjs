@@ -1,7 +1,7 @@
 @import '../../app.theme.color';
 @import '../../app.theme.responsive';
 @import '../../blocks/layout/icons';
-@import '../../blocks/layout/button.mixin';
+@import '../../blocks/layout/buttons';
 @import '../../blocks/layout/background';
 
 [route="tchat.room"] {
@@ -145,8 +145,8 @@
           &:hover,
           &.has-focus {
             &:before {
-              background-color: $pseudo-white;
-              color: $primary-color;
+              color: $pseudo-white;
+              background-color: darken($primary-color, 30%);
               border: 1px solid darken($primary-color, 30%);
             }
             input {

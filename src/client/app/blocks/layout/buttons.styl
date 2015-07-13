@@ -1,3 +1,5 @@
+@import 'icons';
+
 standard-button()
   border: none;
   background-color: alpha($pseudo-white, 60%);
@@ -11,3 +13,9 @@ standard-button()
   transition-property: background-color, border-color, color;
   transition-duration: 100ms;
   transition-timing-function: ease-out;
+
+button
+  for icon in $icon-list
+    &.{icon[0]}
+      add-icon(icon[1], true)
+  
