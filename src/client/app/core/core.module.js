@@ -20,7 +20,8 @@
       'blocks.layout',
       'blocks.logger',
       'blocks.router',
-      'blocks.sse'
+      'blocks.sse',
+      'blocks.uid'
 
       /* 3rd-party modules */
     ]);

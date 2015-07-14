@@ -4,22 +4,39 @@
       prefix-icon="icon-pencil"
       type="text"
       class="room-name"
-      ng-model="roomName"
+      ng-model="room.name"
     />
     <div>
-      <button class="icon-close"/>
+      <button
+        class="icon-user-plus"
+        title="Add a user to this room"
+      />
+      <button
+        class="icon-close"
+        title="Close this room"
+      />
     </div>
   </header>
   <section>
-    <div class="message-list">
-    </div>
+    <div class="message-list"></div>
+    <ul class="available-user-list">
+      <li ng-show="info.peerCount == 0" class="no-hover">
+        No one seems to be online !
+      </li>
+      <li ng-repeat="peer in info.peerList" ng-click="action.addRoomUser(peer.rtcId);">
+        <span>{{ peer.nickname }}</span>
+      </li>
   </section>
   <footer>
+    <div prefix-icon="icon-users">{{ info.roomUserCount }}</div>
     <input
       type="text"
       class="message"
       placeholder="Type your message here"
     />
-    <button class="icon-mail-dark"></button>
+    <button
+      class="icon-mail-dark"
+      title="Send your message"
+    />
   </footer>
 </box>

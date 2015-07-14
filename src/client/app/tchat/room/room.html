@@ -2,9 +2,17 @@
 
   <section class="informations">
     <box>
-      <header>You are connected as&nbsp;<strong>{{ vm.user.nickname }}</strong></header>
-      <section>
-        RTC id : {{ vm.user.rtcId }}
+      <header><strong>{{ vm.user.nickname }}</strong> - {{ vm.user.rtcId }}</header>
+      <section class="room-creation-buttons">
+        <button
+          class="icon-chat"
+          title="Create a new public room"
+          ng-click="vm.createPublicRoomAction()"
+        />
+        <button
+          class="icon-lock-alt"
+          title="Create a new private room"
+        />
       </section>
     </box>
 
@@ -21,7 +29,6 @@
             <button
               title="Start a private conversation"
               class="icon-comment-alt"
-              ng-click="vm.connectToAction(peer)"
             />
 
           </li>
@@ -32,8 +39,8 @@
 
   <section class="rooms">
     <tchat-room
-      ng-repeat="dataConnection in vm.dataConnections"
-      connection="dataConnection"
+      ng-repeat="room in vm.roomCollections"
+      room="room"
     ></tchat-room>
   </section>
 

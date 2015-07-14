@@ -9,8 +9,6 @@
   function application(express, config, httpApp, server, peerServer, tchatRouter, serverInfo) {
 
     // static directories
-    // httpApp.use('/', express.static('dist/dev/client'));
-    // httpApp.use('/bower_components', express.static('bower_components'));
     for(var i in config.staticDirectories) {
       httpApp.use(i, express.static(config.staticDirectories[i]));
     }

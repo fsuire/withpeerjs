@@ -10,7 +10,6 @@
 
     var clients = {};
 
-    // peerServer.on('connection', registerClient);
     peerServer.on('disconnect', unregisterClient);
 
     return function(httpApp) {
@@ -35,7 +34,6 @@
     }
 
     function registerClient(req, res, next) {
-      console.log('registering', req.params.nickname, req.params.rtcId, req.params.sseId);
       clients[req.params.rtcId] = {
         nickname: req.params.nickname,
         rtcId: req.params.rtcId,

@@ -5,21 +5,102 @@
     .module('app.tchat')
     .directive('tchatRoom', tchatRoomDirective);
 
-  tchatRoomDirective.$inject = ['$document', 'tchatUser', 'registeredPeers'];
+  tchatRoomDirective.$inject = ['$rootScope', '$document', 'peer', 'peerConnections'];
 
-  function tchatRoomDirective($document, tchatUser, registeredPeers) {
+  function tchatRoomDirective($rootScope, $document, peer, peerConnections) {
 
     return {
       restrict: 'E',
       templateUrl: 'app/tchat/room/room.directive.html',
       scope: {
-        connection: '='
+        room: '='
       },
       link: link
     };
 
     function link(scope, element, attrs) {
-      var _connection = scope.connection;
+      scope.action = {};
+      scope.info = {};
+
+      var _dataConnections = {};
+
+      var _element = element[0];
+      var _roomNameElement = _element.querySelector('.room-name');
+      var _addUserButtonElement = _element.querySelector('button.icon-user-plus');
+      var _availableUserListElement = _element.querySelector('.available-user-list');
+      var _closeButtonElement = _element.querySelector('button.icon-close');
+
+      scope.info.roomUsers = {};
+      scope.info.roomUserCount = 0;
+      scope.info.peerList = {};
+      scope.info.peerCount = 0;
+
+      _addUserButtonElement.addEventListener('click', showAvailableUserListAction);
+      _closeButtonElement.addEventListener('click', closeRoomAction);
+
+      scope.action.addRoomUser = addRoomUser;
+
+      peer.on('new-dataconnection-received', onNewDataConnection);
+      peerConnections.on('list', _refreshAvailableUserListElement);
+
+      _init();
+
+      ////////////////
+
+      function _init() {
+
+        _refreshAvailableUserListElement(peerConnections.getList());
+
+      }
+
+      function _refreshAvailableUserListElement(userList) {
+        scope.info.peerCount = $rootScope.getObjectLength(userList);
+        scope.info.peerList = userList;
+      }
+
+      ////////////////
+
+      function showAvailableUserListAction() {
+        _availableUserListElement.classList.toggle('shown');
+      }
+
+      function closeRoomAction() {
+        _element.style.display = 'none';
+      }
+
+      function addRoomUser(rtcId) {
+        var dataConnection = peer.createDataConnection(rtcId, {
+          roomName: scope.room.name
+        });
+
+        dataConnection.on('open', function() {
+          scope.info.roomUsers[rtcId] = scope.info.peerList[rtcId];
+          scope.info.roomUserCount = $rootScope.getObjectLength(scope.info.roomUsers);
+          _dataConnections[rtcId] = dataConnection;
+
+
+          console.log('sending connected-peers-rtcid message');
+          dataConnection.send(JSON.stringify({
+            type: 'connected-peers-rtcid',
+            value: []
+          }));
+        });
+
+      }
+
+      ////////////////
+
+      function onNewDataConnection(dataConnection) {
+        _dataConnections[dataConnection.peer] = dataConnection;
+
+        console.log('a new dataconnection has been received');
+
+        dataConnection.on('message', function(data) {
+          console.log('message received', data);
+        });
+      }
+
+      /*var _connection = scope.connection;
       var _element = element[0];
       var _roomNameElement = _element.querySelector('.room-name');
       var _closeButtonElement = _element.querySelector('button.icon-close');
@@ -68,7 +149,7 @@
 
         switch(data.type) {
           case 'message':
-            var nickname = registeredPeers.getNicknameFromRtcId(_connection.peer);
+            var nickname = peerConnections.getNicknameFromRtcId(_connection.peer);
             appendMessage(_connection.peer, nickname, data.value);
             break;
           case 'room-name':
@@ -136,7 +217,7 @@
             value: _oldRoomName
           }));
         }
-      }
+      }*/
 
     }
 

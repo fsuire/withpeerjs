@@ -24,6 +24,18 @@
     
     box-shadow: regular-shadow($primary-background-color);
     
+    button {
+      background-color: $pseudo-white;
+      color: alpha($primary-font-color, 50%);
+      border: 1px solid darken($primary-background-color, 10%);
+      
+      &:hover {
+        border-color: $secondary-color;
+        color: $secondary-color;
+      }
+      
+    }
+    
     box {
       box-shadow: none;
       
@@ -41,6 +53,16 @@
         justify-content: flex-end
       }
       
+    }
+    
+    .room-creation-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+        
+      button {
+        font-size: 1.5em;
+      }
     }
 
     .peer-list {
@@ -63,29 +85,11 @@
 
         &.peer:hover {
           background-color: alpha($secondary-color, 20%);
-          
-          button.icon-comment-alt {
-            border: 1px solid lighten($secondary-color, 30%);
-          }
         }
 
         > span {
           flex: 1;
         }
-
-        button.icon-comment-alt {
-          standard-button();
-          border: 1px solid darken($primary-background-color, 10%);
-
-          &:hover {
-            background-color: $pseudo-white;
-            border-color: darken($secondary-color, 50%);
-            color: $secondary-color;
-          }
-
-        }
-          
-        
       }
     }
   }
@@ -99,144 +103,6 @@
     flex-wrap: wrap;
     
     padding: 0.5em;
-    overflow: auto;
-
-    tchat-room {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      
-      margin: 0.5em;
-      min-width: calc(50% - 1em);
-      min-height: calc(50% - 1em);
-          
-      > box {
-        flex: 1;        
-        
-        display: flex;
-        flex-direction: column;
-        
-        margin: 0;
-        
-        > header > prefix-icon {
-          flex: 1;
-          height: 1em;
-          
-          focused-input() {
-            background-color: alpha($pseudo-white, 50%);
-            border: 1px solid darken($primary-color, 30%);
-            border-left: none;
-          }
-          
-          &:before {
-            height: 100%;
-            padding: 0.25em;
-            border-radius: 0.25em;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            border: 1px solid alpha($primary-color, 0%);
-            
-            transition-property: background-color, border-color, color;
-            transition-duration: 100ms;
-            transition-timing-function: ease-out;
-          }
-          
-          &:focus,
-          &:hover,
-          &.has-focus {
-            &:before {
-              color: $pseudo-white;
-              background-color: darken($primary-color, 30%);
-              border: 1px solid darken($primary-color, 30%);
-            }
-            input {
-              focused-input();
-            }
-          }
-        
-          input {
-            padding: 0.25em;
-            height: 100%;
-            border: 1px solid alpha($primary-color, 0%);
-            border-left: none;
-            border-radius: 0.25em;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            background-color: alpha($pseudo-white, 0%);
-            color: $primary-font-color;
-            font-size: 1em;
-
-            transition-property: background-color, border-color, color;
-            transition-duration: 100ms;
-            transition-timing-function: ease-out;
-            
-            &:focus {
-              focused-input();
-            }
-            
-          }
-        }
-
-        > section {
-          flex: 1;
-          position: relative;
-          padding: 0;
-          
-          > .message-list {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            overflow: auto;
-            
-            display: flex;
-            flex-direction: column;
-            
-            > .message {
-              flex-shrink: 0;
-              display: flex;
-              flex-direction: row;
-              width: 100%;
-              
-              &.locally-sent {
-                > .nickname {
-                  order: 1;
-                  background-color: alpha($secondary-color, 25%);
-                }
-              
-                > .message {
-                  order: 2;
-                  background-color: alpha($secondary-color, 15%);
-                  text-align: left;
-                }
-              }
-              
-              > .nickname {
-                order: 2;
-                padding: 1em;
-                background-color: alpha($primary-color, 25%);
-                font-weight: bold;
-              }
-              
-              > .message {
-                order: 1;
-                flex: 1;
-                padding: 1em;
-                background-color: alpha($primary-color, 15%);
-                text-align: right;
-              }
-              
-            }
-          }
-
-        }
-        
-        > footer {
-          justify-content: flex-end;
-        }
-        
-      }
-    }
+    overflow: auto;    
   }
 }

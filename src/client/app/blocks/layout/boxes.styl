@@ -13,9 +13,6 @@ box {
   display: flex;
   flex-direction: column;
   
-  transform: scaleY(1);
-  
-  //box-shadow: regular-shadow($primary-background-color);
   margin-bottom: 1em;
   
   button {
@@ -39,10 +36,22 @@ box {
     border: 1px solid darken($color1, 25%);
     
     padding: 0.5em;
-    background: /*shiny-spot($pseudo-white),*/ $color1;
+    background: $color1;
     
     button:hover {
       color: $color1
+    }
+    
+    > div:last-child {
+      margin-left: 2em;
+      
+      button {
+        margin-right: 0.5em;
+      }
+      
+      button:last-child {
+        margin-right: 0;
+      }
     }
     
   }
@@ -66,7 +75,7 @@ box {
     border: 1px solid darken($color2, 25%);
     
     padding: 0.5em;
-    background: /*shadowy-spot(black),*/ $color2;
+    background: $color2;
     
     button:hover {
       color: $color2
