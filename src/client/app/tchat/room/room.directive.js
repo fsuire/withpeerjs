@@ -40,7 +40,6 @@
 
       scope.action.addRoomUser = addRoomUser;
 
-      peer.on('new-dataconnection-received', onNewDataConnection);
       peerConnections.on('list', _refreshAvailableUserListElement);
 
       _init();
@@ -90,15 +89,7 @@
 
       ////////////////
 
-      function onNewDataConnection(dataConnection) {
-        _dataConnections[dataConnection.peer] = dataConnection;
 
-        console.log('a new dataconnection has been received');
-
-        dataConnection.on('message', function(data) {
-          console.log('message received', data);
-        });
-      }
 
       /*var _connection = scope.connection;
       var _element = element[0];

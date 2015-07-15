@@ -5,9 +5,9 @@
     .module('app.tchat')
     .controller('TchatRoomController', TchatRoomController);
 
-  TchatRoomController.$inject = ['$scope', '$state', '$http', 'peerConnections', 'sse', 'uid', 'peer'];
+  TchatRoomController.$inject = ['$scope', '$state', '$http', 'peerConnections', 'sse', 'uid', 'peer', 'Pubsub'];
 
-  function TchatRoomController($scope, $state, $http, peerConnections, sse, uid, peer) {
+  function TchatRoomController($scope, $state, $http, peerConnections, sse, uid, peer, Pubsub) {
     var vm = this;
 
     vm.registeredPeerList = [];
@@ -17,6 +17,24 @@
     vm.createPublicRoomAction = createPublicRoom;
 
     peerConnections.on('list', onPeerList);
+    peer.on('new-dataconnection-received', onNewDataconnection);
+
+    console.log(':D');
+    $scope.$on('$destroy', function() {
+      console.log('argh !');
+    });
+
+    var pubsub = new Pubsub();
+
+    var destroyPubsub = pubsub.subscribe('prout', function(prout) {
+      console.log('prout event !!', prout);
+    });
+
+    pubsub.publish('prout', 'ha ha ha');
+
+    destroyPubsub();
+
+    pubsub.publish('prout', 'ha ha ha');
 
     _init();
 
@@ -38,14 +56,21 @@
       });
     }
 
+    function onNewDataconnection(dataconnection) {
+      console.log('new data connection within controller', dataconnection);
+    }
+
     ////////////////
 
-    function createPublicRoom() {
-      var id = uid();
-      var roomId = peer.user.rtcId + '-' + id;
+    function createPublicRoom(roomId) {
+      if(angular.isUndefined(roomId)) {
+        var id = uid();
+        roomId = peer.user.rtcId + '-' + id;
+      }
       var room = {
-        name: 'public room ' + id,
-        type: 'public'
+        name: 'public room',
+        type: 'public',
+        id: roomId
       };
 
       vm.roomCollections[roomId] = room;

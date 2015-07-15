@@ -71,7 +71,7 @@
     }
 
     function emit(eventName, data) {
-      console.log('peer.service is emitting', eventName, data);
+      console.log('peer.service is emitting', eventName, _listeners);
       if(angular.isDefined(_listeners[eventName])) {
         angular.forEach(_listeners[eventName], function(listener) {
           listener(data);
