@@ -40,7 +40,7 @@
 
       scope.action.addRoomUser = addRoomUser;
 
-      peerConnections.on('list', _refreshAvailableUserListElement);
+      peerConnections.subscribe('list', _refreshAvailableUserListElement);
 
       _init();
 

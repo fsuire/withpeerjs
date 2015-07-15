@@ -16,25 +16,13 @@
 
     vm.createPublicRoomAction = createPublicRoom;
 
-    peerConnections.on('list', onPeerList);
+    peerConnections.subscribe('list', onPeerList);
     peer.on('new-dataconnection-received', onNewDataconnection);
 
     console.log(':D');
     $scope.$on('$destroy', function() {
       console.log('argh !');
     });
-
-    var pubsub = new Pubsub();
-
-    var destroyPubsub = pubsub.subscribe('prout', function(prout) {
-      console.log('prout event !!', prout);
-    });
-
-    pubsub.publish('prout', 'ha ha ha');
-
-    destroyPubsub();
-
-    pubsub.publish('prout', 'ha ha ha');
 
     _init();
 

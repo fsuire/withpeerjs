@@ -5,20 +5,20 @@
     .module('blocks.peer')
     .factory('peerConnections', peerConnectionsFactory);
 
-  peerConnectionsFactory.$inject = [];
+  peerConnectionsFactory.$inject = ['Pubsub'];
 
 
-  function peerConnectionsFactory() {
+  function peerConnectionsFactory(Pubsub) {
+
+    var pubsub = new Pubsub();
 
     var _list = [];
-    var _listeners = {};
-
     var service = {
       getList: getList,
       setList: setList,
       getNicknameFromRtcId: getNicknameFromRtcId,
 
-      on: on
+      subscribe: pubsub.subscribe
     };
 
     return service;
@@ -31,7 +31,7 @@
 
     function setList(newList) {
       _list = newList;
-      _emit('list', newList);
+      pubsub.publish('list', newList);
     }
 
     function getNicknameFromRtcId(rtcId) {
@@ -40,23 +40,6 @@
         nickname = _list[rtcId].nickname;
       }
       return nickname;
-    }
-
-    function on(eventName, listener) {
-      if(angular.isUndefined(_listeners[eventName])) {
-        _listeners[eventName] = [];
-      }
-      _listeners[eventName].push(listener);
-    }
-
-    ////////////////
-
-    function _emit(eventName, data) {
-      if(angular.isDefined(_listeners[eventName])) {
-        angular.forEach(_listeners[eventName], function(listener) {
-          listener(data);
-        });
-      }
     }
 
 

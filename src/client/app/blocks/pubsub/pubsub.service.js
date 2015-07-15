@@ -22,30 +22,26 @@
     var _uid = 0;
 
     var Pubsub = function() {
+      this._subscribers = {};
+      var _self = this;
 
-    };
-
-    Pubsub.prototype = {
-
-      _subscribers: {},
-
-      publish: function(eventName, publication) {
-        if(angular.isDefined(this._subscribers[eventName])) {
-          angular.forEach(this._subscribers[eventName], function(subscriber) {
+      this.publish = function(eventName, publication) {
+        if(angular.isDefined(_self._subscribers[eventName])) {
+          angular.forEach(_self._subscribers[eventName], function(subscriber) {
             subscriber(publication);
           });
         }
-      },
+      };
 
-      subscribe: function(eventName, subscriber) {
-        if(angular.isUndefined(this._subscribers[eventName])) {
-          this._subscribers[eventName] = {};
+      this.subscribe = function(eventName, subscriber) {
+        if(angular.isUndefined(_self._subscribers[eventName])) {
+          _self._subscribers[eventName] = {};
         }
 
         var uid = _getUid();
-        this._subscribers[eventName][uid] = subscriber;
-        return _createDestroyFunction(this, eventName, uid);
-      }
+        _self._subscribers[eventName][uid] = subscriber;
+        return _createDestroyFunction(_self, eventName, uid);
+      };
 
     };
 
