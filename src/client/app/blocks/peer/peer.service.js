@@ -5,7 +5,7 @@
     .module('blocks.peer')
     .factory('peer', peerFactory);
 
-  peerFactory.$inject = ['$http', 'sse', 'peerConnections'];
+  peerFactory.$inject = ['$http', '$q', 'Pubsub', 'sse', 'peerConnections'];
 
   /**
    * @ngdoc Factory
@@ -17,9 +17,12 @@
    *
    * @returns {object} - The peer service
    */
-  function peerFactory($http, sse, peerConnections) {
+  function peerFactory($http, $q, Pubsub, sse, peerConnections) {
     /* global Peer:false */
-    var _listeners = {};
+    var pubsub = new Pubsub();
+
+    var _channels = {};
+    var _dataConnections = {};
 
     var service = {
       peer: null,
@@ -28,15 +31,21 @@
         rtcId: null
       },
 
-      connectToServer: connectToServer,
-      createDataConnection: createDataConnection,
+      addChannel: addChannel,
 
-      on: on
+      connectToServer: connectToServer,
+      getDataconnection: getDataconnection,
+
+      subscribe: pubsub.subscribe
     };
 
     return service;
 
     ////////////////
+
+    function addChannel(channel, action) {
+      _channels[channel] = action;
+    }
 
     function connectToServer() {
       if(!service.peer) {
@@ -54,28 +63,13 @@
       }
     }
 
-    function createDataConnection(rtcId, metadata) {
-      var dataConnection = service.peer.connect(rtcId, {
-        metadata: metadata
-      });
-      console.log('----->', dataConnection);
-      return dataConnection;
-    }
-
-    function on(eventName, listener) {
-      console.log('a new listener has been initialized on peer.service', eventName);
-      if(angular.isUndefined(_listeners[eventName])) {
-        _listeners[eventName] = [];
-      }
-      _listeners[eventName].push(listener);
-    }
-
-    function emit(eventName, data) {
-      console.log('peer.service is emitting', eventName, _listeners);
-      if(angular.isDefined(_listeners[eventName])) {
-        angular.forEach(_listeners[eventName], function(listener) {
-          listener(data);
-        });
+    function getDataconnection(rtcId) {
+      if(angular.isDefined(_dataConnections[rtcId])) {
+        var deferred = $q.defer();
+        deferred.resolve(_dataConnections[rtcId]);
+        return deferred.promise;
+      } else {
+        return _createDataConnection(rtcId);
       }
     }
 
@@ -93,13 +87,41 @@
 
     function onDataConnection(dataConnection) {
       console.log('<-----', dataConnection);
-      emit('new-dataconnection-received', dataConnection);
+      _dataConnections[dataConnection.peer] = dataConnection;
+
+      dataConnection.on('data', function(data) {
+        console.log('data received !', data);
+        data = JSON.parse(data);
+        if(angular.isDefined(_channels[data.channel])) {
+          _channels[data.channel](data.data);
+        }
+      });
+
+      pubsub.publish('new-dataconnection-received', dataConnection);
     }
 
     function onRegisteredPeerList(data) {
       delete data[service.user.rtcId];
 
       peerConnections.setList(data);
+    }
+
+    ////////////////
+
+    function _createDataConnection(rtcId) {
+      var deferred = $q.defer();
+
+      var dataConnection = service.peer.connect(rtcId);
+
+      console.log('----->', dataConnection);
+
+      dataConnection.on('open', function() {
+        _dataConnections[rtcId] = dataConnection;
+        console.log('connected with remote peer', rtcId);
+        deferred.resolve(dataConnection);
+      });
+
+      return deferred.promise;
     }
 
   }

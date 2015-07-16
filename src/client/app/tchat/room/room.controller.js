@@ -14,14 +14,19 @@
     vm.roomCollections = {};
     vm.user = peer.user;
 
-    vm.createPublicRoomAction = createPublicRoom;
+    vm.createPublicRoomAction = createPublicRoomAction;
 
-    peerConnections.subscribe('list', onPeerList);
-    peer.on('new-dataconnection-received', onNewDataconnection);
+    var _subscribersToDestroy = [];
+    _subscribersToDestroy.push(
+      peerConnections.subscribe('list', onPeerList)
+    );
 
-    console.log(':D');
+    peer.addChannel('tchat-room/create/public-room', createPublicRoom);
+
     $scope.$on('$destroy', function() {
-      console.log('argh !');
+      while(_subscribersToDestroy.length) {
+        _subscribersToDestroy.pop()();
+      }
     });
 
     _init();
@@ -44,24 +49,26 @@
       });
     }
 
-    function onNewDataconnection(dataconnection) {
-      console.log('new data connection within controller', dataconnection);
+    ////////////////
+
+    function createPublicRoomAction() {
+      var id = peer.user.rtcId + '-' + uid();
+      var room = {
+        name: 'public room',
+        type: 'public',
+        id: id,
+        peers: [peer.user.rtcId]
+      };
+
+      vm.roomCollections[id] = room;
     }
 
     ////////////////
 
-    function createPublicRoom(roomId) {
-      if(angular.isUndefined(roomId)) {
-        var id = uid();
-        roomId = peer.user.rtcId + '-' + id;
-      }
-      var room = {
-        name: 'public room',
-        type: 'public',
-        id: roomId
-      };
-
-      vm.roomCollections[roomId] = room;
+    function createPublicRoom(room) {
+      $scope.$apply(function() {
+        vm.roomCollections[room.id] = room;
+      });
     }
 
 

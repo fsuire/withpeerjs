@@ -56,6 +56,7 @@
 
     function _createDestroyFunction(publisher, eventName, uid) {
       return function() {
+        console.log('destroying subscriber ', eventName, uid);
         delete publisher._subscribers[eventName][uid];
       };
     }

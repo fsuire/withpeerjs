@@ -89,6 +89,46 @@ tchat-room {
         background-color: $pseudo-white;
       }
       
+      > .connected-user-list {
+        background-color: $pseudo-white;
+        width: 0px;
+        overflow: hidden;
+        
+        transition-property: width;
+        transition-duration: 100ms;
+        transition-timing-function: ease-out;
+        
+        border-right: none;
+        
+        &.shown {
+          width: 25%;
+          max-width: 250px;
+          border-right: 1px solid darken($primary-background-color, 25%);
+        }
+        
+        li {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 0.25em;
+          border-bottom: 1px solid $primary-background-color;
+          
+          &:last-child {
+            border-bottom: none
+          }
+          
+          &:hover {
+            background-color: alpha($secondary-color, 20%);
+            cursor: pointer;
+          }
+          
+          &.no-hover:hover {
+            background-color: inherit;
+            cursor: inherit;
+          }
+        }
+      }
+      
       > .available-user-list {
         background-color: $pseudo-white;
         width: 0px;
@@ -180,7 +220,14 @@ tchat-room {
     }
 
     > footer {
-      justify-content: flex-end;
+      .connected-room-user-count {
+        width: auto;
+        
+        &:hover {
+          cursor: pointer;
+        }
+        
+      }
     }
 
   }

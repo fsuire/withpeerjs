@@ -27,18 +27,20 @@
       var _element = element[0];
       var _roomNameElement = _element.querySelector('.room-name');
       var _addUserButtonElement = _element.querySelector('button.icon-user-plus');
+      var _showConnectedUserButtonElement = _element.querySelector('button.connected-room-user-count');
       var _availableUserListElement = _element.querySelector('.available-user-list');
       var _closeButtonElement = _element.querySelector('button.icon-close');
 
       scope.info.roomUsers = {};
-      scope.info.roomUserCount = 0;
+      scope.info.roomUserList = [];
       scope.info.peerList = {};
-      scope.info.peerCount = 0;
+      scope.info.peerIdList = [];
 
       _addUserButtonElement.addEventListener('click', showAvailableUserListAction);
+      _showConnectedUserButtonElement.addEventListener('click', showConnectedUserListAction);
       _closeButtonElement.addEventListener('click', closeRoomAction);
 
-      scope.action.addRoomUser = addRoomUser;
+      scope.action.addRoomUser = addRoomUserAction;
 
       peerConnections.subscribe('list', _refreshAvailableUserListElement);
 
@@ -50,14 +52,29 @@
 
         _refreshAvailableUserListElement(peerConnections.getList());
 
+        angular.forEach(scope.room.peers, function(peerId) {
+          if(peerId !== peer.user.rtcId) {
+            peer.getDataconnection(peerId).then(function(dataconnection) {
+              scope.info.roomUsers[peerId] = scope.info.peerList[peerId];
+              scope.info.roomUserList = Object.keys(scope.info.roomUsers);
+              _dataConnections[peerId] = dataconnection;
+              console.log(peerId, 'registered');
+            });
+          }
+        });
+
       }
 
       function _refreshAvailableUserListElement(userList) {
-        scope.info.peerCount = $rootScope.getObjectLength(userList);
+        scope.info.peerIdList = Object.keys(userList);
         scope.info.peerList = userList;
       }
 
       ////////////////
+
+      function showConnectedUserListAction() {
+        _showConnectedUserButtonElement.classList.toggle('shown');
+      }
 
       function showAvailableUserListAction() {
         _availableUserListElement.classList.toggle('shown');
@@ -67,22 +84,24 @@
         _element.style.display = 'none';
       }
 
-      function addRoomUser(rtcId) {
-        var dataConnection = peer.createDataConnection(rtcId, {
-          roomName: scope.room.name
-        });
+      function addRoomUserAction(rtcId) {
+        peer.getDataconnection(rtcId).then(function(dataconnection) {
 
-        dataConnection.on('open', function() {
           scope.info.roomUsers[rtcId] = scope.info.peerList[rtcId];
-          scope.info.roomUserCount = $rootScope.getObjectLength(scope.info.roomUsers);
-          _dataConnections[rtcId] = dataConnection;
+          scope.info.roomUserList = Object.keys(scope.info.roomUsers);
+          _dataConnections[rtcId] = dataconnection;
 
-
-          console.log('sending connected-peers-rtcid message');
-          dataConnection.send(JSON.stringify({
-            type: 'connected-peers-rtcid',
-            value: []
+          dataconnection.send(JSON.stringify({
+            channel: 'tchat-room/create/public-room',
+            data: {
+              name: scope.room.name,
+              id: scope.room.id,
+              peers: [peer.user.rtcId]
+            }
           }));
+
+          console.log(':D', scope.info.roomUserList);
+
         });
 
       }
@@ -192,10 +211,6 @@
         }
 
         _lastSpeakerId = rtcId;
-      }
-
-      function closeRoom() {
-        _element.style.display = 'none';
       }
 
       function sendNewRoomName() {
