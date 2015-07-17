@@ -15,7 +15,7 @@ $icon-list = icon-cancel '\e800',
   icon-lock-alt '\e80d',
   icon-lock-open '\e80e',
   icon-lock-open-alt '\e80f'
-  
+
 
 /////////////////
 
@@ -25,18 +25,17 @@ prepare-for-icon()
   font-weight: normal;
 
 add-icon(_icon, _hover = false, _after = false)
-  prepare-for-icon();
-  
+
   if _hover
     &:hover {
       cursor: pointer;
     }
-  
+
   if _after is false
     &:before {
       content: _icon;
     }
-  
+
   if _after
     &:after {
       content: _icon;

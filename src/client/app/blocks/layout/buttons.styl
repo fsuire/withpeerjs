@@ -17,4 +17,6 @@ button
   for icon in $icon-list
     &.{icon[0]}
       add-icon(icon[1], true)
-  
+
+  &:before
+    prepare-for-icon()

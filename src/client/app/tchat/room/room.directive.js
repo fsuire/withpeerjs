@@ -5,9 +5,9 @@
     .module('app.tchat')
     .directive('tchatRoom', tchatRoomDirective);
 
-  tchatRoomDirective.$inject = ['$rootScope', '$document', 'peer', 'peerConnections'];
+  tchatRoomDirective.$inject = ['$rootScope', '$document', '$q', 'peer', 'peerConnections'];
 
-  function tchatRoomDirective($rootScope, $document, peer, peerConnections) {
+  function tchatRoomDirective($rootScope, $document, $q, peer, peerConnections) {
 
     return {
       restrict: 'E',
@@ -29,7 +29,10 @@
       var _addUserButtonElement = _element.querySelector('button.icon-user-plus');
       var _showConnectedUserButtonElement = _element.querySelector('button.connected-room-user-count');
       var _availableUserListElement = _element.querySelector('.available-user-list');
+      var _connectedUserListElement = _element.querySelector('.connected-user-list');
       var _closeButtonElement = _element.querySelector('button.icon-close');
+      var _sendMessageButtonElement = _element.querySelector('button.icon-mail-dark');
+      var _messageInputElement = _element.querySelector('footer input');
 
       scope.info.roomUsers = {};
       scope.info.roomUserList = [];
@@ -39,10 +42,19 @@
       _addUserButtonElement.addEventListener('click', showAvailableUserListAction);
       _showConnectedUserButtonElement.addEventListener('click', showConnectedUserListAction);
       _closeButtonElement.addEventListener('click', closeRoomAction);
+      _sendMessageButtonElement.addEventListener('click', sendMessageAction);
 
       scope.action.addRoomUser = addRoomUserAction;
 
       peerConnections.subscribe('list', _refreshAvailableUserListElement);
+
+      peer.addChannel('tchat-room/join/' + scope.room.id, function(peerId) {
+        addRoomUser(peerId);
+      });
+
+      peer.addChannel('tchat-room/message/' + scope.room.id, function(message, dataconnection) {
+        console.log('room ' + scope.room.id + ' has received a message from ' + dataconnection.peer, message);
+      });
 
       _init();
 
@@ -50,15 +62,17 @@
 
       function _init() {
 
-        _refreshAvailableUserListElement(peerConnections.getList());
+        var userList = peerConnections.getList();
+        scope.info.peerIdList = Object.keys(userList);
+        scope.info.peerList = userList;
 
         angular.forEach(scope.room.peers, function(peerId) {
           if(peerId !== peer.user.rtcId) {
-            peer.getDataconnection(peerId).then(function(dataconnection) {
-              scope.info.roomUsers[peerId] = scope.info.peerList[peerId];
-              scope.info.roomUserList = Object.keys(scope.info.roomUsers);
-              _dataConnections[peerId] = dataconnection;
-              console.log(peerId, 'registered');
+            addRoomUser(peerId).then(function(dataconnection) {
+              dataconnection.send(JSON.stringify({
+                channel: 'tchat-room/join/' + scope.room.id,
+                data: peer.user.rtcId
+              }));
             });
           }
         });
@@ -66,14 +80,16 @@
       }
 
       function _refreshAvailableUserListElement(userList) {
-        scope.info.peerIdList = Object.keys(userList);
-        scope.info.peerList = userList;
+        scope.$apply(function() {
+          scope.info.peerIdList = Object.keys(userList);
+          scope.info.peerList = userList;
+        });
       }
 
       ////////////////
 
       function showConnectedUserListAction() {
-        _showConnectedUserButtonElement.classList.toggle('shown');
+        _connectedUserListElement.classList.toggle('shown');
       }
 
       function showAvailableUserListAction() {
@@ -85,28 +101,40 @@
       }
 
       function addRoomUserAction(rtcId) {
-        peer.getDataconnection(rtcId).then(function(dataconnection) {
-
-          scope.info.roomUsers[rtcId] = scope.info.peerList[rtcId];
-          scope.info.roomUserList = Object.keys(scope.info.roomUsers);
-          _dataConnections[rtcId] = dataconnection;
-
+        addRoomUser(rtcId).then(function(dataconnection) {
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/create/public-room',
             data: {
               name: scope.room.name,
               id: scope.room.id,
-              peers: [peer.user.rtcId]
+              peers: [peer.user.rtcId].concat(Object.keys(scope.info.roomUsers))
             }
           }));
-
-          console.log(':D', scope.info.roomUserList);
-
         });
+      }
 
+      function sendMessageAction() {
+        angular.forEach(_dataConnections, function(dataconnection) {
+          dataconnection.send(JSON.stringify({
+            channel: 'tchat-room/message/' + scope.room.id,
+            data: _messageInputElement.value
+          }));
+        });
       }
 
       ////////////////
+
+      function addRoomUser(peerId) {
+        var deferred = $q.defer();
+        peer.getDataconnection(peerId).then(function(dataconnection) {
+          scope.info.roomUsers[peerId] = scope.info.peerList[peerId];
+          scope.info.roomUserList = Object.keys(scope.info.roomUsers);
+          _dataConnections[peerId] = dataconnection;
+          deferred.resolve(dataconnection);
+        });
+
+        return deferred.promise;
+      }
 
 
 

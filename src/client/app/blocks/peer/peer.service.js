@@ -81,19 +81,16 @@
       $http
         .put('/tchat/register/' + service.user.nickname + '/' + service.user.rtcId + '/' + sse.id)
         .success(function(data, status, headers, config) {
-          console.log('--> connected <---');
         });
     }
 
     function onDataConnection(dataConnection) {
-      console.log('<-----', dataConnection);
       _dataConnections[dataConnection.peer] = dataConnection;
 
       dataConnection.on('data', function(data) {
-        console.log('data received !', data);
         data = JSON.parse(data);
         if(angular.isDefined(_channels[data.channel])) {
-          _channels[data.channel](data.data);
+          _channels[data.channel](data.data, dataConnection);
         }
       });
 
@@ -113,11 +110,8 @@
 
       var dataConnection = service.peer.connect(rtcId);
 
-      console.log('----->', dataConnection);
-
       dataConnection.on('open', function() {
         _dataConnections[rtcId] = dataConnection;
-        console.log('connected with remote peer', rtcId);
         deferred.resolve(dataConnection);
       });
 

@@ -23,7 +23,7 @@
         No one seems to be connected to this room !
       </li>
       <li
-        ng-repeat="peer in info.roomUserList"
+        ng-repeat="peer in info.roomUsers"
       >
         <span>{{ peer.nickname }}</span>
       </li>
@@ -38,9 +38,9 @@
       <li
         ng-repeat="peer in info.peerList"
         ng-click="action.addRoomUser(peer.rtcId);"
-        ng-hide="info.roomUserList.indexOf(peer.rtcId) > -1"
+        ng-class="{'connected': info.roomUserList.indexOf(peer.rtcId) > -1}"
       >
-        <span>{{ peer.nickname }}</span>
+        <span prefix-icon="icon-user">{{ peer.nickname }}</span>
       </li>
     </ul>
   </section>
