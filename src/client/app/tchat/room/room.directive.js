@@ -22,8 +22,6 @@
 
       var room = scope.room;
 
-      console.log('new room directive', room.peerList);
-
       scope.action = {};
 
       var _element = element[0];
@@ -31,10 +29,14 @@
       var _addUserButtonElement = _element.querySelector('button.icon-user-plus');
       var _showConnectedUserButtonElement = _element.querySelector('button.connected-room-user-count');
       var _availableUserListElement = _element.querySelector('.available-user-list');
+      var _messageListElement = _element.querySelector('.message-list');
       var _connectedUserListElement = _element.querySelector('.connected-user-list');
       var _closeButtonElement = _element.querySelector('button.icon-close');
       var _sendMessageButtonElement = _element.querySelector('button.icon-mail-dark');
       var _messageInputElement = _element.querySelector('footer input');
+      var _lastMessageZoneElement = null;
+
+      var _lastSpeakerId = null;
 
       _addUserButtonElement.addEventListener('click', showAvailableUserListAction);
       _showConnectedUserButtonElement.addEventListener('click', showConnectedUserListAction);
@@ -46,6 +48,8 @@
       peerConnections.subscribe('list', function() {
         scope.$apply();
       });
+
+      room.onmessage = onmessage;
 
       _init();
 
@@ -60,10 +64,7 @@
           }
         });
 
-        $q.all(joinPromises).then(function() {
-          console.log('joined everyone');
-          console.log('  -->', room.roomUserList);
-        });
+        $q.all(joinPromises);
       }
 
       ////////////////
@@ -81,16 +82,50 @@
       }
 
       function addRoomUserAction(peerId) {
-        room.create(peerId).then(function() {
-          //scope.$apply();
-        });
+        room.create(peerId);
       }
 
       function sendMessageAction() {
-        room.sendMessage(_messageInputElement.value);
+        var message = _messageInputElement.value;
+        room.sendMessage(message);
+        appendMessage(peer.user.rtcId, peer.user.nickname, message, true);
       }
 
       ////////////////
+
+      function appendMessage(rtcId, nickname, message, isLocallySent) {
+
+        if(_lastSpeakerId !== rtcId) {
+
+          var messageElement = $document[0].createElement('div');
+          messageElement.classList.add('message');
+          messageElement.innerHTML = '<div class="nickname"><span>'
+            + nickname + '</span></div><div class="message"><p>'
+            + message + '<p></div>';
+          if(isLocallySent) {
+            messageElement.classList.add('locally-sent');
+          }
+          _messageListElement.appendChild(messageElement);
+
+          _lastMessageZoneElement = messageElement.querySelector('.message');
+
+        } else {
+
+          var newMessageElement = $document[0].createElement('p');
+          var messageText = $document[0].createTextNode(message);
+          newMessageElement.appendChild(messageText);
+          _lastMessageZoneElement.appendChild(newMessageElement);
+
+        }
+
+        _lastSpeakerId = rtcId;
+      }
+
+      function onmessage(message, dataconnection) {
+        console.log('onmessage', message, dataconnection.peer);
+        var nickname = peerConnections.getNicknameFromRtcId(dataconnection.peer);
+        appendMessage(dataconnection.peer, nickname, message);
+      }
 
 
 

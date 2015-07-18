@@ -23,6 +23,7 @@
       this.peerIdList = Object.keys(this.peerList);
       this.peers = options.peers || [];
       this.name = options.name || 'Please enter a name';
+      this.onmessage = null;
 
       ////////////////
 
@@ -35,6 +36,9 @@
 
       peer.addChannel('tchat-room/message/' + _id, function(message, dataconnection) {
         console.log('room ' + _id + ' has received a message from ' + dataconnection.peer, message);
+        if(angular.isFunction(self.onmessage)) {
+          self.onmessage(message, dataconnection);
+        }
       });
 
       ////////////////
