@@ -5,9 +5,9 @@
     .module('app.tchat')
     .controller('TchatRoomController', TchatRoomController);
 
-  TchatRoomController.$inject = ['$scope', '$state', '$http', 'peerConnections', 'sse', 'uid', 'peer', 'Pubsub'];
+  TchatRoomController.$inject = ['$scope', '$state', '$http', 'peerConnections', 'sse', 'uid', 'peer', 'PeerRoom', 'Pubsub'];
 
-  function TchatRoomController($scope, $state, $http, peerConnections, sse, uid, peer, Pubsub) {
+  function TchatRoomController($scope, $state, $http, peerConnections, sse, uid, peer, PeerRoom, Pubsub) {
     var vm = this;
 
     vm.registeredPeerList = [];
@@ -60,14 +60,14 @@
         peers: [peer.user.rtcId]
       };
 
-      vm.roomCollections[id] = room;
+      vm.roomCollections[id] = new PeerRoom(room);
     }
 
     ////////////////
 
-    function createPublicRoom(room) {
+    function createPublicRoom(roomOptions) {
       $scope.$apply(function() {
-        vm.roomCollections[room.id] = room;
+        vm.roomCollections[roomOptions.id] = new PeerRoom(roomOptions);
       });
     }
 

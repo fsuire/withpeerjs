@@ -19,10 +19,12 @@
     };
 
     function link(scope, element, attrs) {
-      scope.action = {};
-      scope.info = {};
 
-      var _dataConnections = {};
+      var room = scope.room;
+
+      console.log('new room directive', room.peerList);
+
+      scope.action = {};
 
       var _element = element[0];
       var _roomNameElement = _element.querySelector('.room-name');
@@ -34,11 +36,6 @@
       var _sendMessageButtonElement = _element.querySelector('button.icon-mail-dark');
       var _messageInputElement = _element.querySelector('footer input');
 
-      scope.info.roomUsers = {};
-      scope.info.roomUserList = [];
-      scope.info.peerList = {};
-      scope.info.peerIdList = [];
-
       _addUserButtonElement.addEventListener('click', showAvailableUserListAction);
       _showConnectedUserButtonElement.addEventListener('click', showConnectedUserListAction);
       _closeButtonElement.addEventListener('click', closeRoomAction);
@@ -46,14 +43,8 @@
 
       scope.action.addRoomUser = addRoomUserAction;
 
-      peerConnections.subscribe('list', _refreshAvailableUserListElement);
-
-      peer.addChannel('tchat-room/join/' + scope.room.id, function(peerId) {
-        addRoomUser(peerId);
-      });
-
-      peer.addChannel('tchat-room/message/' + scope.room.id, function(message, dataconnection) {
-        console.log('room ' + scope.room.id + ' has received a message from ' + dataconnection.peer, message);
+      peerConnections.subscribe('list', function() {
+        scope.$apply();
       });
 
       _init();
@@ -62,27 +53,16 @@
 
       function _init() {
 
-        var userList = peerConnections.getList();
-        scope.info.peerIdList = Object.keys(userList);
-        scope.info.peerList = userList;
-
-        angular.forEach(scope.room.peers, function(peerId) {
+        var joinPromises = [];
+        angular.forEach(room.peers, function(peerId) {
           if(peerId !== peer.user.rtcId) {
-            addRoomUser(peerId).then(function(dataconnection) {
-              dataconnection.send(JSON.stringify({
-                channel: 'tchat-room/join/' + scope.room.id,
-                data: peer.user.rtcId
-              }));
-            });
+            joinPromises.push(room.join(peerId));
           }
         });
 
-      }
-
-      function _refreshAvailableUserListElement(userList) {
-        scope.$apply(function() {
-          scope.info.peerIdList = Object.keys(userList);
-          scope.info.peerList = userList;
+        $q.all(joinPromises).then(function() {
+          console.log('joined everyone');
+          console.log('  -->', room.roomUserList);
         });
       }
 
@@ -100,41 +80,19 @@
         _element.style.display = 'none';
       }
 
-      function addRoomUserAction(rtcId) {
-        addRoomUser(rtcId).then(function(dataconnection) {
-          dataconnection.send(JSON.stringify({
-            channel: 'tchat-room/create/public-room',
-            data: {
-              name: scope.room.name,
-              id: scope.room.id,
-              peers: [peer.user.rtcId].concat(Object.keys(scope.info.roomUsers))
-            }
-          }));
+      function addRoomUserAction(peerId) {
+        room.create(peerId).then(function() {
+          //scope.$apply();
         });
       }
 
       function sendMessageAction() {
-        angular.forEach(_dataConnections, function(dataconnection) {
-          dataconnection.send(JSON.stringify({
-            channel: 'tchat-room/message/' + scope.room.id,
-            data: _messageInputElement.value
-          }));
-        });
+        room.sendMessage(_messageInputElement.value);
       }
 
       ////////////////
 
-      function addRoomUser(peerId) {
-        var deferred = $q.defer();
-        peer.getDataconnection(peerId).then(function(dataconnection) {
-          scope.info.roomUsers[peerId] = scope.info.peerList[peerId];
-          scope.info.roomUserList = Object.keys(scope.info.roomUsers);
-          _dataConnections[peerId] = dataconnection;
-          deferred.resolve(dataconnection);
-        });
 
-        return deferred.promise;
-      }
 
 
 

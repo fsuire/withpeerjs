@@ -77,29 +77,19 @@
 
     function onConnectionOpened(id) {
       service.user.rtcId = id;
+      var url = '/tchat/register/'
+        + service.user.nickname + '/'
+        + service.user.rtcId + '/' + sse.id;
 
-      $http
-        .put('/tchat/register/' + service.user.nickname + '/' + service.user.rtcId + '/' + sse.id)
-        .success(function(data, status, headers, config) {
-        });
+      $http.put(url);
     }
 
-    function onDataConnection(dataConnection) {
-      _dataConnections[dataConnection.peer] = dataConnection;
-
-      dataConnection.on('data', function(data) {
-        data = JSON.parse(data);
-        if(angular.isDefined(_channels[data.channel])) {
-          _channels[data.channel](data.data, dataConnection);
-        }
-      });
-
-      pubsub.publish('new-dataconnection-received', dataConnection);
+    function onDataConnection(dataconnection) {
+      _registerDataconnection(dataconnection);
     }
 
     function onRegisteredPeerList(data) {
       delete data[service.user.rtcId];
-
       peerConnections.setList(data);
     }
 
@@ -108,14 +98,27 @@
     function _createDataConnection(rtcId) {
       var deferred = $q.defer();
 
-      var dataConnection = service.peer.connect(rtcId);
+      var dataconnection = service.peer.connect(rtcId);
 
-      dataConnection.on('open', function() {
-        _dataConnections[rtcId] = dataConnection;
-        deferred.resolve(dataConnection);
+      dataconnection.on('open', function() {
+        _registerDataconnection(dataconnection);
+        deferred.resolve(dataconnection);
       });
 
       return deferred.promise;
+    }
+
+    function _registerDataconnection(dataconnection) {
+      _dataConnections[dataconnection.peer] = dataconnection;
+
+      dataconnection.on('data', function(data) {
+        data = JSON.parse(data);
+        if(angular.isDefined(_channels[data.channel])) {
+          _channels[data.channel](data.data, dataconnection);
+        }
+      });
+
+      pubsub.publish('new-dataconnection-received', dataconnection);
     }
 
   }

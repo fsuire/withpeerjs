@@ -19,11 +19,11 @@
   </header>
   <section>
     <ul class="connected-user-list">
-      <li ng-show="info.roomUserList.length == 0" class="no-hover">
+      <li ng-show="room.roomUserList.length == 0" class="no-hover">
         No one seems to be connected to this room !
       </li>
       <li
-        ng-repeat="peer in info.roomUsers"
+        ng-repeat="peer in room.roomUsers"
       >
         <span>{{ peer.nickname }}</span>
       </li>
@@ -32,20 +32,20 @@
     <div class="message-list"></div>
 
     <ul class="available-user-list">
-      <li ng-show="info.peerIdList.length == 0" class="no-hover">
+      <li ng-show="room.peerIdList.length == 0" class="no-hover">
         No one seems to be online !
       </li>
       <li
-        ng-repeat="peer in info.peerList"
+        ng-repeat="peer in room.peerList"
         ng-click="action.addRoomUser(peer.rtcId);"
-        ng-class="{'connected': info.roomUserList.indexOf(peer.rtcId) > -1}"
+        ng-class="{'connected': room.roomUserList.indexOf(peer.rtcId) > -1}"
       >
         <span prefix-icon="icon-user">{{ peer.nickname }}</span>
       </li>
     </ul>
   </section>
   <footer>
-    <button class="connected-room-user-count"><span prefix-icon="icon-users">{{ info.roomUserList.length }}</span></button>
+    <button class="connected-room-user-count"><span prefix-icon="icon-users">{{ room.roomUserList.length }}</span></button>
     <div class="flex-spacer"></div>
     <input
       type="text"
