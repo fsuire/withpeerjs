@@ -45,11 +45,8 @@
 
       scope.action.addRoomUser = addRoomUserAction;
 
-      peerConnections.subscribe('list', function() {
-        scope.$apply();
-      });
-
       room.onmessage = onmessage;
+      room.onupdate = onroomupdate;
 
       _init();
 
@@ -71,14 +68,16 @@
 
       function showConnectedUserListAction() {
         _connectedUserListElement.classList.toggle('shown');
+        _showConnectedUserButtonElement.classList.toggle('selected');
       }
 
       function showAvailableUserListAction() {
         _availableUserListElement.classList.toggle('shown');
+        _addUserButtonElement.classList.toggle('selected');
       }
 
       function closeRoomAction() {
-        _element.style.display = 'none';
+        room.close();
       }
 
       function addRoomUserAction(peerId) {
@@ -122,12 +121,13 @@
       }
 
       function onmessage(message, dataconnection) {
-        console.log('onmessage', message, dataconnection.peer);
         var nickname = peerConnections.getNicknameFromRtcId(dataconnection.peer);
         appendMessage(dataconnection.peer, nickname, message);
       }
 
-
+      function onroomupdate() {
+        scope.$apply();
+      }
 
 
 

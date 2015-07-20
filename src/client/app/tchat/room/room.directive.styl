@@ -18,63 +18,70 @@ tchat-room {
 
     margin: 0;
 
-    > header > prefix-icon {
-      flex: 1;
-      height: 1em;
+    > header {
+      > prefix-icon {
+        flex: 1;
+        height: 1em;
 
-      focused-input() {
-        background-color: alpha($pseudo-white, 50%);
-        border: 1px solid darken($primary-color, 30%);
-        border-left: none;
-      }
-
-      &:before {
-        height: 100%;
-        padding: 0.25em;
-        border-radius: 0.25em;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-        border: 1px solid alpha($primary-color, 0%);
-
-        transition-property: background-color, border-color, color;
-        transition-duration: 100ms;
-        transition-timing-function: ease-out;
-      }
-
-      &:focus,
-      &:hover,
-      &.has-focus {
-        &:before {
-          color: $pseudo-white;
-          background-color: darken($primary-color, 30%);
+        focused-input() {
+          background-color: alpha($pseudo-white, 50%);
           border: 1px solid darken($primary-color, 30%);
+          border-left: none;
         }
-        input {
-          focused-input();
+
+        &:before {
+          height: 100%;
+          padding: 0.25em;
+          border-radius: 0.25em;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border: 1px solid alpha($primary-color, 0%);
+
+          transition-property: background-color, border-color, color;
+          transition-duration: 100ms;
+          transition-timing-function: ease-out;
+        }
+
+        &:focus,
+        &:hover,
+        &.has-focus {
+          &:before {
+            color: $pseudo-white;
+            background-color: darken($primary-color, 30%);
+            border: 1px solid darken($primary-color, 30%);
+          }
+          input[prefix-icon="icon-pencil"] {
+            focused-input();
+          }
+        }
+
+        input[prefix-icon="icon-pencil"] {
+          padding: 0.25em;
+          height: 100%;
+          border: 1px solid alpha($primary-color, 0%);
+          border-left: none;
+          border-radius: 0.25em;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          background-color: alpha($pseudo-white, 0%);
+          color: $primary-font-color;
+          font-size: 1em;
+
+          transition-property: background-color, border-color, color;
+          transition-duration: 100ms;
+          transition-timing-function: ease-out;
+
+          &:hover,
+          &:focus {
+            focused-input();
+          }
         }
       }
 
-      input {
-        padding: 0.25em;
-        height: 100%;
-        border: 1px solid alpha($primary-color, 0%);
-        border-left: none;
-        border-radius: 0.25em;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        background-color: alpha($pseudo-white, 100%);
-        color: $primary-font-color;
-        font-size: 1em;
-
-        transition-property: background-color, border-color, color;
-        transition-duration: 100ms;
-        transition-timing-function: ease-out;
-
-        &:focus {
-          focused-input();
-        }
-
+      button.selected {
+        background-color: $pseudo-white;
       }
+
     }
 
     > section {
@@ -84,16 +91,34 @@ tchat-room {
       display: flex;
       flex-direction: row;
 
+      h1 {
+        text-align: center;
+        font-size: 1.5em;
+        color: $primary-font-color;
+      }
+
       > .message-list {
         flex: 1;
         background-color: $pseudo-white;
       }
 
-      > ul {
+      ul li {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 0.25em;
+          border-bottom: 1px solid $primary-background-color;
+
+          &:last-child {
+            border-bottom: none
+          }
+      }
+
+      > .connected-user-list {
         background-color: $pseudo-white;
         width: 0px;
         overflow: hidden;
-        box-shadow: regular-shadow($primary-background-color);
+        border-right: none;
 
         transition-property: width;
         transition-duration: 100ms;
@@ -104,31 +129,25 @@ tchat-room {
           max-width: 200px;
         }
 
-        li {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          padding: 0.25em;
-          border-bottom: 1px solid $primary-background-color;
-
-          &:last-child {
-            border-bottom: none
-          }
-        }
-
-      }
-
-      > .connected-user-list {
-
-        border-right: none;
-
         &.shown {
           border-right: 1px solid darken($primary-background-color, 25%);
         }
       }
 
       > .available-user-list {
+        background-color: $pseudo-white;
+        width: 0px;
+        overflow: hidden;
         border-left: none;
+
+        transition-property: width;
+        transition-duration: 100ms;
+        transition-timing-function: ease-out;
+
+        &.shown {
+          width: 25%;
+          max-width: 200px;
+        }
 
         &.shown {
           border-left: 1px solid darken($primary-background-color, 25%);
@@ -156,17 +175,17 @@ tchat-room {
 
         }
       }
-      
+
       .message-list {
         display: flex;
         flex-direction: column;
-        
+
         > .message {
           flex-shrink: 0;
           display: flex;
           flex-direction: row;
           width: 100%;
-          
+
           &.locally-sent {
             > .nickname {
               order: 1;
@@ -179,7 +198,7 @@ tchat-room {
               text-align: left;
             }
           }
-          
+
            > .nickname {
             order: 2;
             padding: 1em;
@@ -194,52 +213,8 @@ tchat-room {
             background-color: alpha($primary-color, 15%);
             text-align: right;
           }
-          
         }
       }
-
-      /*.message-list {
-
-        display: flex;
-        flex-direction: column;
-
-        > .message {
-          flex-shrink: 0;
-          display: flex;
-          flex-direction: row;
-          width: 100%;
-
-          &.locally-sent {
-            > .nickname {
-              order: 1;
-              background-color: alpha($secondary-color, 25%);
-            }
-
-            > .message {
-              order: 2;
-              background-color: alpha($secondary-color, 15%);
-              text-align: left;
-            }
-          }
-
-          > .nickname {
-            order: 2;
-            padding: 1em;
-            background-color: alpha($primary-color, 25%);
-            font-weight: bold;
-          }
-
-          > .message {
-            order: 1;
-            flex: 1;
-            padding: 1em;
-            background-color: alpha($primary-color, 15%);
-            text-align: right;
-          }
-
-        }
-      }*/
-
     }
 
     > footer {
@@ -248,6 +223,10 @@ tchat-room {
 
         &:hover {
           cursor: pointer;
+        }
+
+        &.selected {
+          background-color: $pseudo-white;
         }
 
         prefix-icon:before {

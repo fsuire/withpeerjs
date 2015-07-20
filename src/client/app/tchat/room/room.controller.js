@@ -18,7 +18,7 @@
 
     var _subscribersToDestroy = [];
     _subscribersToDestroy.push(
-      peerConnections.subscribe('list', onPeerList)
+      peerConnections.subscribe('list', onpeerlist)
     );
 
     peer.addChannel('tchat-room/create/public-room', createPublicRoom);
@@ -43,31 +43,39 @@
 
     ////////////////
 
-    function onPeerList(peerList) {
-      $scope.$apply(function() {
-        vm.registeredPeerList = peerList;
-      });
-    }
-
-    ////////////////
-
     function createPublicRoomAction() {
       var id = peer.user.rtcId + '-' + uid();
-      var room = {
+      var room = new PeerRoom({
         name: 'public room',
         type: 'public',
         id: id,
-        peers: [peer.user.rtcId]
-      };
+        peers: [peer.user.rtcId],
+        onclose: oncloseroom
+      });
 
-      vm.roomCollections[id] = new PeerRoom(room);
+      vm.roomCollections[id] = room;
     }
 
     ////////////////
 
     function createPublicRoom(roomOptions) {
       $scope.$apply(function() {
+        roomOptions.onclose = oncloseroom;
         vm.roomCollections[roomOptions.id] = new PeerRoom(roomOptions);
+      });
+    }
+
+    ////////////////
+
+    function onpeerlist(peerList) {
+      $scope.$apply(function() {
+        vm.registeredPeerList = peerList;
+      });
+    }
+
+    function oncloseroom(id) {
+      $scope.$apply(function() {
+        delete vm.roomCollections[id];
       });
     }
 

@@ -18,31 +18,37 @@
     </div>
   </header>
   <section>
-    <ul class="connected-user-list">
-      <li ng-show="room.roomUserList.length == 0" class="no-hover">
-        No one seems to be connected to this room !
-      </li>
-      <li
-        ng-repeat="peer in room.roomUsers"
-      >
-        <span>{{ peer.nickname }}</span>
-      </li>
-    </ul>
+    <div class="connected-user-list">
+      <h1>Room's users</h1>
+      <ul>
+        <li ng-show="room.roomUserList.length == 0" class="no-hover">
+          No one seems to be connected to this room !
+        </li>
+        <li
+          ng-repeat="peer in room.roomUsers"
+        >
+          <span>{{ peer.nickname }}</span>
+        </li>
+      </ul>
+    </div>
 
     <div class="scrollable"><div class="message-list"></div></div>
 
-    <ul class="available-user-list">
-      <li ng-show="room.peerIdList.length == 0" class="no-hover">
-        No one seems to be online !
-      </li>
-      <li
-        ng-repeat="peer in room.peerList"
-        ng-click="action.addRoomUser(peer.rtcId);"
-        ng-class="{'connected': room.roomUserList.indexOf(peer.rtcId) > -1}"
-      >
-        <span prefix-icon="icon-user">{{ peer.nickname }}</span>
-      </li>
-    </ul>
+    <div  class="available-user-list">
+      <h1>Available users</h1>
+      <ul>
+        <li ng-show="room.peerIdList.length == 0" class="no-hover">
+          No one seems to be online !
+        </li>
+        <li
+          ng-repeat="peer in room.peerList"
+          ng-click="room.create(peer.rtcId);"
+          ng-class="{'connected': room.roomUserList.indexOf(peer.rtcId) > -1}"
+        >
+          <span prefix-icon="icon-user">{{ peer.nickname }}</span>
+        </li>
+      </ul>
+    </div>
   </section>
   <footer>
     <button class="connected-room-user-count"><span prefix-icon="icon-users">{{ room.roomUserList.length }}</span></button>

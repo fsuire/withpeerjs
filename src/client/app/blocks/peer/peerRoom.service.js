@@ -24,21 +24,26 @@
       this.peers = options.peers || [];
       this.name = options.name || 'Please enter a name';
       this.onmessage = null;
+      this.onupdate = null;
+      this.onclose = options.onclose || null;
 
       ////////////////
 
       peerConnections.subscribe('list', _refreshPeerList);
 
       peer.addChannel('tchat-room/join/' + _id, function(peerId) {
-        console.log('joining room ', _id);
         self.addRoomUser(peerId);
       });
 
       peer.addChannel('tchat-room/message/' + _id, function(message, dataconnection) {
-        console.log('room ' + _id + ' has received a message from ' + dataconnection.peer, message);
         if(angular.isFunction(self.onmessage)) {
           self.onmessage(message, dataconnection);
         }
+      });
+
+      peer.addChannel('tchat-room/disconnect/' + _id, function(message, dataconnection) {
+        _disconnectUser(dataconnection.peer);
+        _update();
       });
 
       ////////////////
@@ -49,16 +54,22 @@
 
           self.roomUsers[peerId] = self.peerList[peerId];
           self.roomUserList = Object.keys(self.roomUsers);
-
           _dataconnections[peerId] = dataconnection;
+
           deferred.resolve(dataconnection);
         });
 
         return deferred.promise;
       };
 
+      this.close = function() {
+        self.disconnect();
+        if(angular.isFunction(self.onclose)) {
+          self.onclose(_id);
+        }
+      };
+
       this.create = function(peerId) {
-        console.log('send create', peerId);
         return self.addRoomUser(peerId).then(function(dataconnection) {
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/create/public-room',
@@ -71,8 +82,16 @@
         });
       };
 
+      this.disconnect = function() {
+        angular.forEach(_dataconnections, function(dataconnection) {
+          dataconnection.send(JSON.stringify({
+            channel: 'tchat-room/disconnect/' + _id,
+            data: ''
+          }));
+        });
+      };
+
       this.join = function(peerId) {
-        console.log('send join', peerId);
         return self.addRoomUser(peerId).then(function(dataconnection) {
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/join/' + _id,
@@ -82,7 +101,6 @@
       };
 
       this.sendMessage = function(message) {
-        console.log('sending message to', _dataconnections);
         angular.forEach(_dataconnections, function(dataconnection) {
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/message/' + _id,
@@ -93,10 +111,38 @@
 
       ////////////////
 
+      function _update() {
+        if(angular.isFunction(self.onupdate)) {
+          self.onupdate();
+        }
+      }
+
       function _refreshPeerList(userList) {
-        console.log('refresh peerList');
         self.peerList = userList;
         self.peerIdList = Object.keys(self.peerList);
+
+        var disconnectedUsers = [];
+        angular.forEach(self.roomUserList, function(peerId) {
+          if(self.peerIdList.indexOf(peerId) === -1) {
+            disconnectedUsers.push(peerId);
+          }
+        });
+        angular.forEach(disconnectedUsers, function(peerId) {
+          _disconnectUser(peerId);
+        });
+
+        _update();
+      }
+
+      function _disconnectUser(peerIds) {
+        if(!angular.isArray(peerIds)) {
+          peerIds = [peerIds];
+        }
+        angular.forEach(peerIds, function(peerId) {
+          delete self.roomUsers[peerId];
+          self.roomUserList = Object.keys(self.roomUsers);
+          delete _dataconnections[peerId];
+        });
       }
 
     };
