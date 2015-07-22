@@ -24,7 +24,6 @@
       this.peers = options.peers || [];
       this.name = options.name || 'Please enter a name';
       this.onmessage = null;
-      this.onupdate = null;
       this.onclose = options.onclose || null;
 
       ////////////////
@@ -49,7 +48,6 @@
 
       peer.addChannel('tchat-room/disconnect/' + _id, function(message, dataconnection) {
         _disconnectUser(dataconnection.peer);
-        _update();
       });
 
       ////////////////
@@ -129,12 +127,6 @@
 
       ////////////////
 
-      function _update() {
-        if(angular.isFunction(self.onupdate)) {
-          self.onupdate();
-        }
-      }
-
       function _refreshPeerList(userList) {
         self.peerList = userList;
         self.peerIdList = Object.keys(self.peerList);
@@ -148,8 +140,6 @@
         angular.forEach(disconnectedUsers, function(peerId) {
           _disconnectUser(peerId);
         });
-
-        _update();
       }
 
       function _disconnectUser(peerIds) {

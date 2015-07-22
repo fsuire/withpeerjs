@@ -13,24 +13,20 @@
       restrict: 'E',
       templateUrl: 'app/tchat/room/room.directive.html',
       scope: {
-        id: '='
+        roomid: '='
       },
       link: link,
       controller: RoomDirectiveController,
-      controllerAs: 'room'
+      controllerAs: 'tchatRoom'
     };
 
     function link(scope, element, attrs) {
 
-      var room = peerRoomCollection.getRoom(scope.id);
+      console.log('d:', scope);
+      var room = peerRoomCollection.getRoom(attrs.roomId);
+      //scope.setRoom(room);
 
-      scope.$watch(function() {
-        return room.peerList;
-      }, function(newValue) {
-        console.log(':D', newValue);
-      });
-
-      var _element = element[0];
+      /*var _element = element[0];
       var _roomNameElement = _element.querySelector('.room-name');
       var _addUserButtonElement = _element.querySelector('button.icon-user-plus');
       var _showConnectedUserButtonElement = _element.querySelector('button.connected-room-user-count');
@@ -44,7 +40,7 @@
 
       var _lastSpeakerId = null;
 
-      _addUserButtonElement.addEventListener('click', showAvailableUserListAction);
+      _addUserButtonElement.addEventListener('click', showAvailableUserListAction);*/
       // _showConnectedUserButtonElement.addEventListener('click', showConnectedUserListAction);
       // _closeButtonElement.addEventListener('click', closeRoomAction);
       // _sendMessageButtonElement.addEventListener('click', sendMessageAction);
@@ -82,10 +78,10 @@
       //   _showConnectedUserButtonElement.classList.toggle('selected');
       // }
 
-      function showAvailableUserListAction() {
+      /*function showAvailableUserListAction() {
         _availableUserListElement.classList.toggle('shown');
         _addUserButtonElement.classList.toggle('selected');
-      }
+      }*/
 
       // function closeRoomAction() {
       //   room.close();
@@ -173,7 +169,29 @@
   RoomDirectiveController.$inject = ['$scope', '$element'];
 
   function RoomDirectiveController($scope, $element) {
-    console.log('YOUPI', $element[0].attributes, $element[0].getAttribute('room-id'));
+    console.log('--->', $element[0].getAttribute('roomid'));
+    var tchatRoom = this;
+
+    tchatRoom.room = null;
+    tchatRoom.availableUserListIsShown = false;
+
+    tchatRoom.setRoom = setRoom;
+    tchatRoom.showAvailableUserListAction = showAvailableUserListAction;
+
+    console.log('c:', tchatRoom);
+
+    ////////////////
+
+    function setRoom(room) {
+      tchatRoom.room = room;
+      console.log(':D', tchatRoom.room.getId());
+    }
+
+    function showAvailableUserListAction() {
+      tchatRoom.availableUserListIsShown = !tchatRoom.availableUserListIsShown;
+    }
+
+
   }
 
 })();

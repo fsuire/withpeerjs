@@ -10,6 +10,8 @@
       <button
         class="icon-user-plus"
         title="Add a user to this room"
+        ng-click="tchatRoom.showAvailableUserListAction()"
+        ng-class="{'selected': tchatRoom.availableUserListIsShown}"
       />
       <button
         class="icon-close"
@@ -18,7 +20,7 @@
     </div>
   </header>
   <section>
-    <div class="connected-user-list">
+    <div class="connected-user-list" ng-class="{}">
       <h1>Room's users</h1>
       <ul>
         <li ng-show="room.roomUserList.length == 0" class="no-hover">
@@ -34,7 +36,10 @@
 
     <div class="scrollable"><div class="message-list"></div></div>
 
-    <div  class="available-user-list">
+    <div
+      class="available-user-list"
+      ng-class="{'shown': tchatRoom.availableUserListIsShown}"
+    >
       <h1>Available users</h1>
       <ul>
         <li ng-show="room.peerIdList.length == 0" class="no-hover">
