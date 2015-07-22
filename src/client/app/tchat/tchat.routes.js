@@ -47,11 +47,11 @@
         state: 'tchat.room',
         config: {
           url: '/room',
-          templateUrl: 'app/tchat/room/room.html',
-          controller: 'TchatRoomController',
+          templateUrl: 'app/tchat/tchat.html',
+          controller: 'TchatController',
           controllerAs: 'vm',
           data: {
-            pageTitle: 'Tchat room'
+            pageTitle: 'Tchat'
           }
         }
       }

@@ -180,13 +180,33 @@ tchat-room {
         display: flex;
         flex-direction: column;
 
+        > .information {
+          padding: 1em;
+          text-align: center;
+          font-color: alpha($primary-font-color, 30%);
+          font-style: italic;
+          border-bottom: 1px solid alpha($primary-font-color, 20%);
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+
         > .message {
           flex-shrink: 0;
           display: flex;
           flex-direction: row;
           width: 100%;
+          border-bottom: 1px solid $primary-color;
+
+          &:last-child,
+          &.locally-sent:last-child {
+            border-bottom: none;
+          }
 
           &.locally-sent {
+            border-bottom: 1px solid $secondary-color;
+
             > .nickname {
               order: 1;
               background-color: alpha($secondary-color, 25%);

@@ -31,13 +31,19 @@
 
       peerConnections.subscribe('list', _refreshPeerList);
 
-      peer.addChannel('tchat-room/join/' + _id, function(peerId) {
+      peer.addChannel('tchat-room/join/' + _id, function(peerId, dataconnection) {
         self.addRoomUser(peerId);
+        if(angular.isFunction(self.onmessage)) {
+          self.onmessage({
+            type: 'connection-information',
+            value: peerConnections.getNicknameFromRtcId(peerId) + ' is now connected.'
+          });
+        }
       });
 
       peer.addChannel('tchat-room/message/' + _id, function(message, dataconnection) {
         if(angular.isFunction(self.onmessage)) {
-          self.onmessage(message, dataconnection);
+          self.onmessage(message, dataconnection.peer);
         }
       });
 
@@ -91,6 +97,10 @@
         });
       };
 
+      this.getId = function() {
+        return _id;
+      };
+
       this.join = function(peerId) {
         return self.addRoomUser(peerId).then(function(dataconnection) {
           dataconnection.send(JSON.stringify({
@@ -101,6 +111,14 @@
       };
 
       this.sendMessage = function(message) {
+        message = {
+          type: 'message',
+          value: {
+            message: message,
+            nickname: peer.user.nickname
+          }
+        };
+
         angular.forEach(_dataconnections, function(dataconnection) {
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/message/' + _id,
@@ -139,6 +157,13 @@
           peerIds = [peerIds];
         }
         angular.forEach(peerIds, function(peerId) {
+          if(angular.isFunction(self.onmessage)) {
+            self.onmessage({
+              type: 'connection-information',
+              value: peerConnections.getNicknameFromRtcId(peerId) + ' has been disconnected.'
+            });
+          }
+
           delete self.roomUsers[peerId];
           self.roomUserList = Object.keys(self.roomUsers);
           delete _dataconnections[peerId];

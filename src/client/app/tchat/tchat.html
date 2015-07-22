@@ -35,12 +35,13 @@
         </ul>
       </section>
     </box>
+
   </section>
 
   <section class="rooms">
     <tchat-room
-      ng-repeat="room in vm.roomCollections"
-      room="room"
+      ng-repeat="roomId in vm.roomIdList"
+      room-id="{{ vm.roomIdList[$index] }}"
     ></tchat-room>
   </section>
 
