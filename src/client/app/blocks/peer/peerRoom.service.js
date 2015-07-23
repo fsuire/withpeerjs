@@ -11,7 +11,7 @@
   function peerRoomFactory($q, Pubsub, peer, peerConnections) {
 
     var Room = function(options) {
-
+      var pubsub = new Pubsub();
       var self = this;
 
       var _id = options.id;
@@ -25,6 +25,7 @@
       this.name = options.name || 'Please enter a name';
       this.onmessage = null;
       this.onclose = options.onclose || null;
+      this.subscribe = pubsub.subscribe;
 
       ////////////////
 
@@ -99,6 +100,10 @@
         return _id;
       };
 
+      this.getPeerList = function() {
+        return self.peerList;
+      };
+
       this.join = function(peerId) {
         return self.addRoomUser(peerId).then(function(dataconnection) {
           dataconnection.send(JSON.stringify({
@@ -140,6 +145,7 @@
         angular.forEach(disconnectedUsers, function(peerId) {
           _disconnectUser(peerId);
         });
+        pubsub.publish('peerList', self.peerList);
       }
 
       function _disconnectUser(peerIds) {

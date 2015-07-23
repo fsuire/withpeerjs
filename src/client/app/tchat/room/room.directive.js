@@ -13,17 +13,18 @@
       restrict: 'E',
       templateUrl: 'app/tchat/room/room.directive.html',
       scope: {
-        roomid: '='
+        id: '='
       },
-      link: link,
+      //link: link,
       controller: RoomDirectiveController,
+      bindToController: true,
       controllerAs: 'tchatRoom'
     };
 
     function link(scope, element, attrs) {
 
       console.log('d:', scope);
-      var room = peerRoomCollection.getRoom(attrs.roomId);
+      //var room = peerRoomCollection.getRoom(attrs.roomId);
       //scope.setRoom(room);
 
       /*var _element = element[0];
@@ -166,31 +167,41 @@
 
   }
 
-  RoomDirectiveController.$inject = ['$scope', '$element'];
+  RoomDirectiveController.$inject = ['$scope', 'peerRoomCollection'];
 
-  function RoomDirectiveController($scope, $element) {
-    console.log('--->', $element[0].getAttribute('roomid'));
+  function RoomDirectiveController($scope, peerRoomCollection) {
+    // console.log('--->', $element[0].getAttribute('roomid'));
     var tchatRoom = this;
 
-    tchatRoom.room = null;
+    var _room = peerRoomCollection.getRoom(tchatRoom.id);
+
     tchatRoom.availableUserListIsShown = false;
+    tchatRoom.connectedUserListIsShown = false;
+    tchatRoom.peerList = null;
 
-    tchatRoom.setRoom = setRoom;
     tchatRoom.showAvailableUserListAction = showAvailableUserListAction;
+    tchatRoom.showConnectedUserListAction = showConnectedUserListAction;
+    tchatRoom.joinAction = joinAction;
 
-    console.log('c:', tchatRoom);
+    _room.subscribe('peerList', function(peerList) {
+      $scope.$apply(function() {
+        tchatRoom.peerList = peerList;
+      });
+    });
 
     ////////////////
-
-    function setRoom(room) {
-      tchatRoom.room = room;
-      console.log(':D', tchatRoom.room.getId());
-    }
 
     function showAvailableUserListAction() {
       tchatRoom.availableUserListIsShown = !tchatRoom.availableUserListIsShown;
     }
 
+    function showConnectedUserListAction() {
+      tchatRoom.connectedUserListIsShown = !tchatRoom.connectedUserListIsShown;
+    }
+
+    function joinAction(peerId) {
+      
+    }
 
   }
 

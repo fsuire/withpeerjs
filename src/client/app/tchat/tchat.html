@@ -39,16 +39,10 @@
   </section>
 
   <section class="rooms">
-<!--
     <tchat-room
-      ng-repeat="roomId in vm.roomIdList"
-      room-id="{{ vm.roomIdList[$index] }}"
+      ng-repeat="(k, roomId) in vm.roomIdList"
+      id="roomId"
     ></tchat-room>
--->
-    <div
-      ng-repeat="roomId in vm.roomIdList"
-      room-id="{{ vm.roomIdList[$index] }}"
-    ></div>
   </section>
 
 </div>

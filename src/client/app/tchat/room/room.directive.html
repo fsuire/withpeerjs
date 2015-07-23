@@ -20,7 +20,10 @@
     </div>
   </header>
   <section>
-    <div class="connected-user-list" ng-class="{}">
+    <div
+      class="connected-user-list"
+      ng-class="{'shown': tchatRoom.connectedUserListIsShown}"
+    >
       <h1>Room's users</h1>
       <ul>
         <li ng-show="room.roomUserList.length == 0" class="no-hover">
@@ -46,17 +49,23 @@
           No one seems to be online !
         </li>
         <li
-          ng-repeat="peer in room.peerList"
-          ng-click="room.create(peer.rtcId);"
-          ng-class="{'connected': room.roomUserList.indexOf(peer.rtcId) > -1}"
+          ng-repeat="peer in tchatRoom.peerList"
+          ng-click="tchatRoom.join(peer.rtcId);"
         >
+        <!-- ng-class="{'connected': room.roomUserList.indexOf(peer.rtcId) > -1}" -->
           <span prefix-icon="icon-user">{{ peer.nickname }}</span>
         </li>
       </ul>
     </div>
   </section>
   <footer>
-    <button class="connected-room-user-count"><span prefix-icon="icon-users">{{ room.roomUserList.length }}</span></button>
+    <button
+      class="connected-room-user-count"
+      ng-click="tchatRoom.showConnectedUserListAction()"
+      ng-class="{'selected': tchatRoom.connectedUserListIsShown}"
+    >
+      <span prefix-icon="icon-users">{{ room.roomUserList.length }}</span>
+    </button>
     <div class="flex-spacer"></div>
     <input
       type="text"
