@@ -170,14 +170,13 @@
   RoomDirectiveController.$inject = ['$scope', 'peerRoomCollection'];
 
   function RoomDirectiveController($scope, peerRoomCollection) {
-    // console.log('--->', $element[0].getAttribute('roomid'));
     var tchatRoom = this;
 
     var _room = peerRoomCollection.getRoom(tchatRoom.id);
 
     tchatRoom.availableUserListIsShown = false;
     tchatRoom.connectedUserListIsShown = false;
-    tchatRoom.peerList = null;
+    tchatRoom.peerList = _room.peerList;
 
     tchatRoom.showAvailableUserListAction = showAvailableUserListAction;
     tchatRoom.showConnectedUserListAction = showConnectedUserListAction;
@@ -185,6 +184,7 @@
 
     _room.subscribe('peerList', function(peerList) {
       $scope.$apply(function() {
+        console.log('peerList update');
         tchatRoom.peerList = peerList;
       });
     });
@@ -200,7 +200,8 @@
     }
 
     function joinAction(peerId) {
-      
+      console.log('ask for joining', peerId);
+      _room.join(peerId);
     }
 
   }

@@ -24,7 +24,6 @@
       this.peers = options.peers || [];
       this.name = options.name || 'Please enter a name';
       this.onmessage = null;
-      this.onclose = options.onclose || null;
       this.subscribe = pubsub.subscribe;
 
       ////////////////
@@ -69,9 +68,7 @@
 
       this.close = function() {
         self.disconnect();
-        if(angular.isFunction(self.onclose)) {
-          self.onclose(_id);
-        }
+        pubsub.publish('close', _id);
       };
 
       this.create = function(peerId) {
@@ -108,7 +105,11 @@
         return self.addRoomUser(peerId).then(function(dataconnection) {
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/join/' + _id,
-            data: peer.user.rtcId
+            data: {
+              name: self.name,
+              id: _id,
+              peers: [peer.user.rtcId].concat(Object.keys(self.roomUsers))
+            }
           }));
         });
       };

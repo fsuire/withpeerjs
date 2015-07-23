@@ -50,7 +50,7 @@
         </li>
         <li
           ng-repeat="peer in tchatRoom.peerList"
-          ng-click="tchatRoom.join(peer.rtcId);"
+          ng-click="tchatRoom.joinAction(peer.rtcId);"
         >
         <!-- ng-class="{'connected': room.roomUserList.indexOf(peer.rtcId) > -1}" -->
           <span prefix-icon="icon-user">{{ peer.nickname }}</span>

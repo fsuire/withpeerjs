@@ -17,11 +17,10 @@
     vm.createPublicRoomAction = createPublicRoomAction;
 
     var _subscribersToDestroy = [];
-    _subscribersToDestroy.push(
-      peerConnections.subscribe('list', onpeerlist)
-    );
-
-    peer.addChannel('tchat-room/create/public-room', createPublicRoom);
+    _subscribersToDestroy.concat([
+      peerConnections.subscribe('list', onpeerlist),
+      peerRoomCollection.subscribe('closeroom', oncloseroom)
+    ]);
 
     $scope.$on('$destroy', function() {
       while(_subscribersToDestroy.length) {
@@ -49,23 +48,12 @@
         name: 'public room',
         type: 'public',
         id: id,
-        peers: [peer.user.rtcId],
-        onclose: oncloseroom
+        peers: [peer.user.rtcId]
       });
 
       peerRoomCollection.addRoom(room);
       vm.roomIdList = peerRoomCollection.getIdList();
     }
-
-    ////////////////
-
-    function createPublicRoom(roomOptions) {
-      roomOptions.onclose = oncloseroom;
-      var room = new PeerRoom(roomOptions);
-      peerRoomCollection.addRoom(room);
-      vm.roomIdList = peerRoomCollection.getIdList();
-    }
-
     ////////////////
 
     function onpeerlist(peerList) {
@@ -75,11 +63,9 @@
     }
 
     function oncloseroom(id) {
-      // $scope.$apply(function() {
-      //   delete vm.roomCollections[id];
-      // });
-      peerRoomCollection.removeRoom(id);
-      vm.roomIdList = peerRoomCollection.getIdList();
+      $scope.$apply(function() {
+        vm.registeredPeerList = vm.roomIdList = peerRoomCollection.getIdList();
+      });
     }
 
   }
