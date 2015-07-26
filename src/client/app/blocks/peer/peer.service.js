@@ -114,6 +114,7 @@
       dataconnection.on('data', function(data) {
         data = JSON.parse(data);
         if(angular.isDefined(_channels[data.channel])) {
+          data.data.sender = dataconnection.peer;
           _channels[data.channel](data.data, dataconnection);
         }
       });

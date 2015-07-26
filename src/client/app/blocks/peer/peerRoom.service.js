@@ -23,7 +23,6 @@
       this.peerIdList = Object.keys(this.peerList);
       this.peers = options.peers || [];
       this.name = options.name || 'Please enter a name';
-      this.onmessage = null;
       this.subscribe = pubsub.subscribe;
 
       ////////////////
@@ -41,9 +40,7 @@
       });
 
       peer.addChannel('tchat-room/message/' + _id, function(message, dataconnection) {
-        if(angular.isFunction(self.onmessage)) {
-          self.onmessage(message, dataconnection.peer);
-        }
+        pubsub.publish('message', message);
       });
 
       peer.addChannel('tchat-room/disconnect/' + _id, function(message, dataconnection) {
@@ -59,6 +56,7 @@
           self.roomUsers[peerId] = self.peerList[peerId];
           self.roomUserList = Object.keys(self.roomUsers);
           _dataconnections[peerId] = dataconnection;
+          pubsub.publish('roomUsers', self.roomUsers);
 
           deferred.resolve(dataconnection);
         });
@@ -117,10 +115,7 @@
       this.sendMessage = function(message) {
         message = {
           type: 'message',
-          value: {
-            message: message,
-            nickname: peer.user.nickname
-          }
+          value: message
         };
 
         angular.forEach(_dataconnections, function(dataconnection) {
@@ -129,6 +124,8 @@
             data: message
           }));
         });
+
+        return message;
       };
 
       ////////////////
@@ -164,6 +161,7 @@
           delete self.roomUsers[peerId];
           self.roomUserList = Object.keys(self.roomUsers);
           delete _dataconnections[peerId];
+          pubsub.publish('roomUsers', self.roomUsers);
         });
       }
 
