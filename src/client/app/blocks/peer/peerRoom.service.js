@@ -25,6 +25,7 @@
       this.name = options.name || 'Please enter a name';
       this.subscribe = pubsub.subscribe;
 
+
       ////////////////
 
       peerConnections.subscribe('list', _refreshPeerList);
@@ -51,6 +52,7 @@
 
       this.addRoomUser = function(peerId) {
         var deferred = $q.defer();
+        console.log('adding ' + peerId + ' to room ' + _id);
         peer.getDataconnection(peerId).then(function(dataconnection) {
 
           self.roomUsers[peerId] = self.peerList[peerId];
@@ -59,6 +61,9 @@
           pubsub.publish('roomUsers', self.roomUsers);
 
           deferred.resolve(dataconnection);
+          console.log(peerId + ' added to room ' + _id);
+        }, function(error) {
+          console.log(peerId + ' was not added to room ' + _id, error);
         });
 
         return deferred.promise;
@@ -113,6 +118,7 @@
       };
 
       this.sendMessage = function(message) {
+        console.log('sending message', Object.keys(_dataconnections));
         message = {
           type: 'message',
           value: message
@@ -164,6 +170,14 @@
           pubsub.publish('roomUsers', self.roomUsers);
         });
       }
+
+      console.log('creating room ' + _id, this.peers);
+
+      angular.forEach(this.peers, function(peerId) {
+        if(peerId !== peer.user.rtcId) {
+          self.addRoomUser(peerId);
+        }
+      });
 
     };
 

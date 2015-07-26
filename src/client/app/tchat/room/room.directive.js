@@ -23,7 +23,6 @@
 
     function link(scope, element, attrs) {
 
-      console.log('d:', scope);
       //var room = peerRoomCollection.getRoom(attrs.roomId);
       //scope.setRoom(room);
 
@@ -195,9 +194,7 @@
     });
 
     _room.subscribe('roomUsers', function(roomUsers) {
-      //$scope.$apply(function() {
       tchatRoom.roomUsers = roomUsers;
-      //});
     });
 
     _room.subscribe('message', function(message) {
@@ -205,6 +202,7 @@
         tchatRoom.messages.push(message);
       });
     });
+
 
     ////////////////
 
@@ -217,18 +215,16 @@
     }
 
     function joinAction(peerId) {
-      console.log('ask for joining', peerId);
       _room.join(peerId);
     }
 
     function createAction(peerId) {
-      console.log('ask for creation', peerId);
       _room.create(peerId);
     }
 
     function sendMessageAction() {
-      var message = _room.sendMessage(tchatRoom.message);
-      if(message !== '') {
+      if(tchatRoom.message !== '') {
+        var message = _room.sendMessage(tchatRoom.message);
         message.sender = peer.user.rtcId;
         message.locallySent = true;
         tchatRoom.messages.push(message);
