@@ -21,7 +21,6 @@
       this.roomUserList = [];
       this.peerList = peerConnections.getList();
       this.peerIdList = Object.keys(this.peerList);
-      this.peers = options.peers || [];
       this.name = options.name || 'Please enter a name';
       this.subscribe = pubsub.subscribe;
 
@@ -32,12 +31,6 @@
 
       peer.addChannel('tchat-room/join/' + _id, function(peerId, dataconnection) {
         self.addRoomUser(peerId);
-        if(angular.isFunction(self.onmessage)) {
-          self.onmessage({
-            type: 'connection-information',
-            value: peerConnections.getNicknameFromRtcId(peerId) + ' is now connected.'
-          });
-        }
       });
 
       peer.addChannel('tchat-room/message/' + _id, function(message, dataconnection) {
@@ -53,18 +46,24 @@
       this.addRoomUser = function(peerId) {
         var deferred = $q.defer();
         console.log('adding ' + peerId + ' to room ' + _id);
-        peer.getDataconnection(peerId).then(function(dataconnection) {
 
-          self.roomUsers[peerId] = self.peerList[peerId];
-          self.roomUserList = Object.keys(self.roomUsers);
-          _dataconnections[peerId] = dataconnection;
-          pubsub.publish('roomUsers', self.roomUsers);
+        if(angular.isUndefined(_dataconnections[peerId])) {
+          console.log(peerId + ' is being added to room ' + _id);
+          peer.getDataconnection(peerId).then(function(dataconnection) {
+            self.roomUsers[peerId] = self.peerList[peerId];
+            self.roomUserList = Object.keys(self.roomUsers);
+            _dataconnections[peerId] = dataconnection;
+            pubsub.publish('roomUsers', self.roomUsers);
+            console.log('added ' + peerId + ' to roomUsers', self.roomUsers);
 
-          deferred.resolve(dataconnection);
-          console.log(peerId + ' added to room ' + _id);
-        }, function(error) {
-          console.log(peerId + ' was not added to room ' + _id, error);
-        });
+            deferred.resolve(dataconnection);
+            console.log(peerId + ' added to room ' + _id);
+          }, function(error) {
+            console.log(peerId + ' was not added to room ' + _id, error);
+          });
+        } else {
+          deferred.resolve(_dataconnections[peerId]);
+        }
 
         return deferred.promise;
       };
@@ -76,6 +75,7 @@
 
       this.create = function(peerId) {
         return self.addRoomUser(peerId).then(function(dataconnection) {
+          console.log('sending room creation order to ' + peerId, [peer.user.rtcId].concat(Object.keys(self.roomUsers)));
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/create/public-room',
             data: {
@@ -171,11 +171,11 @@
         });
       }
 
-      console.log('creating room ' + _id, this.peers);
+      console.log('creating room ' + _id, options.peers + ' (sender: ' + options.sender + ')');
 
-      angular.forEach(this.peers, function(peerId) {
+      angular.forEach(options.peers, function(peerId) {
         if(peerId !== peer.user.rtcId) {
-          self.addRoomUser(peerId);
+          self.join(peerId);
         }
       });
 

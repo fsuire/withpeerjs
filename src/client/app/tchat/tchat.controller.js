@@ -67,6 +67,7 @@
     ////////////////
 
     function createRoom(options) {
+      console.log('Room creation order received', options);
       var room = new PeerRoom(options);
 
       peerRoomCollection.addRoom(room);
