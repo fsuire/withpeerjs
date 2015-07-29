@@ -5,17 +5,23 @@
     .module('app.tchat')
     .controller('TchatController', TchatRoomController);
 
-  TchatRoomController.$inject = ['$scope', '$state', '$http', 'peerConnections', 'sse', 'uid', 'peer', 'PeerRoom', 'Pubsub', 'peerRoomCollection'];
+  TchatRoomController.$inject = [
+    '$scope', '$state', '$http',
+    'peerConnections', 'sse', 'uid', 'peer', 'PeerRoom', 'Pubsub', 'peerRoomCollection'
+  ];
 
-  function TchatRoomController($scope, $state, $http, peerConnections, sse, uid, peer, PeerRoom, Pubsub, peerRoomCollection) {
+  function TchatRoomController(
+    $scope, $state, $http,
+    peerConnections, sse, uid, peer, PeerRoom, Pubsub, peerRoomCollection
+  ) {
     var vm = this;
 
     vm.registeredPeerList = [];
     vm.user = peer.user;
     vm.roomIdList = peerRoomCollection.getIdList();
+    vm.date = null;
 
     vm.createPublicRoomAction = createPublicRoomAction;
-
 
 
     var _subscribersToDestroy = [];
@@ -63,6 +69,7 @@
       peerRoomCollection.addRoom(room);
       vm.roomIdList = peerRoomCollection.getIdList();
     }
+
 
     ////////////////
 

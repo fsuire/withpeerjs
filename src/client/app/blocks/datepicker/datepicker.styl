@@ -1,0 +1,119 @@
+.date-picker {
+  $fontcolor = #474747;
+  $lightgrey = #DDDDDD;
+  $hilightcolor = #6699FF
+  $lightFontcolor = alpha($fontcolor, 50%);
+    
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right:0;
+  
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  cursor: default;
+  background-color: alpha(#000, 70%);
+  
+  &.shown {
+    display: flex;
+  }
+
+  .wrapper {
+
+    background-color: white;
+    border: 1px solid #DEDEDE;
+    padding: 1em;
+    color: $fontcolor;
+    
+    h1 {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      font-size: 2.25em;
+      
+      .month {
+        margin-right: 0.25em;
+      }
+      
+      .year {
+        margin-left: 0.25em;
+      }
+      
+      span {
+        font-weight: bold;
+      }
+      
+      .prev {
+        margin-right: 0.15em;
+      }
+      
+      .next {
+        margin-left: 0.15em;
+      }
+      
+      .prev:hover,
+      .next:hover {
+        cursor: pointer;
+      }
+      
+    }
+
+    section.matrice {
+      display: flex;
+      flex-direction: column;
+      height: 15em;
+
+      header,
+      div.row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-bottom: 0.25em;
+      }
+      
+      header > div {
+        flex-grow: 1;
+        flex-shrink: 0;
+        width: 4em;
+        text-align: center;
+      }
+      
+      div.row > div {
+        width: 2em;
+        height: 2em;
+        line-height: 1.9em;
+        text-align: center;
+        border-radius: 2em;
+        
+        &:hover {
+          cursor: pointer;
+        }
+        
+        &.week-number {
+          color: $hilightcolor;
+        }
+        
+        &.day {
+          color: $lightFontcolor;
+          
+          &:hover {
+            cursor: default;
+          }
+        }
+        
+        &.current-month-day.selected {
+          background-color: $hilightcolor;
+        }
+        
+        &.week-number:hover,
+        &.current-month-day:hover {
+          background-color: $lightgrey;
+        }
+      }
+
+    }
+  }
+}

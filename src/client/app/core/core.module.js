@@ -14,12 +14,14 @@
       /* Angular modules */
 
       /* Cross-app modules */
+      'blocks.datepicker',
       'blocks.exception',
       'blocks.navigator',
       'blocks.peer',
       'blocks.pubsub',
       'blocks.layout',
       'blocks.logger',
+      'blocks.moment',
       'blocks.router',
       'blocks.sse',
       'blocks.uid'

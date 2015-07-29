@@ -1,0 +1,36 @@
+<section class="date-picker" ng-class="{'shown': datepicker.classShown}">
+  <div class="wrapper">
+    <h1>
+      <div class="month">
+        <span class="prev" ng-click="datepicker.previousMonthAction()">&lt;</span>
+        {{ datepicker.date.month }}
+        <span class="next" ng-click="datepicker.nextMonthAction()">&gt;</span>
+      </div>
+
+      <div class="year">
+        <span class="prev" ng-click="datepicker.previousYearAction()">&lt;</span>
+        {{ datepicker.date.year }}
+        <span class="next" ng-click="datepicker.nextYearAction()">&gt;</span>
+      </div>
+    </h1>
+
+    <section class="matrice">
+      <header>
+        <div></div>
+        <div ng-repeat="(k, day) in datepicker.date.locale.weekdays">{{ day }}</div>
+      </header>
+
+      <div class="row" ng-repeat="week in datepicker.date.matrice">
+        <div
+          ng-repeat="day in week"
+          ng-class="{'week-number': day.type == 'week', 'day': day.type == 'day', 'current-month-day': day.type == 'currentMonthDay', 'selected': day.selected}"
+        >
+          {{ day.value }}
+        </div>
+      </div>
+    </section>
+
+    <button>annuler</button>
+    <button ng-click="datepicker.ok()">ok</button>
+  </div>
+</section>
