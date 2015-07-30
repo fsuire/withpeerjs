@@ -23,9 +23,7 @@
       $http.get('app/blocks/datepicker/datepicker.html').then(function(response) {
         element.append($compile(response.data)(scope));
       });
-
     }
-
   }
 
 
@@ -39,6 +37,7 @@
     vm.classShown = false;
 
     vm.ok = okAction;
+    vm.hideAction = hideAction;
     vm.previousMonthAction = previousMonthAction;
     vm.nextMonthAction = nextMonthAction;
     vm.previousYearAction = previousYearAction;
@@ -73,7 +72,7 @@
       var referenceDay = date.momentDate.clone();
       var d = date.momentDate.clone().startOf('month');
       var currentMonth = d.month();
-      var nextMonth = currentMonth + 1;
+      var nextMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
       var matriceWeekCounter = 0;
 
       if(d.day() > 0) {
@@ -81,10 +80,9 @@
       }
 
       matrice[matriceWeekCounter] = [createWeekObject(d, referenceDay)];
-      while(nextMonth > d.month()) {
-
+      while(nextMonth !== d.month()) {
+        console.log('.');
         matrice[matriceWeekCounter].push(createDayObject(d, referenceDay));
-
         d.add(1, 'day');
         if(d.day() === 0) {
           matriceWeekCounter++;
@@ -100,9 +98,12 @@
       return matrice;
 
       function createWeekObject(day, referenceDay) {
+        d.add(1, 'day');
+        var value = day.week();
+        d.subtract(1, 'day');
         return {
           type: 'week',
-          value: day.week() + 1,
+          value: value,
           selected: (day.week() === referenceDay.week()) ? true : false
         };
       }
@@ -132,6 +133,13 @@
           vm.classShown = true;
         });
       }
+    }
+
+    function hideAction($event) {
+      if(vm.classShown === true) {
+        vm.classShown = false;
+      }
+      $event.stopPropagation();
     }
 
     function previousMonthAction() {
