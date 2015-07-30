@@ -43,6 +43,7 @@
       weekdays: moment.weekdays()
     };
 
+    vm.cancelAction = cancelAction;
     vm.okAction = okAction;
     vm.hideAction = hideAction;
     vm.previousMonthAction = previousMonthAction;
@@ -93,6 +94,11 @@
     }
 
     ////////////////
+
+    function cancelAction() {
+      console.log('CANCEL !!');
+      vm.classShown = false;
+    }
 
     function okAction() {
       console.log('OK !!');

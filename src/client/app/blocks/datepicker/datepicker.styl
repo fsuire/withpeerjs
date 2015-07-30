@@ -1,5 +1,6 @@
 .date-picker {
   $fontcolor = #474747;
+  $grey = #BBBBBB;
   $lightgrey = #DDDDDD;
   $hilightcolor = #6699FF;
   $lighthilightcolor = alpha($hilightcolor, 50%);
@@ -79,6 +80,21 @@
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
+      
+      .button {
+        margin-right: 1em;
+        padding: 0.2em 0.5em;
+        border: 1px solid $grey;
+        border-radius: 0.3em;
+        
+        &:last-child {
+          margin-right: 0;
+        }
+        
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
 
     h1 {
