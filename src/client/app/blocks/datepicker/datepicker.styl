@@ -1,8 +1,10 @@
 .date-picker {
   $fontcolor = #474747;
   $lightgrey = #DDDDDD;
-  $hilightcolor = #6699FF
+  $hilightcolor = #6699FF;
+  $lighthilightcolor = alpha($hilightcolor, 50%);
   $lightFontcolor = alpha($fontcolor, 50%);
+  $white = #FFFFFF;
 
   position: fixed;
   top: 0;
@@ -39,6 +41,45 @@
     border: 1px solid #DEDEDE;
     padding: 1em;
     color: $fontcolor;
+    
+    > section.content-panel {
+      display: flex;
+      flex-direction: row;
+      
+      > .selected-date {
+        display: flex;
+        flex-direction: column;
+        
+        min-width: 250px;
+        color: $white;
+        text-align: center;
+        font-weight: bold;
+        
+        div {
+          padding-top: 0.25em;
+          padding-bottom: 0.25em;
+          font-size: 2em;
+          background-color: $hilightcolor;
+        }
+        
+        div.date {
+          flex: 1;
+        }
+        
+        div.week {
+          background-color: $lighthilightcolor;
+          font-weight: normal;
+        }
+      }
+      
+    }
+    
+    > section.button-bar {
+      padding-top: 1em;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
 
     h1 {
       display: flex;
@@ -116,13 +157,18 @@
           }
         }
 
-        &.current-month-day.selected {
-          background-color: $hilightcolor;
-        }
-
         &.week-number:hover,
         &.current-month-day:hover {
           background-color: $lightgrey;
+        }
+
+        &.current-month-day.selected {
+          background-color: $hilightcolor;
+          
+          &:hover {
+            cursor: default;
+            background-color: $hilightcolor;
+          }
         }
       }
 

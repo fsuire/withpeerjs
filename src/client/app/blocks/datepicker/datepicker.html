@@ -3,37 +3,49 @@
   <div class="overlay" ng-click="datepicker.hideAction($event)"></div>
 
   <div class="wrapper">
-    <h1>
-      <div class="month">
-        <span class="prev" ng-click="datepicker.previousMonthAction()">&lt;</span>
-        {{ datepicker.date.month }}
-        <span class="next" ng-click="datepicker.nextMonthAction()">&gt;</span>
+    <section class="content-panel">
+      <div class="selected-date">
+        <div class="date">{{ datepicker.selectedDate | moment:'format':'LL' }}</div>
+        <div class="week">semaine {{ datepicker.selectedDate | moment:'format':'ww' }}</div>
       </div>
+      <div class="calendar">
+        <h1>
+          <div class="month">
+            <span class="prev" ng-click="datepicker.previousMonthAction()">&lt;</span>
+            {{ datepicker.date.momentDate | moment:'format':'MMMM' }}
+            <span class="next" ng-click="datepicker.nextMonthAction()">&gt;</span>
+          </div>
 
-      <div class="year">
-        <span class="prev" ng-click="datepicker.previousYearAction()">&lt;</span>
-        {{ datepicker.date.year }}
-        <span class="next" ng-click="datepicker.nextYearAction()">&gt;</span>
-      </div>
-    </h1>
+          <div class="year">
+            <span class="prev" ng-click="datepicker.previousYearAction()">&lt;</span>
+            {{ datepicker.date.momentDate | moment:'format':'YYYY' }}
+            <span class="next" ng-click="datepicker.nextYearAction()">&gt;</span>
+          </div>
+        </h1>
 
-    <section class="matrice">
-      <header>
-        <div></div>
-        <div ng-repeat="(k, day) in datepicker.date.locale.weekdays">{{ day }}</div>
-      </header>
+        <section class="matrice">
+          <header>
+            <div></div>
+            <div ng-repeat="(k, day) in datepicker.locale.weekdays">{{ day }}</div>
+          </header>
 
-      <div class="row" ng-repeat="week in datepicker.date.matrice">
-        <div
-          ng-repeat="day in week"
-          ng-class="{'week-number': day.type == 'week', 'day': day.type == 'day', 'current-month-day': day.type == 'currentMonthDay', 'selected': day.selected}"
-        >
-          {{ day.value }}
-        </div>
+          <div class="row" ng-repeat="week in datepicker.date.matrice">
+            <div
+              ng-repeat="day in week"
+              ng-class="{'week-number': day.type == 'week', 'day': day.type == 'day', 'current-month-day': day.type == 'currentMonthDay', 'selected': day.selected}"
+              ng-click="datepicker.selectDateAction(day.date, day.selected)"
+            >
+              {{ day.value }}
+            </div>
+          </div>
+        </section>
       </div>
     </section>
 
-    <button>annuler</button>
-    <button ng-click="datepicker.ok()">ok</button>
+    <section class="button-bar">
+      <button>annuler</button>
+      <div ng-click="datepicker.okAction()">ok</div>
+    </section>
+
   </div>
 </section>

@@ -37,11 +37,14 @@
     </box>
 
     <div>
-      <date-picker>
+      <date-picker date-model="vm.date">
         date picker
       </date-picker>
       <p>
-        date : {{ vm.date }}
+        date : {{ vm.date | moment:'format':'LL' }}
+      </p>
+      <p>
+        semaine : {{ vm.date | moment:'week' }}
       </p>
     </div>
 

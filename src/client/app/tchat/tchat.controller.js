@@ -7,19 +7,21 @@
 
   TchatRoomController.$inject = [
     '$scope', '$state', '$http',
-    'peerConnections', 'sse', 'uid', 'peer', 'PeerRoom', 'Pubsub', 'peerRoomCollection'
+    'peerConnections', 'sse', 'uid', 'peer', 'PeerRoom', 'Pubsub', 'peerRoomCollection',
+    'moment'
   ];
 
   function TchatRoomController(
     $scope, $state, $http,
-    peerConnections, sse, uid, peer, PeerRoom, Pubsub, peerRoomCollection
+    peerConnections, sse, uid, peer, PeerRoom, Pubsub, peerRoomCollection,
+    moment
   ) {
     var vm = this;
 
     vm.registeredPeerList = [];
     vm.user = peer.user;
     vm.roomIdList = peerRoomCollection.getIdList();
-    vm.date = null;
+    vm.date = moment(new Date());
 
     vm.createPublicRoomAction = createPublicRoomAction;
 
