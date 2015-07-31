@@ -95,18 +95,19 @@
 
     ////////////////
 
-    function cancelAction() {
-      console.log('CANCEL !!');
+    function cancelAction($event) {
+      $event.stopPropagation();
       vm.classShown = false;
     }
 
-    function okAction() {
-      console.log('OK !!');
+    function okAction($event) {
+      $event.stopPropagation();
       vm.classShown = false;
       vm.dateModel = vm.selectedDate.clone();
     }
 
-    function showAction() {
+    function showAction($event) {
+      $event.stopPropagation();
       if(!vm.classShown) {
         $scope.$apply(function() {
           vm.classShown = true;
@@ -115,10 +116,10 @@
     }
 
     function hideAction($event) {
+      $event.stopPropagation();
       if(vm.classShown === true) {
         vm.classShown = false;
       }
-      $event.stopPropagation();
     }
 
     function previousMonthAction() {
