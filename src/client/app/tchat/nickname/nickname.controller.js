@@ -28,8 +28,11 @@
     ////////////////
 
     function validateNicknameAction() {
-      peer.user.nickname = vm.nickname;
-      $state.go('tchat.room');
+      if(vm.nickname) {
+        console.log('-->', vm.nickname);
+        peer.user.nickname = vm.nickname;
+        $state.go('tchat.room');
+      }
     }
 
     function nicknameKeyupAction(event) {
