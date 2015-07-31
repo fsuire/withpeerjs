@@ -42,55 +42,57 @@
     border: 1px solid #DEDEDE;
     padding: 1em;
     color: $fontcolor;
-    
+
     > section.content-panel {
       display: flex;
       flex-direction: row;
-      
+      flex-wrap: wrap;
+
       > .selected-date {
         display: flex;
         flex-direction: column;
-        
+
         min-width: 250px;
+        max-width: 100%;
         color: $white;
         text-align: center;
         font-weight: bold;
-        
+
         div {
-          padding-top: 0.25em;
-          padding-bottom: 0.25em;
-          font-size: 2em;
+          padding: 0.25em;
+          font-size: 1.5em;
           background-color: $hilightcolor;
         }
-        
+
         div.date {
           flex: 1;
+          font-size: 2em;
         }
-        
+
         div.week {
           background-color: $lighthilightcolor;
           font-weight: normal;
         }
       }
-      
+
     }
-    
+
     > section.button-bar {
       padding-top: 1em;
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
-      
+
       .button {
         margin-right: 1em;
         padding: 0.2em 0.5em;
         border: 1px solid $grey;
         border-radius: 0.3em;
-        
+
         &:last-child {
           margin-right: 0;
         }
-        
+
         &:hover {
           cursor: pointer;
         }
@@ -180,7 +182,7 @@
 
         &.current-month-day.selected {
           background-color: $hilightcolor;
-          
+
           &:hover {
             cursor: default;
             background-color: $hilightcolor;
@@ -189,5 +191,25 @@
       }
 
     }
+  }
+
+  transition: opacity 500ms ease-in-out;
+
+  &.shown-add {
+    display: flex;
+    opacity: 0;
+  }
+
+  &.shown-add-active {
+    opacity: 1;
+  }
+
+  &.shown-remove {
+    display: flex;
+  }
+
+  &.shown-remove-active {
+    display: flex;
+    opacity: 0;
   }
 }
