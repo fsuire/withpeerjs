@@ -39,8 +39,12 @@
     vm.selectedDate = null;
     vm.date = {};
     vm.classShown = false;
+
+    var weekdays = moment.weekdays();
+    weekdays.push(weekdays.shift());
+
     vm.locale = {
-      weekdays: moment.weekdays()
+      weekdays: weekdays
     };
 
     vm.cancelAction = cancelAction;
@@ -155,31 +159,34 @@
 
     function createMatrice(dateModel) {
 
-      var d = dateModel.momentDate.clone().startOf('month');
-      var referenceDay = dateModel.momentDate.clone();
-      var currentMonth = d.month();
-      var nextMonth = (currentMonth === 11) ? 0 : currentMonth + 1;
-      var matriceWeekCounter = 0;
-
-      if(d.day() > 0) {
-        d.subtract(d.day(), 'days');
+      var matrice = [];
+      var dateCursor = dateModel.momentDate.clone();
+      var referenceMonth = dateCursor.month();
+      var nextMonth = referenceMonth + 1;
+      if(nextMonth > 11) {
+        nextMonth = 0;
       }
 
-      dateModel.matrice[matriceWeekCounter] = [createWeekObject(d)];
-      while(nextMonth !== d.month()) {
-        var type = (d.month() === referenceDay.month()) ? 'currentMonthDay' : 'day';
-        dateModel.matrice[matriceWeekCounter].push(createDayObject(d, type));
-        d.add(1, 'day');
-        if(d.day() === 0) {
-          matriceWeekCounter++;
-          dateModel.matrice[matriceWeekCounter] = [createWeekObject(d)];
+      dateCursor.startOf('month');
+      dateCursor.day(1);
+
+      var weekIndex = 0;
+      matrice[weekIndex] = [createWeekObject(dateCursor)];
+      while(dateCursor.month() !== nextMonth) {
+        var type = (dateCursor.month() === referenceMonth) ? 'currentMonthDay' : 'day';
+        matrice[weekIndex].push(createDayObject(dateCursor, type));
+        dateCursor.add(1, 'day');
+        if(dateCursor.day() === 1) {
+          weekIndex++;
+          matrice[weekIndex] = [createWeekObject(dateCursor)];
         }
+      }
+      while(matrice[weekIndex].length !== 8) {
+        matrice[weekIndex].push(createDayObject(dateCursor, 'day'));
+        dateCursor.add(1, 'day');
+      }
 
-      }
-      while(dateModel.matrice[matriceWeekCounter].length !== 8) {
-        dateModel.matrice[matriceWeekCounter].push(createDayObject(d, 'day'));
-        d.add(1, 'day');
-      }
+      dateModel.matrice = matrice;
 
       function createWeekObject(day) {
         day = day.clone();
