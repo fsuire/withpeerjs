@@ -11,10 +11,6 @@
   display: flex;
   flex-direction: row;
 
-  @media screen and (max-width: $responsive-small-break) {
-    display: column;
-  }
-
   .informations {
     display: flex;
     flex-direction: column;
@@ -68,17 +64,37 @@
 
     .peer-list {
       padding: 0;
+      
+      div.empty-list {
+        transition: all 1s ease-out;
+        height: 2em;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        
+        &.ng-hide-add,
+        &.ng-hide-remove-active {
+          height: 2em;
+          opacity: 1;
+        }
+        
+        &.ng-hide-add-active,
+        &.ng-hide-remove {
+          height: 0;
+          opacity: 0;
+        }
+      }
 
       ul > li {
+        transition: all 1s ease-out;
         display: flex;
         flex-direction: row;
+        height: 2em;
+        align-items: center;
+        overflow: hidden;
 
         border-bottom: 1px solid $primary-background-color;
         padding: 0.5em;
-
-        transition-property: background-color, border-color, color;
-        transition-duration: 100ms;
-        transition-timing-function: ease-out;
 
         &:last-child {
           border-bottom: none;
@@ -90,6 +106,18 @@
 
         > span {
           flex: 1;
+        }
+        
+        &.ng-enter,
+        &.ng-leave-active {
+          height: 0;
+          opacity: 0;
+        }
+        
+        &.ng-enter-active,
+        &.ng-leave {
+          height: 2em;
+          opacity: 1;
         }
       }
     }

@@ -19,10 +19,10 @@
     <box>
       <header>Peer list</header>
       <section class="peer-list">
+        <div ng-hide="getObjectLength(vm.registeredPeerList)" class="empty-list">
+          No one seems to be online !
+        </div>
         <ul>
-          <li ng-hide="getObjectLength(vm.registeredPeerList)">
-            No one seems to be online !
-          </li>
           <li ng-repeat="(rtcId, peer) in vm.registeredPeerList" class="peer">
 
             <span>{{ peer.nickname }}</span>

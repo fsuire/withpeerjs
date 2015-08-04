@@ -29,8 +29,9 @@
 
       peerConnections.subscribe('list', _refreshPeerList);
 
-      peer.addChannel('tchat-room/join/' + _id, function(peerId, dataconnection) {
-        self.addRoomUser(peerId);
+      peer.addChannel('tchat-room/join/' + _id, function(message, dataconnection) {
+        console.log('JOIN ORDER', message);
+        self.addRoomUser(dataconnection.peer);
       });
 
       peer.addChannel('tchat-room/message/' + _id, function(message, dataconnection) {
@@ -44,22 +45,23 @@
       ////////////////
 
       this.addRoomUser = function(peerId) {
+        var peerString = peerId + ' (' + peerConnections.getNicknameFromRtcId(peerId) + ')';
         var deferred = $q.defer();
-        console.log('adding ' + peerId + ' to room ' + _id);
+        console.log('adding ' + peerString + ' to room ' + _id, peerId);
 
         if(angular.isUndefined(_dataconnections[peerId])) {
-          console.log(peerId + ' is being added to room ' + _id);
+          console.log(peerString + ' is being added to room ' + _id);
           peer.getDataconnection(peerId).then(function(dataconnection) {
             self.roomUsers[peerId] = self.peerList[peerId];
             self.roomUserList = Object.keys(self.roomUsers);
             _dataconnections[peerId] = dataconnection;
             pubsub.publish('roomUsers', self.roomUsers);
-            console.log('added ' + peerId + ' to roomUsers', self.roomUsers);
+            console.log('added ' + peerString + ' to roomUsers', self.roomUsers);
 
             deferred.resolve(dataconnection);
-            console.log(peerId + ' added to room ' + _id);
+            console.log(peerString + ' added to room ' + _id);
           }, function(error) {
-            console.log(peerId + ' was not added to room ' + _id, error);
+            console.log(peerString + ' was not added to room ' + _id, error);
           });
         } else {
           deferred.resolve(_dataconnections[peerId]);
@@ -109,9 +111,7 @@
           dataconnection.send(JSON.stringify({
             channel: 'tchat-room/join/' + _id,
             data: {
-              name: self.name,
-              id: _id,
-              peers: [peer.user.rtcId].concat(Object.keys(self.roomUsers))
+              //peer.user.rtcId
             }
           }));
         });

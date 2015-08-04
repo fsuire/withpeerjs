@@ -25,6 +25,8 @@
 
     vm.createPublicRoomAction = createPublicRoomAction;
 
+    //element.on('$animate:before', function(evt, animationDetails) {});
+
 
     var _subscribersToDestroy = [];
     _subscribersToDestroy.concat([
