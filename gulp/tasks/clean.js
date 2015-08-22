@@ -8,7 +8,11 @@
   exports.task = function(done) {
     del(config.outputDir, function (err, paths) {
       console.log('Deleted files/folders:\n', paths.join('\n'));
-      done(err);
+
+      del(config.client.styleDir + '**/*.css', function (err, paths) {
+        console.log('Deleted files/folders:\n', paths.join('\n'));
+        done(err);
+      });
     });
   };
 

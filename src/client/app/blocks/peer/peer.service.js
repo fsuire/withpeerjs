@@ -99,7 +99,7 @@
       var deferred = $q.defer();
 
       var dataconnection = service.peer.connect(rtcId);
-
+      console.log('creating dataconnection for ' + rtcId);
       dataconnection.on('open', function() {
         _registerDataconnection(dataconnection);
         deferred.resolve(dataconnection);
