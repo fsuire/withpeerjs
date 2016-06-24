@@ -6,9 +6,9 @@
   module.exports = {
 
     ipaddress: '127.0.0.1',
-    port: 3001,
+    port: 3000,
     peerjs: {
-      port: 3001
+      port: 3000
     },
 
     htmlIndexPath: 'dist/dev/client/index.html',

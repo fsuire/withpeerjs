@@ -48,7 +48,7 @@
       });
 
       function serve() {
-        if(args.nosync) {
+        if(!IS_SYNC) {
           return;
         }
 
