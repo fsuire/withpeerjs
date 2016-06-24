@@ -1,0 +1,41 @@
+@import 'icons';
+
+prefix-icon
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  for icon in $icon-list
+    &.{icon[0]}
+      add-icon(icon[1])
+
+  &:before {
+    prepare-for-icon()
+    cursor: default;
+    flex-shrink: 0;
+  }
+
+  > * {
+    flex: 1;
+  }
+
+
+
+suffix-icon
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  for icon in $icon-list
+    &.{icon[0]}
+      add-icon(icon[1], false, true)
+
+  &:after {
+    prepare-for-icon()
+    cursor: default;
+    flex-shrink: 0;
+  }
+
+  > * {
+    flex: 1;
+  }

@@ -1,0 +1,67 @@
+@require 'nib'
+@import 'nib/gradients'
+
+//@import url(http://fonts.googleapis.com/css?family=Oxygen:400,700,300&subset=latin,latin-ext)
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Oxygen Light'), local('Oxygen-Light'), url(http://fonts.gstatic.com/s/oxygen/v5/-1odZCVpKpOs9pNLq607fltXRa8TVwTICgirnJhmVJw.woff2) format('woff2'), url(http://fonts.gstatic.com/s/oxygen/v5/-1odZCVpKpOs9pNLq607fj8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Oxygen'), local('Oxygen-Regular'), url(http://fonts.gstatic.com/s/oxygen/v5/-v6-DSWC3BhduHBfSfXFpA.woff2) format('woff2'), url(http://fonts.gstatic.com/s/oxygen/v5/OFgyER5uFw7Cy-F01PjbVg.woff) format('woff');
+}
+@font-face {
+  font-family: 'Oxygen';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Oxygen Bold'), local('Oxygen-Bold'), url(http://fonts.gstatic.com/s/oxygen/v5/fSUtikcZd7PHZK0t2hzTeVtXRa8TVwTICgirnJhmVJw.woff2) format('woff2'), url(http://fonts.gstatic.com/s/oxygen/v5/fSUtikcZd7PHZK0t2hzTeT8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+
+
+@font-face {
+  font-family: 'icon-font';
+  src: url('/assets/fonts/icon-font.eot');
+  src: url('/assets/fonts/icon-font.eot') format('embedded-opentype'),
+       url('/assets/fonts/icon-font.woff') format('woff'),
+       url('/assets/fonts/icon-font.ttf') format('truetype'),
+       url('/assets/fonts/icon-font.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+global-reset();
+
+div,
+header,
+footer,
+section,
+form {
+  box-sizing: border-box;
+}
+
+input {
+  border: 0;
+  background: 0;
+}
+
+.flex-spacer {
+  flex: 1;
+}
+
+.scrollable {
+  position: relative;
+  flex: 1;
+  
+  > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+  }
+}

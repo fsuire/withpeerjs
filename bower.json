@@ -1,0 +1,27 @@
+{
+  "name": "nodejs",
+  "version": "0.0.1",
+  "authors": [
+    "Frédéric SUIRE <fred_suire@yahoo.fr>",
+    "Quentin BERLEMONT <quentinberlemont@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.4.x",
+    "angular-sanitize": "~1.4.0",
+    "peerjs": "0.3.x",
+    "ui-router": "~0.2.13",
+    "moment": "~2.10.6",
+    "angular-animate": "~1.4.3"
+  },
+  "resolutions": {
+    "angular": "1.4.3"
+  }
+}

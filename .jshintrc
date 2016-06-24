@@ -1,0 +1,12 @@
+{
+  "extends": ".jshintrc-base",
+  "globals": {
+    "angular": false,
+    "describe": false,
+    "it": false,
+    "beforeEach": false,
+    "afterEach": false,
+    "expect": false
+  },
+  "node": true
+}

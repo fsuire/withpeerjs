@@ -1,0 +1,287 @@
+@import '../../app.theme.color';
+@import '../../app.theme.responsive';
+
+tchat-room {
+  transition: all 500ms ease-in-out;
+  
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  margin: 0.5em;
+  min-width: calc(50% - 1em);
+  min-height: calc(50% - 1em);
+
+  > box {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: 0;
+
+    > header {
+      > prefix-icon {
+        flex: 1;
+        height: 1em;
+
+        focused-input() {
+          background-color: alpha($pseudo-white, 50%);
+          border: 1px solid darken($primary-color, 30%);
+          border-left: none;
+        }
+
+        &:before {
+          height: 100%;
+          padding: 0.25em;
+          border-radius: 0.25em;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border: 1px solid alpha($primary-color, 0%);
+
+          transition-property: background-color, border-color, color;
+          transition-duration: 100ms;
+          transition-timing-function: ease-out;
+        }
+
+        &:focus,
+        &:hover,
+        &.has-focus {
+          &:before {
+            color: $pseudo-white;
+            background-color: darken($primary-color, 30%);
+            border: 1px solid darken($primary-color, 30%);
+          }
+          input[prefix-icon="icon-pencil"] {
+            focused-input();
+          }
+        }
+
+        input[prefix-icon="icon-pencil"] {
+          padding: 0.25em;
+          height: 100%;
+          border: 1px solid alpha($primary-color, 0%);
+          border-left: none;
+          border-radius: 0.25em;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          background-color: alpha($pseudo-white, 0%);
+          color: $primary-font-color;
+          font-size: 1em;
+
+          transition-property: background-color, border-color, color;
+          transition-duration: 100ms;
+          transition-timing-function: ease-out;
+
+          &:hover,
+          &:focus {
+            focused-input();
+          }
+        }
+      }
+
+      button.selected {
+        background-color: $pseudo-white;
+      }
+
+    }
+
+    > section {
+      flex: 1;
+      padding: 0;
+
+      display: flex;
+      flex-direction: row;
+
+      h1 {
+        text-align: center;
+        font-size: 1.5em;
+        color: $primary-font-color;
+      }
+
+      > .message-list {
+        flex: 1;
+        background-color: $pseudo-white;
+      }
+
+      ul li {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 0.25em;
+          border-bottom: 1px solid $primary-background-color;
+
+          &:last-child {
+            border-bottom: none
+          }
+      }
+
+      > .connected-user-list {
+        background-color: $pseudo-white;
+        width: 0px;
+        overflow: hidden;
+        border-right: none;
+
+        transition-property: width;
+        transition-duration: 100ms;
+        transition-timing-function: ease-out;
+
+        &.shown {
+          width: 25%;
+          max-width: 200px;
+        }
+
+        &.shown {
+          border-right: 1px solid darken($primary-background-color, 25%);
+        }
+        
+        li prefix-icon:before {
+          margin-right: 0.5em;        
+        }
+      }
+
+      > .available-user-list {
+        background-color: $pseudo-white;
+        width: 0px;
+        overflow: hidden;
+        border-left: none;
+
+        transition-property: width;
+        transition-duration: 100ms;
+        transition-timing-function: ease-out;
+
+        &.shown {
+          width: 25%;
+          max-width: 200px;
+        }
+
+        &.shown {
+          border-left: 1px solid darken($primary-background-color, 25%);
+        }
+
+        li {
+          &:hover {
+            background-color: alpha($secondary-color, 20%);
+            cursor: pointer;
+          }
+
+          &.connected:hover,
+          &.no-hover:hover {
+            background-color: inherit;
+            cursor: inherit;
+          }
+
+          &.connected {
+            color: $secondary-color;
+          }
+
+          prefix-icon:before {
+            margin-right: 0.5em;
+          }
+
+        }
+      }
+
+      .message-list {
+        display: flex;
+        flex-direction: column;
+
+        > .information {
+          padding: 1em;
+          text-align: center;
+          font-color: alpha($primary-font-color, 30%);
+          font-style: italic;
+          border-bottom: 1px solid alpha($primary-font-color, 20%);
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+
+        > .message {
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: row;
+          width: 100%;
+          border-bottom: 1px solid $primary-color;
+
+          &:last-child,
+          &.locally-sent:last-child {
+            border-bottom: none;
+          }
+
+          &.locally-sent {
+            border-bottom: 1px solid $secondary-color;
+
+            > .nickname {
+              order: 1;
+              background-color: alpha($secondary-color, 25%);
+            }
+
+            > .message {
+              order: 2;
+              background-color: alpha($secondary-color, 15%);
+              text-align: left;
+            }
+          }
+
+           > .nickname {
+            order: 2;
+            padding: 1em;
+            background-color: alpha($primary-color, 25%);
+            font-weight: bold;
+          }
+
+          > .message {
+            order: 1;
+            flex: 1;
+            padding: 1em;
+            background-color: alpha($primary-color, 15%);
+            text-align: right;
+          }
+        }
+      }
+    }
+
+    > footer {
+      button.connected-room-user-count {
+        width: auto;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &.selected {
+          background-color: $pseudo-white;
+        }
+
+        prefix-icon:before {
+          margin-right: 1em;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+      }
+    }
+
+  }
+  
+  &.ng-enter {
+    opacity: 0;
+    width: 0;
+  }
+
+  &.ng-enter-active {
+    opacity: 1;
+  }
+
+  &.ng-leave {
+    opacity: 1;
+  }
+
+  &.ng-leave-active {
+    opacity: 0;
+  }
+}

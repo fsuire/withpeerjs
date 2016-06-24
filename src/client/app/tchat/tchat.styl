@@ -1,0 +1,137 @@
+
+@import '../app.theme.color';
+@import '../app.theme.responsive';
+@import '../blocks/layout/icons';
+@import '../blocks/layout/buttons';
+@import '../blocks/layout/background';
+
+[route="tchat.room"] {
+  flex: 1;
+
+  display: flex;
+  flex-direction: row;
+
+  .informations {
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+
+    background-color: $primary-background-color;
+    border-right: 1px solid darken($primary-background-color, 40%);
+
+    box-shadow: regular-shadow($primary-background-color);
+
+    button {
+      background-color: $pseudo-white;
+      color: alpha($primary-font-color, 50%);
+      border: 1px solid darken($primary-background-color, 10%);
+
+      &:hover {
+        border-color: $secondary-color;
+        color: $secondary-color;
+      }
+
+    }
+
+    box {
+      box-shadow: none;
+
+      > section,
+      > footer {
+        border: none;
+        background: none;
+        background-color: $pseudo-white;
+      }
+
+      > header {
+        border: none;
+        background: none;
+        background-color: $primary-color;
+        justify-content: flex-end
+      }
+
+    }
+
+    .room-creation-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+
+      button {
+        font-size: 1.5em;
+      }
+    }
+
+    .peer-list {
+      padding: 0;
+      
+      div.empty-list {
+        transition: all 1s ease-out;
+        height: 2em;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        
+        &.ng-hide-add,
+        &.ng-hide-remove-active {
+          height: 2em;
+          opacity: 1;
+        }
+        
+        &.ng-hide-add-active,
+        &.ng-hide-remove {
+          height: 0;
+          opacity: 0;
+        }
+      }
+
+      ul > li {
+        transition: all 1s ease-out;
+        display: flex;
+        flex-direction: row;
+        height: 2em;
+        align-items: center;
+        overflow: hidden;
+
+        border-bottom: 1px solid $primary-background-color;
+        padding: 0.5em;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &.peer:hover {
+          background-color: alpha($secondary-color, 20%);
+        }
+
+        > span {
+          flex: 1;
+        }
+        
+        &.ng-enter,
+        &.ng-leave-active {
+          height: 0;
+          opacity: 0;
+        }
+        
+        &.ng-enter-active,
+        &.ng-leave {
+          height: 2em;
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+
+  .rooms {
+    flex: 1;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    padding: 0.5em;
+    overflow: auto;
+  }
+}

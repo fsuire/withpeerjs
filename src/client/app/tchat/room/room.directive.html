@@ -1,0 +1,92 @@
+<box standard-behaviour>
+  <header>
+    <input
+      prefix-icon="icon-pencil"
+      type="text"
+      class="room-name"
+      ng-model="tchatRoom.name"
+    />
+    <div>
+      <button
+        class="icon-user-plus"
+        title="Add a user to this room"
+        ng-click="tchatRoom.showAvailableUserListAction()"
+        ng-class="{'selected': tchatRoom.availableUserListIsShown}"
+      />
+      <button
+        class="icon-close"
+        title="Close this room"
+      />
+    </div>
+  </header>
+  <section>
+    <div
+      class="connected-user-list"
+      ng-class="{'shown': tchatRoom.connectedUserListIsShown}"
+    >
+      <h1>Room's users</h1>
+      <ul>
+        <li ng-hide="tchatRoom.roomUsers | objectLength" class="no-hover">
+          No one seems to be connected to this room !
+        </li>
+        <li
+          ng-repeat="peer in tchatRoom.roomUsers"
+        >
+          <span prefix-icon="icon-user">{{ peer.nickname }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="scrollable">
+      <div class="message-list">
+        <div
+          ng-repeat="(k, message) in tchatRoom.messages"
+          ng-class="{'message': message.type == 'message', 'locally-sent': message.locallySent}"
+        >
+          <div class="nickname"><span>{{ message.sender | peerNickname }}</span></div>
+          <div class="message">{{ message.value }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="available-user-list"
+      ng-class="{'shown': tchatRoom.availableUserListIsShown}"
+    >
+      <h1>Available users</h1>
+      <ul>
+        <li ng-hide="tchatRoom.peerList | objectLength" class="no-hover">
+          No one seems to be online !
+        </li>
+        <li
+          ng-repeat="peer in tchatRoom.peerList"
+          ng-click="tchatRoom.createAction(peer.rtcId);"
+          ng-class="{'connected': tchatRoom.roomUsers[peer.rtcId]}"
+        >
+          <span prefix-icon="icon-user">{{ peer.nickname }}</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+  <footer>
+    <button
+      class="connected-room-user-count"
+      ng-click="tchatRoom.showConnectedUserListAction()"
+      ng-class="{'selected': tchatRoom.connectedUserListIsShown}"
+    >
+      <span prefix-icon="icon-users">{{ tchatRoom.roomUsers | objectLength }}</span>
+    </button>
+    <div class="flex-spacer"></div>
+    <input
+      type="text"
+      class="message"
+      placeholder="Type your message here"
+      ng-model="tchatRoom.message"
+    />
+    <button
+      class="icon-mail-dark"
+      title="Send your message"
+      ng-click="tchatRoom.sendMessageAction()"
+    />
+  </footer>
+</box>

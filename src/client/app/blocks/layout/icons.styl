@@ -1,0 +1,42 @@
+$icon-list = icon-cancel '\e800',
+  icon-close '\e800',
+  icon-ok '\e801',
+  icon-mail '\e802',
+  icon-mail-dark '\e803',
+  icon-user '\e804',
+  icon-users '\e808',
+  icon-user-plus '\e807',
+  icon-user-times '\e809',
+  icon-right-open '\e805',
+  icon-comment-alt '\e806',
+  icon-pencil '\e80a',
+  icon-chat '\e80b',
+  icon-lock '\e80c',
+  icon-lock-alt '\e80d',
+  icon-lock-open '\e80e',
+  icon-lock-open-alt '\e80f'
+
+
+/////////////////
+
+prepare-for-icon()
+  font-family: "icon-font";
+  font-style: normal;
+  font-weight: normal;
+
+add-icon(_icon, _hover = false, _after = false)
+
+  if _hover
+    &:hover {
+      cursor: pointer;
+    }
+
+  if _after is false
+    &:before {
+      content: _icon;
+    }
+
+  if _after
+    &:after {
+      content: _icon;
+    }

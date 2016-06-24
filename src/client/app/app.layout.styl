@@ -1,0 +1,66 @@
+@import './app.theme.color';
+@import './app.theme.responsive';
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  background: linear-gradient(to bottom, $primary-background-color 0%,alpha($primary-background-color,0) 100px,alpha($primary-background-color,0) 100%) no-repeat;
+  font-family: Oxygen, sans-serif;
+  color: $primary-font-color;
+  position: relative;
+}
+
+h1 {
+  font-size: 3rem;
+  color: $primary-color;
+  margin-bottom: 0.25em;
+}
+
+strong {
+  font-weight: bold;
+}
+
+div.content {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow-x: hidden;
+  
+  
+  > ui-view {
+    transition: all 500ms ease-in-out;
+    display: flex;
+    overflow: hidden;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    
+    &.ng-enter {
+      opacity: 0;
+      left: -100vw;
+    }
+    
+    &.ng-enter-active {
+      opacity: 1;
+      left: 0;
+    }
+
+    &.ng-leave {
+      opacity: 1;
+      left: 0;
+    }
+
+    &.ng-leave-active {
+      opacity: 0;
+      left: 200vw;
+    }
+  }
+  
+}

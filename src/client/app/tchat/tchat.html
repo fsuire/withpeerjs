@@ -1,0 +1,61 @@
+<div route="tchat.room">
+
+  <section class="informations">
+    <box>
+      <header><strong>{{ vm.user.nickname }}</strong> - {{ vm.user.rtcId }}</header>
+      <section class="room-creation-buttons">
+        <button
+          class="icon-chat"
+          title="Create a new public room"
+          ng-click="vm.createPublicRoomAction()"
+        />
+        <button
+          class="icon-lock-alt"
+          title="Create a new private room"
+        />
+      </section>
+    </box>
+
+    <box>
+      <header>Peer list</header>
+      <section class="peer-list">
+        <div ng-hide="getObjectLength(vm.registeredPeerList)" class="empty-list">
+          No one seems to be online !
+        </div>
+        <ul>
+          <li ng-repeat="(rtcId, peer) in vm.registeredPeerList" class="peer">
+
+            <span>{{ peer.nickname }}</span>
+            <button
+              title="Start a private conversation"
+              class="icon-comment-alt"
+            />
+
+          </li>
+        </ul>
+      </section>
+    </box>
+
+    <div>
+      <date-picker date-model="vm.date">
+        date picker
+      </date-picker>
+      <p>
+        date : {{ vm.date | moment:'format':'LL' }}
+      </p>
+      <p>
+        semaine : {{ vm.date | moment:'week' }}
+      </p>
+    </div>
+
+
+  </section>
+
+  <section class="rooms">
+    <tchat-room
+      ng-repeat="(k, roomId) in vm.roomIdList"
+      id="roomId"
+    ></tchat-room>
+  </section>
+
+</div>
