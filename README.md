@@ -2,7 +2,7 @@
 
 /!\ This application is an experimentation. **It will never be finished or documented.**
 
-Withpeerjs is a small angular/webRTC/sse/nodejs app, made in order to try the [PeerJS](https://github.com/peers/peerjs) library. 
+Withpeerjs is a small angular/webRTC/sse/nodejs chat app, made in order to try the [PeerJS](https://github.com/peers/peerjs) library. 
 
 ##Setup
 
@@ -18,4 +18,4 @@ gulp --dev
 * Choose nicknames in both browsers
 * In one browser, use the "create a public room" functionnality
 * In one browser, add a user to this new room (look at the upper right corner of the window)
-* Begin a RTC conversation beetween the two browsers
+* Begin a RTC chat conversation beetween the two browsers
