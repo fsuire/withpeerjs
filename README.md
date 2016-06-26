@@ -7,7 +7,7 @@ Withpeerjs is a small angular/webRTC/sse/nodejs chat app, made in order to try t
 ##Setup
 
 ```shell
-git clone ...
+git clone https://github.com/fsuire/withpeerjs.git
 cd withpeerjs
 npm install -g bower
 npm i && bower i
